@@ -287,7 +287,8 @@ if ( ! class_exists( '\HootKit\Admin\Settings' ) ) :
 												<div class="hk-boxnav-filters">
 													<div class="hk-boxnav-filter hk-currentfilter" data-displayset="all"><?php _e( 'View All', 'hootkit' ) ?></div>
 													<?php foreach ( $displaysets as $filter ) {
-														echo '<div class="hk-boxnav-filter" data-displayset="' . esc_attr( $filter ) . '">' . ucwords( $filter ) . '</div>';
+														$filterlabel = $filter === 'woocom' ? hootkit()->get_string( 'woocom', $filter ) : $filter;
+														echo '<div class="hk-boxnav-filter" data-displayset="' . esc_attr( $filter ) . '">' . ucwords( $filterlabel ) . '</div>';
 													} ?>
 												</div>
 											<?php endif; ?>
@@ -334,7 +335,7 @@ if ( ! class_exists( '\HootKit\Admin\Settings' ) ) :
 																	echo ' hk-set-' . esc_attr( $dset );
 															?>  hk-set-all">
 														<div class="hk-modhover-msg"><?php
-															if ( $inactive == 'wcinactivemods' ) esc_html_e( 'This module requires WooCommerce - for Online Shops', 'hootkit' );
+															if ( $inactive == 'wcinactivemods' ) esc_html_e( 'This module requires WooCommerce plugin for Online Shops', 'hootkit' );
 															if ( $inactive == 'premiummods' ) esc_html_e( 'Premium Theme Feature', 'hootkit' );
 															?></div>
 														<div class="hk-mod-name"><?php

@@ -258,7 +258,6 @@ if ( ! class_exists( '\HootKit\Inc\Helper_Config' ) ) :
 				// If theme is loading its own css, hootkit wont load its own default styles
 				'theme_css' => false,
 				// Theme Supported Modules
-				// @todo 'ticker' width bug: css width percentage does not work inside table/flex layout => theme should remove support if theme markup does not explicitly support this (i.e. max-width provided for ticker boxes inside table cells)
 				'modules'   => array(
 					'widget' => array( 'slider-image', 'slider-postimage', 'announce', 'content-blocks', 'content-posts-blocks', 'cta', 'icon', 'post-grid', 'post-list', 'social-icons', /*'ticker',*/ 'content-grid', 'cover-image' ),
 					'block' => array(),
@@ -285,6 +284,8 @@ if ( ! class_exists( '\HootKit\Inc\Helper_Config' ) ) :
 				'settings' => array(),
 				// Misc theme specific settings
 				'supports' => array(),
+				// Version Support
+				'supports_version' => false, // Use 'v2' templates
 				// wpHoot Themes
 				'themelist' => array(
 					'chromatic',		'dispatch',			'responsive-brix',
@@ -296,7 +297,7 @@ if ( ! class_exists( '\HootKit\Inc\Helper_Config' ) ) :
 					'unos-business',	'unos-glow',		'unos-magazine-black',
 					'unos-store-bell',	'unos-minima-store','unos-news',	'unos-bizdeck',
 					'nevark',			'neux',				'magazine-news-byte',
-					'hoot-porto',
+					'hoot-porto',		'olius',
 				),
 				// Default Styles
 				'presets'   => array(),

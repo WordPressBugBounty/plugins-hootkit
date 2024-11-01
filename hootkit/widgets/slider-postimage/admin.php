@@ -191,6 +191,7 @@ class HootKit_Slider_Postimage_Widget extends HK_Widget {
 		// Allow theme/child-themes to use their own template
 		$slider_template = hoot_get_widget( 'slider-image', false, 'post' );
 		// Use Hootkit template if theme does not have one
+		$slider_template = apply_filters( 'hootkit_widget_template', $slider_template, 'slider-image' );
 		$slider_template = ( $slider_template ) ? $slider_template : hootkit()->dir . 'widgets/slider/view.php';
 		// Option to overwrite variables to keep html tags in title later sanitized during display => skips 'widget_title' filter (esc_html hooked) action on title; (Possibly redundant as html is sanitized in title during save)
 		if ( apply_filters( 'hootkit_display_widget_extract_overwrite', false, 'slider-image' ) ) extract( $instance, EXTR_OVERWRITE ); else extract( $instance, EXTR_SKIP );

@@ -109,9 +109,16 @@ do_action( 'hootkit_content_blocks_wrap', 'custom', ( ( !isset( $instance ) ) ? 
 				if ( !empty( $box['url'] ) ) {
 					$linktag = '<a href="' . esc_url( $box['url'] ) . '" ' . hoot_get_attr( 'content-block-link', ( ( !isset( $instance ) ) ? array() : $instance ) ) . '>';
 					$linktagend = '</a>';
-					$linktext = ( !empty( $box['link'] ) ) ? $box['link'] : ( ( function_exists( 'hoot_get_mod' ) ) ? hoot_get_mod('read_more') : __( 'Know More', 'hootkit' ) );
-					$linktext = ( empty( $linktext ) ) ? sprintf( __( 'Read More %s', 'hootkit' ), '&rarr;' ) : $linktext;
-					$linktext = '<p class="more-link">' . $linktag . esc_html( $linktext ) . $linktagend . '</p>';
+
+					if ( !empty( $box['link'] ) ) {
+						$themetextclass = '';
+						$linktext = $box['link'];
+					} else {
+						$themetextclass = ' theme-more-link'; // JNES@SR
+						$linktext = function_exists( 'hoot_get_mod' ) ? hoot_get_mod('read_more') : '';
+						$linktext = $linktext ? $linktext : sprintf( __( 'Read More %s', 'hootkit' ), '&rarr;' );
+					}
+					$linktext = '<p class="more-link' . $themetextclass . '">' . $linktag . esc_html( $linktext ) . $linktagend . '</p>';
 				} else {
 					$linktag = $linktagend = $linktext = '';
 				}

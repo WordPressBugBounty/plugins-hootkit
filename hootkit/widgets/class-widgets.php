@@ -94,10 +94,18 @@ if ( ! class_exists( '\HootKit\Mods\Widgets' ) ) :
 		 * @since  2.0.0
 		 */
 		private function load_widgets() {
+			$tmplver = hootkit()->get_config( 'supports_version' );
 
 			foreach ( $this->activewidgets as $widget )
-				if ( file_exists( hootkit()->dir . 'widgets/' . sanitize_file_name( $widget ) . '/admin.php' ) )
+				if ( $tmplver &&
+					file_exists(  hootkit()->dir . $tmplver . '/widgets/' . sanitize_file_name( $widget ) . '/admin.php' )
+				) {
+					require_once( hootkit()->dir . $tmplver . '/widgets/' . sanitize_file_name( $widget ) . '/admin.php' );
+				} elseif (
+					file_exists(  hootkit()->dir . 'widgets/' . sanitize_file_name( $widget ) . '/admin.php' )
+				) {
 					require_once( hootkit()->dir . 'widgets/' . sanitize_file_name( $widget ) . '/admin.php' );
+				}
 
 		}
 

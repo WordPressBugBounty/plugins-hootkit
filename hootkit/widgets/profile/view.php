@@ -27,7 +27,7 @@ $subtitle = ( !empty( $subtitle ) ) ? $subtitle : '';
 		echo do_shortcode( wp_kses_post( apply_filters( 'hootkit_widget_title', $titlemarkup, 'profile', $title, $before_title, $after_title, $subtitle ) ) );
 
 		/* Display Image */
-		$image = intval( $image );
+		$image = !empty( $image ) ? intval( $image ) : 0;
 		if ( !empty( $image ) ) :
 			$img_style = ( !empty( $img_style ) && in_array( $img_style, array( 'circle', 'square', 'full' ) ) ) ? $img_style : 'circle';
 			if ( $img_style == 'circle' )

@@ -8,7 +8,7 @@ jQuery(document).ready(function($) {
 	window.onbeforeunload = function(e) {
 		if ( dirtyvalues ) {
 			e.preventDefault();
-			e.returnValue = 'Some text';
+			e.returnValue = 'Your values are not saved';
 		}
 	};
 

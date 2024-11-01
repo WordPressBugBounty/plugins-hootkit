@@ -45,6 +45,10 @@ add_filter( 'wp_prepare_themes_for_js', 'hootkit_prepare_themes_for_display' );
  */
 if ( !function_exists( 'hootkit_parent_theme_title_style' ) ):
 function hootkit_parent_theme_title_style( $hook ) {
+	if ( 'widgets.php' == $hook && wp_script_is('WCPAY_DASH_APP', 'enqueued') ) {
+		// Dequeue the WooCommerce Payments script
+		wp_dequeue_script('WCPAY_DASH_APP');
+	}
 	if ( 'themes.php' == $hook && is_child_theme() ) {
 		echo '<style>.theme.active + .theme .theme-name { background: #515d69; color: #fff; font-weight: 300; } .theme.active + .theme .theme-name:before { content: "Parent: "; font-weight: bold; }</style>';
 	}

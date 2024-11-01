@@ -94,6 +94,7 @@ class HootKit_Icon_Widget extends HK_Widget {
 		// Allow theme/child-themes to use their own template
 		$widget_template = hoot_get_widget( 'icon', false );
 		// Use Hootkit template if theme does not have one
+		$widget_template = apply_filters( 'hootkit_widget_template', $widget_template, 'icon' );
 		$widget_template = ( $widget_template ) ? $widget_template : hootkit()->dir . 'widgets/icon/view.php';
 		// Option to overwrite variables to keep html tags in title later sanitized during display => skips 'widget_title' filter (esc_html hooked) action on title; (Possibly redundant as html is sanitized in title during save)
 		if ( apply_filters( 'hootkit_display_widget_extract_overwrite', false, 'icon' ) ) extract( $instance, EXTR_OVERWRITE ); else extract( $instance, EXTR_SKIP );

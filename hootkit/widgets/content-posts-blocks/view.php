@@ -107,9 +107,11 @@ do_action( 'hootkit_content_blocks_wrap', 'posts', ( ( !isset( $instance ) ) ? a
 							// Set URL
 							$linktag = '<a href="' . esc_url( get_permalink() ) . '" ' . hoot_get_attr( 'content-posts-blocks-link', ( ( !isset( $instance ) ) ? array() : $instance ) ) . '>';
 							$linktagend = '</a>';
-							$linktext = ( function_exists( 'hoot_get_mod' ) ) ? hoot_get_mod('read_more') : __( 'Know More', 'hootkit' );
-							$linktext = ( empty( $linktext ) ) ? sprintf( __( 'Read More %s', 'hootkit' ), '&rarr;' ) : $linktext;
-							$linktext = '<p class="more-link">' . $linktag . esc_html( $linktext ) . $linktagend . '</p>';
+
+							$themetextclass = ' theme-more-link'; // JNES@SR
+							$linktext = function_exists( 'hoot_get_mod' ) ? hoot_get_mod('read_more') : '';
+							$linktext = $linktext ? $linktext : sprintf( __( 'Read More %s', 'hootkit' ), '&rarr;' );
+							$linktext = '<p class="more-link' . $themetextclass . '">' . $linktag . esc_html( $linktext ) . $linktagend . '</p>';
 
 							// Start Block Display
 							if ( $column == 1 ) echo '<div class="content-block-row">';

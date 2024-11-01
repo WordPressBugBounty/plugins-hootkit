@@ -127,9 +127,6 @@ do_action( 'hootkit_content_blocks_wrap', 'products', ( ( !isset( $instance ) ) 
 							// Set URL
 							$linktag = '<a href="' . esc_url( get_permalink() ) . '" ' . hoot_get_attr( 'content-products-blocks-link', ( ( !isset( $instance ) ) ? array() : $instance ) ) . '>';
 							$linktagend = '</a>';
-							// $linktext = ( function_exists( 'hoot_get_mod' ) ) ? hoot_get_mod('read_more') : __( 'Know More', 'hootkit' );
-							// $linktext = ( empty( $linktext ) ) ? sprintf( __( 'Read More %s', 'hootkit' ), '&rarr;' ) : $linktext;
-							// $linktext = '<p class="more-link">' . $linktag . esc_html( $linktext ) . $linktagend . '</p>';
 
 							// Start Block Display
 							if ( $column == 1 ) echo '<div class="content-block-row">';
@@ -193,8 +190,6 @@ do_action( 'hootkit_content_blocks_wrap', 'products', ( ( !isset( $instance ) ) 
 												echo '<div class="content-block-text">';
 												echo wpautop( $content );
 												echo '</div>';
-												// if ( function_exists( 'hoot_remove_readmore_link' ) && ( $style == 'style5' || $style == 'style6' ) )
-												// 	echo $linktext;
 											}
 										}
 										if ( !empty( $show_rating ) ) {
@@ -213,8 +208,6 @@ do_action( 'hootkit_content_blocks_wrap', 'products', ( ( !isset( $instance ) ) 
 
 								</div>
 								<?php
-								// if ( $fullcontent === 'excerpt' && function_exists( 'hoot_remove_readmore_link' ) && $style != 'style5' && $style != 'style6' )
-								// 	echo $linktext;
 								?>
 							</div><?php
 

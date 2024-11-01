@@ -131,6 +131,7 @@ class HootKit_Ticker_Widget extends HK_Widget {
 		// Allow theme/child-themes to use their own template
 		$widget_template = hoot_get_widget( 'ticker', false );
 		// Use Hootkit template if theme does not have one
+		$widget_template = apply_filters( 'hootkit_widget_template', $widget_template, 'ticker' );
 		$widget_template = ( $widget_template ) ? $widget_template : hootkit()->dir . 'widgets/ticker/view.php';
 		// Option to overwrite variables to keep html tags in title later sanitized during display => skips 'widget_title' filter (esc_html hooked) action on title; (Possibly redundant as html is sanitized in title during save)
 		if ( apply_filters( 'hootkit_display_widget_extract_overwrite', false, 'ticker' ) ) extract( $instance, EXTR_OVERWRITE ); else extract( $instance, EXTR_SKIP );

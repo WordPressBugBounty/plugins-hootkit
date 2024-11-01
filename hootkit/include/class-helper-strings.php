@@ -50,7 +50,7 @@ if ( ! class_exists( '\HootKit\Inc\Helper_Strings' ) ) :
 				'content'     => __( 'Content Widgets', 'hootkit' ),
 				'post'        => __( 'Post Widgets',    'hootkit' ),
 				'display'     => __( 'Display Widgets', 'hootkit' ),
-				'woocom'      => __( 'Woocommerce',     'hootkit' ),
+				'woocom'      => __( 'WooCommerce',     'hootkit' ),
 				'misc'        => __( 'Misc. Features',  'hootkit' ),
 
 

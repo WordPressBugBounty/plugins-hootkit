@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HootKit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-22 00:05+0530\n"
+"POT-Creation-Date: 2024-11-01 20:59+0530\n"
 "PO-Revision-Date: 2021-12-04 00:48+0530\n"
 "Last-Translator: wpHoot <admin@wphoot.com>\n"
 "Language-Team: wpHoot <admin@wphoot.com>\n"
@@ -79,19 +79,19 @@ msgstr ""
 msgid "View All"
 msgstr ""
 
-#: ../admin/class-settings.php:298
+#: ../admin/class-settings.php:299
 msgid "Click 'Enable' on left to show available options."
 msgstr ""
 
-#: ../admin/class-settings.php:337
-msgid "This module requires WooCommerce - for Online Shops"
+#: ../admin/class-settings.php:338
+msgid "This module requires WooCommerce plugin for Online Shops"
 msgstr ""
 
-#: ../admin/class-settings.php:338
+#: ../admin/class-settings.php:339
 msgid "Premium Theme Feature"
 msgstr ""
 
-#: ../admin/class-settings.php:371
+#: ../admin/class-settings.php:372
 msgid "Save Changes"
 msgstr ""
 
@@ -128,7 +128,7 @@ msgid "Display Widgets"
 msgstr ""
 
 #: ../include/class-helper-strings.php:53
-msgid "Woocommerce"
+msgid "WooCommerce"
 msgstr ""
 
 #: ../include/class-helper-strings.php:54
@@ -685,7 +685,7 @@ msgid "On:"
 msgstr ""
 
 #: ../include/template-functions.php:300
-#: ../widgets/content-products-blocks/view.php:165
+#: ../widgets/content-products-blocks/view.php:162
 #: ../widgets/product-list/view.php:170
 #: ../widgets/productcarousel/view-setup.php:95
 #: ../widgets/productlistcarousel/view-setup.php:109
@@ -693,7 +693,7 @@ msgid "In:"
 msgstr ""
 
 #: ../include/template-functions.php:306
-#: ../widgets/content-products-blocks/view.php:169
+#: ../widgets/content-products-blocks/view.php:166
 #: ../widgets/product-list/view.php:174
 #: ../widgets/productcarousel/view-setup.php:99
 #: ../widgets/productlistcarousel/view-setup.php:113
@@ -883,6 +883,12 @@ msgid ""
 "\t\t\tIf you are adding a large image to Content (to display as a full width image banner), it can be useful to set %15$sContent Box Size%16$s option above to %15$sStretched%16$s\n"
 "\t\t\t%4$s%2$s\n"
 "\t\t\t"
+msgstr ""
+
+#: ../v2/widgets/announce/view.php:36
+#: ../v2/widgets/products-carticon/view.php:29 ../widgets/announce/view.php:36
+#: ../widgets/buttons/admin.php:66 ../widgets/products-carticon/view.php:29
+msgid "Click Here"
 msgstr ""
 
 #: ../widgets/announce/admin.php:23
@@ -1116,11 +1122,6 @@ msgstr ""
 #: ../widgets/ticker-posts/admin.php:125 ../widgets/ticker/admin.php:111
 #: ../widgets/toggle/admin.php:82 ../widgets/vcards/admin.php:157
 msgid "Margin Bottom"
-msgstr ""
-
-#: ../widgets/announce/view.php:36 ../widgets/buttons/admin.php:66
-#: ../widgets/products-carticon/view.php:29
-msgid "Click Here"
 msgstr ""
 
 #: ../widgets/buttons/admin.php:23
@@ -1498,9 +1499,8 @@ msgid "Link Text (optional)"
 msgstr ""
 
 #: ../widgets/carousel/admin.php:110 ../widgets/content-blocks/admin.php:135
-#: ../widgets/content-blocks/view.php:112
-#: ../widgets/content-posts-blocks/view.php:110 ../widgets/cta/view.php:8
-#: ../widgets/profile/view.php:8 ../widgets/slider-image/admin.php:114
+#: ../widgets/cta/view.php:8 ../widgets/profile/view.php:8
+#: ../widgets/slider-image/admin.php:114
 msgid "Know More"
 msgstr ""
 
@@ -1732,8 +1732,8 @@ msgstr ""
 msgid "(in pixels) Leave empty for default icon size"
 msgstr ""
 
-#: ../widgets/content-blocks/view.php:113
-#: ../widgets/content-posts-blocks/view.php:111 ../widgets/cta/view.php:9
+#: ../widgets/content-blocks/view.php:119
+#: ../widgets/content-posts-blocks/view.php:113 ../widgets/cta/view.php:9
 #: ../widgets/profile/view.php:9
 #, php-format
 msgid "Read More %s"

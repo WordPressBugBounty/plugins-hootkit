@@ -2,9 +2,9 @@
 Contributors: wphoot
 Tags: widgets, wphoot, demo content, slider
 Requires at least: 6.0
-Tested up to: 6.5
+Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 2.0.14
+Stable tag: 2.0.15
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -42,6 +42,13 @@ This plugin is released under a GPL license.
 The plugin supports all themes, but works best with wpHoot Themes. A few options are available only in compatible wpHoot Themes.
 
 == Changelog ==
+
+= 2.0.15 =
+* Minor css changes for admin screens
+* Update WooCommerce label in Settings page
+* Read More link text compatibility with theme customizer live changes
+* Add v2 templates for supporting themes
+* Fix admin wp.media bug with WooPaymets plugin (Ticket#12065)
 
 = 2.0.14 =
 * Add X (twitter) to Social Profiles
