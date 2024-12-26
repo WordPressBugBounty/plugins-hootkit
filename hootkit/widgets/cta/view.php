@@ -18,7 +18,7 @@ $class .= ( !empty( $style ) ) ? ' cta-' . esc_attr( $style ) : ' cta-style1';
 ?>
 
 <div class="cta-widget-wrap <?php echo hoot_sanitize_html_classes( "{$top_class} {$bottom_class}" ); ?>">
-	<div class="cta-widget <?php echo $class; ?>">
+	<div <?php hoot_attr( 'cta-widget', '', $class ); ?>>
 
 		<div class="cta-content">
 

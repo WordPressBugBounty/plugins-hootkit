@@ -37,7 +37,7 @@ $subtitle = ( !empty( $subtitle ) ) ? $subtitle : '';
 			else
 				$img_size = apply_filters( 'hootkit_profile_imgsize', 'full', $img_style );
 			?>
-			<div class="profile-image <?php echo 'profile-img-' . esc_attr( $img_style ); ?>">
+			<div <?php hoot_attr( 'profile-image', '', 'profile-img-'.$img_style ); ?>>
 				<?php
 				if ( $img_style == 'full' ) {
 					echo wp_get_attachment_image( $image, $img_size, '', array( 'class' => "profile-img attachment-{$img_size} size-{$img_size}", 'itemprop' => 'image' ) );

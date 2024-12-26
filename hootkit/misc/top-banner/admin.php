@@ -149,7 +149,7 @@ function hootkit_topbanner_customizer_options( $options ) {
 		'section'	=> $section,
 		'type'		=> 'content',
 		/* Translators: The %s are placeholders for HTML, so the order can't be changed. */
-		'content' => '<span style="display:block;margin-top:-15px;">'. sprintf( esc_html__( '%1$s%3$s
+		'content' => sprintf( esc_html__( '%1$s%3$s
 			%5$sInsert Timer%6$s
 			You can add a HootKit timer to your content using shortcode. The values are the %7$send time%8$s
 			%9$s[HKtimer year="%7$s2029%8$s" month="%7$s12%8$s" day="%7$s31%8$s" hour="%7$s23%8$s" minute="%7$s59%8$s"]%14$s
@@ -167,7 +167,7 @@ function hootkit_topbanner_customizer_options( $options ) {
 			%9$s<img src=" %7$shttp://website.com/image.png%8$s ">%14$s
 			If you are adding a large image to Content (to display as a full width image banner), it can be useful to set %15$sContent Box Size%16$s option above to %15$sStretched%16$s
 			%4$s%2$s
-			', 'hootkit' ), '<ul style="list-style:disc;margin-left:1.5em">','</ul>','<li>','</li>',
+			', 'hootkit' ), '<ul>','</ul>','<li style="margin-left:1.5em;"><span style="margin-left:-1em">&#9755;</span>','</li>',
 								 '<strong style="display:block;margin:10px 0 0;">', '</strong>',
 								 '<span style="text-decoration:underline">', '</span>',
 								 '<code style="display:block;margin:2px 0;font-style:normal;">',

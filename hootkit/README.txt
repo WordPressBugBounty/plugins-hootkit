@@ -2,9 +2,9 @@
 Contributors: wphoot
 Tags: widgets, wphoot, demo content, slider
 Requires at least: 6.0
-Tested up to: 6.6
+Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 2.0.15
+Stable tag: 2.0.16
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -42,6 +42,12 @@ This plugin is released under a GPL license.
 The plugin supports all themes, but works best with wpHoot Themes. A few options are available only in compatible wpHoot Themes.
 
 == Changelog ==
+
+= 2.0.16 =
+* Provide option to hide WC Offscreen Cart
+* Add option to enable 'classic-widgets' for supporting themes
+* Add customizer options mods for supporting themes
+* Add AOS support for supporting themes
 
 = 2.0.15 =
 * Minor css changes for admin screens

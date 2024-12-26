@@ -151,7 +151,7 @@ do_action( 'hootkit_gridwidget_wrap', 'content-grid', ( ( !isset( $instance ) ) 
 		$gridslider = ( $firstgridcount > 1 );
 		?>
 
-		<div <?php echo hoot_get_attr( 'hk-gridunit', 'content-grid', $gridunit_attr ) ?> <?php echo $gridunit_style; ?>>
+		<div <?php echo hoot_get_attr( 'hk-gridunit', array( 'type' => 'content-grid', 'counter' => $gridcount ), $gridunit_attr ) ?> <?php echo $gridunit_style; ?>>
 			<?php
 			if ( $gridslider ) echo '<div ' . hoot_get_attr( 'hk-gridslider', 'content-grid', 'lightSlider' ) . '>';
 			foreach ( $firstgrid_boxes as $box ) :
@@ -174,7 +174,7 @@ do_action( 'hootkit_gridwidget_wrap', 'content-grid', ( ( !isset( $instance ) ) 
 		$gridunit_style = '';
 		foreach ( $boxes as $box ) : ?>
 
-		<div <?php echo hoot_get_attr( 'hk-gridunit', 'content-grid', $gridunit_attr ) ?> <?php echo $gridunit_style; ?>>
+		<div <?php echo hoot_get_attr( 'hk-gridunit', array( 'type' => 'content-grid', 'counter' => $gridcount ), $gridunit_attr ) ?> <?php echo $gridunit_style; ?>>
 			<?php
 				hootkit_content_grid_displayunit( $box, $gridcount, $factor, $columns, $gridunit_height, array() );
 			?>

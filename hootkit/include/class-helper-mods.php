@@ -233,6 +233,10 @@ if ( ! class_exists( '\HootKit\Inc\Helper_Mods' ) ) :
 						'assets'      => array( 'font-awesome' ),
 						// 'adminassets' => array( 'font-awesome' ), // @todo: load font-awesome in customizer
 					),
+					'classic-widgets' => array(
+						'types'       => array( 'misc' ),
+						'displaysets' => array( 'widgets' ),
+					),
 
 					// DISPLAY SET: WooCom
 					'products-carticon' => array(
@@ -300,3 +304,36 @@ if ( ! class_exists( '\HootKit\Inc\Helper_Mods' ) ) :
 	Helper_Mods::get_instance();
 
 endif;
+
+/**
+ * Theme Customizer settings mods
+ *
+ * @since 2.0.16
+ * @param array $options
+ * @return array
+ */
+if ( !function_exists( 'HootKit\Inc\hootkit_theme_customizer_options' ) ):
+function hootkit_theme_customizer_options( $options ) {
+	if ( !is_array( $options ) || empty( $options['settings'] ) || !is_array( $options['settings'] ) )
+		return $options;
+	if ( !empty( $options['settings']['topann_content'] ) && is_array( $options['settings']['topann_content'] ) && !empty( $options['settings']['topann_content']['type'] ) ) {
+		if ( $options['settings']['topann_content']['type'] === 'text' )
+			$options['settings']['topann_content']['type'] = 'textarea';
+	}
+	if ( !empty( $options['settings']['header_image_text'] ) && is_array( $options['settings']['header_image_text'] ) && !empty( $options['settings']['header_image_text']['type'] ) ) {
+		if ( $options['settings']['header_image_text']['type'] === 'text' )
+			$options['settings']['header_image_text']['type'] = 'textarea';
+	}
+	foreach ( array( 'colorspnote', 'typopnote', 'singlemetapnote' ) as $key ) {
+		if ( !empty( $options['settings'][ $key ] ) && is_array( $options['settings'][ $key ] ) && empty( $options['settings'][ $key ]['type'] ) ) {
+			$options['settings'][ $key ]['type'] = 'content';
+		}
+	}
+	if ( !empty( $options['settings']['sidebar_tabs'] ) && is_array( $options['settings']['sidebar_tabs'] ) && !empty( $options['settings']['sidebar_tabs']['options'] ) && is_array( $options['settings']['sidebar_tabs']['options'] ) && !empty( $options['settings']['sidebar_tabs']['options']['layout'] ) && is_array( $options['settings']['sidebar_tabs']['options']['layout'] ) && !empty( $options['settings']['sidebar_tabs']['options']['layout']['sblayoutpnote'] ) && is_array( $options['settings']['sidebar_tabs']['options']['layout']['sblayoutpnote'] ) && empty( $options['settings']['sidebar_tabs']['options']['layout']['sblayoutpnote']['type'] ) ) {
+		$options['settings']['sidebar_tabs']['options']['layout']['sblayoutpnote']['type'] = 'content';
+	}
+
+	return $options;
+};
+endif;
+add_filter( 'olius_customizer_options', 'HootKit\Inc\hootkit_theme_customizer_options', 7 );

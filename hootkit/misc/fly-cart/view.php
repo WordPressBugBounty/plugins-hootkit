@@ -11,6 +11,8 @@ foreach ( array(
 	) as $id ) {
 	$$id = hoot_get_mod( 'hkfc_' . $id );
 }
+if ( $location === 'none' && ! is_customize_preview() )
+	return;
 
 ?>
 

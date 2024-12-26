@@ -125,16 +125,16 @@ do_action( 'hootkit_content_blocks_wrap', 'custom', ( ( !isset( $instance ) ) ? 
 
 				// Start Block Display
 				if ( $column == 1 ) echo '<div class="content-block-row">';
+				$contentblock_attr = array( 'classes' => 'no-highlight' );
+				if ( $visualtype == 'icon' && $icon_size && !empty( $icon_size_padding ) && $style == 'style3' ) {
+					$contentblock_attr['style'] = 'padding-top:' . ( ( $icon_size + $icon_size_padding ) / 2 ) . 'px;margin-top:' . ( ( $icon_size + $icon_size_padding ) / 2 ) . 'px;';
+				}
+
+				$attrcontext = array( 'visual' => $visual, 'visualtype' => $visualtype, 'style' => $style, 'counter' => $counter, 'column' => $column, 'columns' => $columns );
 				?>
 
-				<div class="content-block-column <?php echo hoot_sanitize_html_classes( "hcolumn-1-{$columns} content-block-{$counter} content-block-{$style} {$column_class}" ); ?>">
-					<?php $contentblock_attr = array( 'classes' => 'no-highlight' );
-					if ( $visualtype == 'icon' && $icon_size && !empty( $icon_size_padding ) && $style == 'style3' ) $contentblock_attr['style'] = 'padding-top:' . ( ( $icon_size + $icon_size_padding ) / 2 ) . 'px;margin-top:' . ( ( $icon_size + $icon_size_padding ) / 2 ) . 'px;';
-					?>
-					<div <?php hoot_attr( 'content-block',
-										  array( 'visual' => $visual, 'visualtype' => $visualtype, 'style' => $style ),
-										  $contentblock_attr
-										); ?>>
+				<div <?php hoot_attr( 'content-block-column', $attrcontext, "hcolumn-1-{$columns} content-block-{$counter} content-block-{$style} {$column_class}" ); ?>>
+					<div <?php hoot_attr( 'content-block', $attrcontext, $contentblock_attr ); ?>>
 
 						<?php if ( $visualtype == 'image' ) : ?>
 							<div class="content-block-visual content-block-image">

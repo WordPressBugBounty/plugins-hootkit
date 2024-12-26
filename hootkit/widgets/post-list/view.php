@@ -114,9 +114,11 @@ do_action( 'hootkit_listwidget_wrap', 'posts-list', ( ( !isset( $instance ) ) ? 
 				$gridunit_attr['class'] .= ($visual) ? ' visual-img' : ' visual-none';
 				$gridunit_attr['data-unitsize'] = $factor;
 				$gridunit_attr['data-columns'] = $columns;
+
+				$attrcontext = array( 'type' => 'post', 'counter' => $postcount, 'row' => $postcount - ( $count - ${ 'count' . $colcount } ) );
 				?>
 
-				<div <?php echo hoot_get_attr( 'hk-listunit', 'post', $gridunit_attr ) ?>>
+				<div <?php echo hoot_get_attr( 'hk-listunit', $attrcontext, $gridunit_attr ) ?>>
 
 					<?php
 					if ( $visual ) :

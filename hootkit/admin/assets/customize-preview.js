@@ -65,7 +65,7 @@
 
 	wp.customize( 'hkfc_location', function( value ) {
 		value.bind( function( newval ) {
-			$('#fly-cart').removeClass('flycart-left flycart-right').addClass('flycart-'+newval);
+			$('#fly-cart').removeClass('flycart-none flycart-left flycart-right').addClass('flycart-'+newval);
 		} );
 	} );
 

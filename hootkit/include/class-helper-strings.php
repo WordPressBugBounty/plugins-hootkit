@@ -101,6 +101,7 @@ if ( ! class_exists( '\HootKit\Inc\Helper_Strings' ) ) :
 
 				'top-banner'      => __( 'Top Banner',        'hootkit' ),
 				'shortcode-timer' => __( 'Timer (shortcode)', 'hootkit' ),
+				'classic-widgets' => __( 'Classic Widgets',   'hootkit' ),
 
 
 				'white'        => __( 'White',           'hootkit' ),

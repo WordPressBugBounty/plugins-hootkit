@@ -363,7 +363,10 @@ function hootkit_attr_social_icons_icon( $attr, $context ) {
 	$attr['class'] = ( empty( $attr['class'] ) ) ? '' : $attr['class'];
 
 	$attr['class'] .= ' social-icons-icon';
-	if ( $context != 'fa-envelope' )
+	if (
+		( is_string( $context ) && $context != 'fa-envelope' ) ||
+		( is_array( $context ) && !empty( $context['icon'] ) && $context['icon'] != 'fa-envelope' )
+	)
 		$attr['target'] = '_blank';
 
 	return $attr;

@@ -137,9 +137,11 @@ do_action( 'hootkit_listwidget_wrap', 'products-list', ( ( !isset( $instance ) )
 				$gridunit_attr['class'] .= ($visual) ? ' visual-img' : ' visual-none';
 				$gridunit_attr['data-unitsize'] = $factor;
 				$gridunit_attr['data-columns'] = $columns;
+
+				$attrcontext = array( 'type' => 'product', 'counter' => $postcount, 'row' => $postcount - ( $count - ${ 'count' . $colcount } ) );
 				?>
 
-				<div <?php echo hoot_get_attr( 'hk-listunit', 'product', $gridunit_attr ) ?>>
+				<div <?php echo hoot_get_attr( 'hk-listunit', $attrcontext, $gridunit_attr ) ?>>
 
 					<?php
 					if ( $visual ) :

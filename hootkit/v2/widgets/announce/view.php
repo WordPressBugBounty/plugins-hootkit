@@ -11,10 +11,8 @@ $headlinesize = ( empty( $headlinesize ) ) ? false : $headlinesize;
 $inlinestyle = $styleclass = $iconstyle = $iconclass = $headlinestyle = $headlineclass = '';
 if ( $background || $fontcolor ) {
 	$styleclass .= ' announce-userstyle';
-	$inlinestyle .= ' style="';
 	$inlinestyle .= ( $background ) ? 'background:' . sanitize_hex_color( $background ) . ';' : '';
 	$inlinestyle .= ( $fontcolor ) ? 'color:' . sanitize_hex_color( $fontcolor ) . ';' : '';
-	$inlinestyle .= '"';
 }
 $styleclass .= ( $background ) ? ' announce-withbg' : '';
 $styleclass .= ( !$headline && !$message ) ? ' announce-nomsg' : '';
@@ -32,7 +30,7 @@ if ( $headlinesize ) {
 }
 ?>
 
-<div class="announce-widget <?php echo $styleclass; ?>" <?php echo $inlinestyle;?>>
+<div <?php hoot_attr( 'announce-widget', '', array( 'classes' => $styleclass, 'style' => $inlinestyle ) ); ?>>
 	<?php if ( !empty( $url ) ) echo '<a href="' . esc_url( $url ) . '" ' . hoot_get_attr( 'announce-link', ( ( !isset( $instance ) ) ? array() : $instance ) ) . '><span>' . __( 'Click Here', 'hootkit' ) . '</span></a>'; ?>
 	<div class="announce-box hootflex hootflex--nor">
 		<?php if ( !empty( $icon ) ) : ?>

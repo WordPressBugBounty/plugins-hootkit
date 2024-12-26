@@ -115,13 +115,12 @@ do_action( 'hootkit_content_blocks_wrap', 'posts', ( ( !isset( $instance ) ) ? a
 
 							// Start Block Display
 							if ( $column == 1 ) echo '<div class="content-block-row">';
+
+							$attrcontext = array( 'visual' => $visual, 'visualtype' => $visualtype, 'style' => $style, 'counter' => $counter, 'column' => $column, 'columns' => $columns );
 							?>
 
-							<div class="content-block-column <?php echo hoot_sanitize_html_classes( "hcolumn-1-{$columns} content-block-{$counter} content-block-{$style} {$column_class}" ); ?>">
-								<div <?php hoot_attr( 'content-block',
-													  array( 'visual' => $visual, 'visualtype' => $visualtype, 'style' => $style ),
-													  'no-highlight'
-													); ?>>
+							<div <?php hoot_attr( 'content-block-column', $attrcontext, "hcolumn-1-{$columns} content-block-{$counter} content-block-{$style} {$column_class}" ); ?>>
+								<div <?php hoot_attr( 'content-block', $attrcontext, 'no-highlight' ); ?>>
 
 									<?php if ( $visualtype == 'image' ) : ?>
 										<div class="content-block-visual content-block-image">

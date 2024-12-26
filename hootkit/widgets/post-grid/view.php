@@ -192,7 +192,7 @@ do_action( 'hootkit_gridwidget_wrap', 'post-grid', ( ( !isset( $instance ) ) ? a
 		$gridslider = ( !empty( $fpquery_args['posts_per_page'] ) && intval( $fpquery_args['posts_per_page'] ) > 1 );
 		?>
 
-		<div <?php echo hoot_get_attr( 'hk-gridunit', 'post-grid', $gridunit_attr ) ?> <?php echo $gridunit_style; ?>>
+		<div <?php echo hoot_get_attr( 'hk-gridunit', array( 'type' => 'post-grid', 'counter' => $postcount ), $gridunit_attr ) ?> <?php echo $gridunit_style; ?>>
 			<?php
 			if ( $gridslider ) echo '<div ' . hoot_get_attr( 'hk-gridslider', 'post-grid', 'lightSlider' ) . '>';
 			foreach ( $post_firstgrid_query as $post ) :
@@ -225,7 +225,7 @@ do_action( 'hootkit_gridwidget_wrap', 'post-grid', ( ( !isset( $instance ) ) ? a
 		$gridunit_style = '';
 		foreach ( $post_grid_query as $post ) : ?>
 
-		<div <?php echo hoot_get_attr( 'hk-gridunit', 'post-grid', $gridunit_attr ) ?> <?php echo $gridunit_style; ?>>
+		<div <?php echo hoot_get_attr( 'hk-gridunit', array( 'type' => 'post-grid', 'counter' => $postcount ), $gridunit_attr ) ?> <?php echo $gridunit_style; ?>>
 			<?php
 				setup_postdata( $post );
 				$metadisplay = array();

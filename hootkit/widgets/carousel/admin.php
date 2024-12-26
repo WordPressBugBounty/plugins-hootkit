@@ -145,6 +145,9 @@ class HootKit_Slider_Carousel_Widget extends HK_Widget {
 
 		if ( !in_array( 'widget-subtitle', hootkit()->get_config( 'supports' ) ) ) {
 			unset( $settings['form_options']['subtitle'] );
+		}
+
+		if ( !in_array( 'slider-subtitles', hootkit()->get_config( 'supports' ) ) ) {
 			unset( $settings['form_options']['slides']['fields']['subtitle'] );
 		}
 

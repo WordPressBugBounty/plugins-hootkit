@@ -89,8 +89,13 @@ if ( $slidesubtitles )
 			) );
 			$slide['image'] = intval( $slide['image'] );
 
-			if ( !empty( $slide['image'] ) ) :
-				?>
+			$hasimage = !empty( $slide['image'] );
+			$hastitle = !empty( $slide['title'] );
+			$hassubtitle = $slidesubtitles && !empty( $slide['subtitle'] );
+			$hascaption = !empty( $slide['caption'] );
+			$hasbutton = !empty( $slide['url'] ) && !empty( $slide['button'] );
+
+			if ( $hasimage ) : ?>
 
 				<li class="lightSlide hootkitslide hootkitslide-<?php echo $slide_count; $slide_count++; ?>">
 
@@ -105,19 +110,21 @@ if ( $slidesubtitles )
 						echo '</a>';
 					?>
 
-					<?php if ( !empty( $slide['title'] ) || !empty( $slide['caption'] ) || ( !empty( $slide['url'] ) && !empty( $slide['button'] ) ) ) : ?>
+					<?php if ( $hastitle || $hassubtitle || $hascaption || $hasbutton ) : ?>
 						<div class="hootkitslide-content wrap-<?php echo $slide['caption_bg']; ?>">
 							<?php
-							if ( !empty( $slide['title'] ) || !empty( $slide['caption'] ) ) :
+							if ( $hastitle || $hassubtitle || $hascaption ) :
 								?>
 								<div <?php hoot_attr( 'hootkitslide-caption', '', 'style-' . $slide['caption_bg'] ) ?>>
 									<?php
-									if ( !empty( $slide['title'] ) )
+									if ( $hastitle )
 										echo '<h3 class="hootkitslide-head">' . wp_kses_post( $slide['title'] ) . '</h3>';
-									if ( !empty( $slide['caption'] ) || ( $slidesubtitles && !empty( $slide['subtitle'] ) ) ) {
+									if ( $hassubtitle || $hascaption ) {
 										echo '<div class="hootkitslide-text">';
-										if ( ( $slidesubtitles && !empty( $slide['subtitle'] ) ) ) echo '<div class="hootkitslide-subtitle hoot-subtitle">' . wp_kses_post( $slide['subtitle'] ) . '</div>';
-										if ( !empty( $slide['caption'] ) ) echo do_shortcode( wp_kses_post( wpautop( $slide['caption'] ) ) );
+										if ( $hassubtitle )
+											echo '<div class="hootkitslide-subtitle hoot-subtitle">' . wp_kses_post( $slide['subtitle'] ) . '</div>';
+										if ( $hascaption )
+											echo do_shortcode( wp_kses_post( wpautop( $slide['caption'] ) ) );
 										echo '</div>';
 									}
 									?>
@@ -125,7 +132,7 @@ if ( $slidesubtitles )
 								<?php
 							endif;
 
-							if ( !empty( $slide['url'] ) && !empty( $slide['button'] ) ) :
+							if ( $hasbutton ) :
 								?>
 								<a href="<?php echo esc_url( $slide['url'] ) ?>" <?php hoot_attr( 'hootkitslide-button', ( ( !isset( $instance ) ) ? array() : $instance ), 'button button-small' ); ?>>
 									<?php echo esc_html( $slide['button'] ) ?>

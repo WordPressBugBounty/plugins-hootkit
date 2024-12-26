@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HootKit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-01 20:59+0530\n"
+"POT-Creation-Date: 2024-12-26 23:41+0530\n"
 "PO-Revision-Date: 2021-12-04 00:48+0530\n"
 "Last-Translator: wpHoot <admin@wphoot.com>\n"
 "Language-Team: wpHoot <admin@wphoot.com>\n"
@@ -75,7 +75,7 @@ msgstr ""
 msgid "Disable"
 msgstr ""
 
-#: ../admin/class-settings.php:288 ../include/template-functions.php:434
+#: ../admin/class-settings.php:288 ../include/template-functions.php:437
 msgid "View All"
 msgstr ""
 
@@ -288,83 +288,87 @@ msgstr ""
 msgid "Timer (shortcode)"
 msgstr ""
 
-#: ../include/class-helper-strings.php:106
-msgid "White"
+#: ../include/class-helper-strings.php:104
+msgid "Classic Widgets"
 msgstr ""
 
 #: ../include/class-helper-strings.php:107
-msgid "Black"
+msgid "White"
 msgstr ""
 
 #: ../include/class-helper-strings.php:108
-msgid "Brown"
+msgid "Black"
 msgstr ""
 
 #: ../include/class-helper-strings.php:109
-msgid "Brown (Bright)"
+msgid "Brown"
 msgstr ""
 
 #: ../include/class-helper-strings.php:110
-msgid "Blue"
+msgid "Brown (Bright)"
 msgstr ""
 
 #: ../include/class-helper-strings.php:111
-msgid "Blue (Bright)"
+msgid "Blue"
 msgstr ""
 
 #: ../include/class-helper-strings.php:112
-msgid "Cyan"
+msgid "Blue (Bright)"
 msgstr ""
 
 #: ../include/class-helper-strings.php:113
-msgid "Cyan (Bright)"
+msgid "Cyan"
 msgstr ""
 
 #: ../include/class-helper-strings.php:114
-msgid "Green"
+msgid "Cyan (Bright)"
 msgstr ""
 
 #: ../include/class-helper-strings.php:115
-msgid "Green (Bright)"
+msgid "Green"
 msgstr ""
 
 #: ../include/class-helper-strings.php:116
-msgid "Yellow"
+msgid "Green (Bright)"
 msgstr ""
 
 #: ../include/class-helper-strings.php:117
-msgid "Yellow (Bright)"
+msgid "Yellow"
 msgstr ""
 
 #: ../include/class-helper-strings.php:118
-msgid "Amber"
+msgid "Yellow (Bright)"
 msgstr ""
 
 #: ../include/class-helper-strings.php:119
-msgid "Amber (Bright)"
+msgid "Amber"
 msgstr ""
 
 #: ../include/class-helper-strings.php:120
-msgid "Orange"
+msgid "Amber (Bright)"
 msgstr ""
 
 #: ../include/class-helper-strings.php:121
-msgid "Orange (Bright)"
+msgid "Orange"
 msgstr ""
 
 #: ../include/class-helper-strings.php:122
-msgid "Red"
+msgid "Orange (Bright)"
 msgstr ""
 
 #: ../include/class-helper-strings.php:123
-msgid "Red (Bright)"
+msgid "Red"
 msgstr ""
 
 #: ../include/class-helper-strings.php:124
-msgid "Pink"
+msgid "Red (Bright)"
 msgstr ""
 
 #: ../include/class-helper-strings.php:125
+msgid "Pink"
+msgstr ""
+
+#: ../include/class-helper-strings.php:126
 msgid "Pink (Bright)"
 msgstr ""
 
@@ -685,16 +689,16 @@ msgid "On:"
 msgstr ""
 
 #: ../include/template-functions.php:300
-#: ../widgets/content-products-blocks/view.php:162
-#: ../widgets/product-list/view.php:170
+#: ../widgets/content-products-blocks/view.php:161
+#: ../widgets/product-list/view.php:172
 #: ../widgets/productcarousel/view-setup.php:95
 #: ../widgets/productlistcarousel/view-setup.php:109
 msgid "In:"
 msgstr ""
 
 #: ../include/template-functions.php:306
-#: ../widgets/content-products-blocks/view.php:166
-#: ../widgets/product-list/view.php:174
+#: ../widgets/content-products-blocks/view.php:165
+#: ../widgets/product-list/view.php:176
 #: ../widgets/productcarousel/view-setup.php:99
 #: ../widgets/productlistcarousel/view-setup.php:113
 msgid "Tagged:"
@@ -737,14 +741,18 @@ msgid "Cart Panel Location"
 msgstr ""
 
 #: ../misc/fly-cart/admin.php:70
-msgid "Left Edge of screen"
+msgid "Hide"
 msgstr ""
 
 #: ../misc/fly-cart/admin.php:71
+msgid "Left Edge of screen"
+msgstr ""
+
+#: ../misc/fly-cart/admin.php:72
 msgid "Right Edge of screen"
 msgstr ""
 
-#: ../misc/fly-cart/admin.php:79
+#: ../misc/fly-cart/admin.php:80
 msgid "Briefly show Cart panel when product is added/removed"
 msgstr ""
 
@@ -885,7 +893,7 @@ msgid ""
 "\t\t\t"
 msgstr ""
 
-#: ../v2/widgets/announce/view.php:36
+#: ../v2/widgets/announce/view.php:34
 #: ../v2/widgets/products-carticon/view.php:29 ../widgets/announce/view.php:36
 #: ../widgets/buttons/admin.php:66 ../widgets/products-carticon/view.php:29
 msgid "Click Here"

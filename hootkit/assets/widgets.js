@@ -23,6 +23,8 @@ jQuery(document).ready(function($) {
 						adaptiveHeight: true,
 						vertical: false,
 						verticalHeight: 500,
+						onSliderLoad: function (el) { setTimeout( () => { if (typeof AOS === 'object') { AOS.refresh(); } }, 1000); },
+						onAfterSlide: function (el) { if (typeof AOS === 'object') { AOS.refresh(); } },
 						},
 					selfData = $self.data(),
 					responsiveitem = (parseInt(selfData.responsiveitem)) ? parseInt(selfData.responsiveitem) : 2,

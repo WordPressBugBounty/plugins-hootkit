@@ -67,6 +67,7 @@ function hootkit_flycart_customizer_options( $options ) {
 		'section'	=> $section,
 		'type'		=> 'select',
 		'choices'     => array(
+			'none'   => esc_html__( 'Hide', 'hootkit'),
 			'left'   => esc_html__( 'Left Edge of screen', 'hootkit'),
 			'right'  => esc_html__( 'Right Edge of screen', 'hootkit'),
 		),
