@@ -324,16 +324,36 @@ function hootkit_theme_customizer_options( $options ) {
 		if ( $options['settings']['header_image_text']['type'] === 'text' )
 			$options['settings']['header_image_text']['type'] = 'textarea';
 	}
-	foreach ( array( 'colorspnote', 'typopnote', 'singlemetapnote' ) as $key ) {
-		if ( !empty( $options['settings'][ $key ] ) && is_array( $options['settings'][ $key ] ) && empty( $options['settings'][ $key ]['type'] ) ) {
-			$options['settings'][ $key ]['type'] = 'content';
+	foreach ( array( 'colorspnote', 'typopnote', 'archivetypepnote', 'singlemetapnote', 'article_background_pnote', 'article_maxwidth_pnote' ) as $key ) {
+		if ( !empty( $options['settings'][ $key ] ) && is_array( $options['settings'][ $key ] ) && !empty( $options['settings'][ $key ]['type'] ) && $options['settings'][ $key ]['type'] === 'note' ) {
+			$options['settings'][ $key ]['type'] = 'pnote';
 		}
 	}
-	if ( !empty( $options['settings']['sidebar_tabs'] ) && is_array( $options['settings']['sidebar_tabs'] ) && !empty( $options['settings']['sidebar_tabs']['options'] ) && is_array( $options['settings']['sidebar_tabs']['options'] ) && !empty( $options['settings']['sidebar_tabs']['options']['layout'] ) && is_array( $options['settings']['sidebar_tabs']['options']['layout'] ) && !empty( $options['settings']['sidebar_tabs']['options']['layout']['sblayoutpnote'] ) && is_array( $options['settings']['sidebar_tabs']['options']['layout']['sblayoutpnote'] ) && empty( $options['settings']['sidebar_tabs']['options']['layout']['sblayoutpnote']['type'] ) ) {
-		$options['settings']['sidebar_tabs']['options']['layout']['sblayoutpnote']['type'] = 'content';
+	if ( !empty( $options['settings']['sidebar_tabs'] ) && is_array( $options['settings']['sidebar_tabs'] ) && !empty( $options['settings']['sidebar_tabs']['options'] ) && is_array( $options['settings']['sidebar_tabs']['options'] ) && !empty( $options['settings']['sidebar_tabs']['options']['layout'] ) && is_array( $options['settings']['sidebar_tabs']['options']['layout'] ) && !empty( $options['settings']['sidebar_tabs']['options']['layout']['sblayoutpnote'] ) && is_array( $options['settings']['sidebar_tabs']['options']['layout']['sblayoutpnote'] ) && !empty( $options['settings']['sidebar_tabs']['options']['layout']['sblayoutpnote']['type'] ) && $options['settings']['sidebar_tabs']['options']['layout']['sblayoutpnote']['type'] === 'note' ) {
+		$options['settings']['sidebar_tabs']['options']['layout']['sblayoutpnote']['type'] = 'pnote';
 	}
 
 	return $options;
 };
 endif;
 add_filter( 'olius_customizer_options', 'HootKit\Inc\hootkit_theme_customizer_options', 7 );
+
+/**
+ * Update Theme fullshot
+ * @access public
+ * @return mixed
+ */
+if ( !function_exists( 'HootKit\Inc\hootkit_theme_abouttags' ) ):
+function hootkit_theme_abouttags( $tags ) {
+	if ( is_array( $tags ) && isset( $tags['fullshot'] ) && empty( $tags['fullshot'] ) ) {
+		$slug = !empty( $tags['slug'] ) ? $tags['slug'] : false;
+		if ( $slug ) {
+			$tags['fullshot'] = ( file_exists( hootkit()->dir . 'admin/assets/images/screenshot-' . $slug . '.jpg' ) ) ? hootkit()->uri . 'admin/assets/images/screenshot-' . $slug . '.jpg' : (
+				( file_exists( hootkit()->dir . 'admin/assets/images/screenshot-' . $slug . '.png' ) ) ? hootkit()->uri . 'admin/assets/images/screenshot-' . $slug . '.png' : ''
+				);
+		}
+	}
+	return $tags;
+}
+endif;
+add_filter( 'olius_abouttags', 'HootKit\Inc\hootkit_theme_abouttags', 7 );
