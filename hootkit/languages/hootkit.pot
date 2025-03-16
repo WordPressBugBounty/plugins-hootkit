@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HootKit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-05 20:15+0530\n"
+"POT-Creation-Date: 2025-03-16 22:43+0530\n"
 "PO-Revision-Date: 2021-12-04 00:48+0530\n"
 "Last-Translator: wpHoot <admin@wphoot.com>\n"
 "Language-Team: wpHoot <admin@wphoot.com>\n"
@@ -93,6 +93,35 @@ msgstr ""
 
 #: ../admin/class-settings.php:372
 msgid "Save Changes"
+msgstr ""
+
+#: ../include/class-helper-mods.php:328
+msgid "The premium version comes with color and background options for different sections of your site like header, menu dropdown, content area, logo background, footer etc."
+msgstr ""
+
+#: ../include/class-helper-mods.php:329
+msgid "The premium version offers complete typography control (color, style, size) for various headings, header, menu, footer, widgets, content sections etc (over 600 Google Fonts to chose from)"
+msgstr ""
+
+#: ../include/class-helper-mods.php:330
+#, php-format
+msgid "The premium version comes with additional archive Layout styles including %1$sMosaic layouts%2$s."
+msgstr ""
+
+#: ../include/class-helper-mods.php:331
+msgid "The premium version comes with control to hide meta information for each individual page/post."
+msgstr ""
+
+#: ../include/class-helper-mods.php:332
+msgid "The premium version allows selecting article background for each individual page/post."
+msgstr ""
+
+#: ../include/class-helper-mods.php:333
+msgid "The premium version allows selecting article max-width for each individual page/post."
+msgstr ""
+
+#: ../include/class-helper-mods.php:343
+msgid "The premium version allows selecting layout for each individual page/post."
 msgstr ""
 
 #: ../include/class-helper-strings.php:44

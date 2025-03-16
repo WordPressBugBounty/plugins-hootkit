@@ -324,19 +324,30 @@ function hootkit_theme_customizer_options( $options ) {
 		if ( $options['settings']['header_image_text']['type'] === 'text' )
 			$options['settings']['header_image_text']['type'] = 'textarea';
 	}
-	foreach ( array( 'colorspnote', 'typopnote', 'archivetypepnote', 'singlemetapnote', 'article_background_pnote', 'article_maxwidth_pnote' ) as $key ) {
+	$ar = array(
+		'colorspnote' => esc_html__( 'The premium version comes with color and background options for different sections of your site like header, menu dropdown, content area, logo background, footer etc.', 'hootkit' ),
+		'typopnote' => esc_html__( 'The premium version offers complete typography control (color, style, size) for various headings, header, menu, footer, widgets, content sections etc (over 600 Google Fonts to chose from)', 'hootkit' ),
+		'archivetypepnote' => sprintf( esc_html__( 'The premium version comes with additional archive Layout styles including %1$sMosaic layouts%2$s.', 'hootkit' ), '<strong>', '</strong>' ),
+		'singlemetapnote' => esc_html__( 'The premium version comes with control to hide meta information for each individual page/post.', 'hootkit' ),
+		'article_background_pnote' => esc_html__( 'The premium version allows selecting article background for each individual page/post.', 'hootkit' ),
+		'article_maxwidth_pnote' => esc_html__( 'The premium version allows selecting article max-width for each individual page/post.', 'hootkit' ),
+	);
+	foreach ( $ar as $key => $text ) {
 		if ( !empty( $options['settings'][ $key ] ) && is_array( $options['settings'][ $key ] ) && !empty( $options['settings'][ $key ]['type'] ) && $options['settings'][ $key ]['type'] === 'note' ) {
 			$options['settings'][ $key ]['type'] = 'pnote';
+			$options['settings'][ $key ]['content'] = $text;
 		}
 	}
 	if ( !empty( $options['settings']['sidebar_tabs'] ) && is_array( $options['settings']['sidebar_tabs'] ) && !empty( $options['settings']['sidebar_tabs']['options'] ) && is_array( $options['settings']['sidebar_tabs']['options'] ) && !empty( $options['settings']['sidebar_tabs']['options']['layout'] ) && is_array( $options['settings']['sidebar_tabs']['options']['layout'] ) && !empty( $options['settings']['sidebar_tabs']['options']['layout']['sblayoutpnote'] ) && is_array( $options['settings']['sidebar_tabs']['options']['layout']['sblayoutpnote'] ) && !empty( $options['settings']['sidebar_tabs']['options']['layout']['sblayoutpnote']['type'] ) && $options['settings']['sidebar_tabs']['options']['layout']['sblayoutpnote']['type'] === 'note' ) {
 		$options['settings']['sidebar_tabs']['options']['layout']['sblayoutpnote']['type'] = 'pnote';
+		$options['settings']['sidebar_tabs']['options']['layout']['sblayoutpnote']['content'] = esc_html__( 'The premium version allows selecting layout for each individual page/post.', 'hootkit' );
 	}
 
 	return $options;
 };
 endif;
 add_filter( 'olius_customizer_options', 'HootKit\Inc\hootkit_theme_customizer_options', 7 );
+add_filter( 'hoot_customize_pattern_pnote', '__return_true', 2 );
 
 /**
  * Update Theme fullshot
