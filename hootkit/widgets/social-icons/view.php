@@ -23,6 +23,9 @@ $subtitle = ( !empty( $subtitle ) ) ? $subtitle : '';
 	$titlemarkup .= ( !empty( $subtitle ) ) ? '<div class="widget-subtitle hoot-subtitle">' . $subtitle . '</div>' : '';
 	echo do_shortcode( wp_kses_post( apply_filters( 'hootkit_widget_title', $titlemarkup, 'social-icons', $title, $before_title, $after_title, $subtitle ) ) );
 
+	if ( in_array( 'social-icons-align', hootkit()->get_config( 'supports' ) ) && !empty( $align ) )
+		echo '<div class="social-icons-align social-icons-align' . esc_attr( $align ) . '">';
+
 	$counter = 1;
 	foreach( $icons as $key => $icon ) :
 		if ( !empty( $icon['url'] ) && !empty( $icon['icon'] ) ) :
@@ -45,5 +48,9 @@ $subtitle = ( !empty( $subtitle ) ) ? $subtitle : '';
 			endif;
 
 		endif;
-	endforeach; ?>
+	endforeach;
+
+	if ( in_array( 'social-icons-align', hootkit()->get_config( 'supports' ) ) && !empty( $align ) )
+		echo '</div>';
+	?>
 </div>

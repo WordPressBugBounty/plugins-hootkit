@@ -4,7 +4,7 @@ Tags: widgets, wphoot, demo content, slider
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 2.0.18
+Stable tag: 2.0.19
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -42,6 +42,12 @@ This plugin is released under a GPL license.
 The plugin supports all themes, but works best with wpHoot Themes. A few options are available only in compatible wpHoot Themes.
 
 == Changelog ==
+
+= 2.0.19 =
+* Add align options for Social Widget
+* Content Grid - Display Content if only buttons available
+* Icons List - Icon Color Option
+* Support for new themes
 
 = 2.0.18 =
 * Fix customizer notices for latest themes

@@ -297,7 +297,8 @@ if ( ! class_exists( '\HootKit\Inc\Helper_Config' ) ) :
 					'unos-business',	'unos-glow',		'unos-magazine-black',
 					'unos-store-bell',	'unos-minima-store','unos-news',	'unos-bizdeck',
 					'nevark',			'neux',				'magazine-news-byte',
-					'hoot-porto',		'olius',
+					'hoot-porto',
+					'olius',			'strute',			'nirvata',
 				),
 				// Default Styles
 				'presets'   => array(),

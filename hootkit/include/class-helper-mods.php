@@ -59,7 +59,7 @@ if ( ! class_exists( '\HootKit\Inc\Helper_Mods' ) ) :
 
 				'supports'    => array(
 					'cta-styles', 'content-blocks-style5', 'content-blocks-style6', 'slider-styles', 'widget-subtitle',
-					'content-blocks-iconoptions', 'social-icons-altcolor',
+					'content-blocks-iconoptions', 'social-icons-altcolor', 'social-icons-align',
 					'slider-style3', 'slider-subtitles',
 					'post-grid-firstpost-category',
 					'grid-widget', // JNES@deprecated <= HootKit v1.1.3 @9.20 postgrid=>grid-widget
@@ -346,8 +346,10 @@ function hootkit_theme_customizer_options( $options ) {
 	return $options;
 };
 endif;
-add_filter( 'olius_customizer_options', 'HootKit\Inc\hootkit_theme_customizer_options', 7 );
 add_filter( 'hoot_customize_pattern_pnote', '__return_true', 2 );
+add_filter( 'olius_customizer_options', 'HootKit\Inc\hootkit_theme_customizer_options', 7 );
+add_filter( 'strute_customizer_options', 'HootKit\Inc\hootkit_theme_customizer_options', 7 );
+add_filter( 'nirvata_customizer_options', 'HootKit\Inc\hootkit_theme_customizer_options', 7 );
 
 /**
  * Update Theme fullshot
@@ -368,3 +370,5 @@ function hootkit_theme_abouttags( $tags ) {
 }
 endif;
 add_filter( 'olius_abouttags', 'HootKit\Inc\hootkit_theme_abouttags', 7 );
+add_filter( 'strute_abouttags', 'HootKit\Inc\hootkit_theme_abouttags', 7 );
+add_filter( 'nirvata_abouttags', 'HootKit\Inc\hootkit_theme_abouttags', 7 );

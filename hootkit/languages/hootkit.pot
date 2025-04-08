@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HootKit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-16 22:43+0530\n"
+"POT-Creation-Date: 2025-04-08 19:35+0530\n"
 "PO-Revision-Date: 2021-12-04 00:48+0530\n"
 "Last-Translator: wpHoot <admin@wphoot.com>\n"
 "Language-Team: wpHoot <admin@wphoot.com>\n"
@@ -241,7 +241,7 @@ msgstr ""
 #: ../include/class-helper-strings.php:82 ../widgets/announce/admin.php:30
 #: ../widgets/content-blocks/admin.php:106 ../widgets/icon-list/admin.php:38
 #: ../widgets/icon/admin.php:30 ../widgets/notice/admin.php:57
-#: ../widgets/social-icons/admin.php:61 ../widgets/ticker/admin.php:34
+#: ../widgets/social-icons/admin.php:72 ../widgets/ticker/admin.php:34
 msgid "Icon"
 msgstr ""
 
@@ -253,7 +253,7 @@ msgstr ""
 msgid "Posts List"
 msgstr ""
 
-#: ../include/class-helper-strings.php:85 ../widgets/social-icons/admin.php:58
+#: ../include/class-helper-strings.php:85 ../widgets/social-icons/admin.php:69
 msgid "Social Icons"
 msgstr ""
 
@@ -928,6 +928,21 @@ msgstr ""
 msgid "Click Here"
 msgstr ""
 
+#: ../v2/widgets/icon-list/admin.php:30
+msgid "Background Color (optional)"
+msgstr ""
+
+#: ../v2/widgets/icon-list/admin.php:36 ../widgets/buttons/admin.php:80
+#: ../widgets/notice/admin.php:79
+msgid "Text Color (optional)"
+msgstr ""
+
+#: ../v2/widgets/icon-list/admin.php:40 ../widgets/icon-list/admin.php:53
+#: ../widgets/icon/admin.php:41 ../widgets/notice/admin.php:73
+#: ../widgets/ticker/admin.php:38
+msgid "Icon Color (optional)"
+msgstr ""
+
 #: ../widgets/announce/admin.php:23
 msgid "Display Announcement Message"
 msgstr ""
@@ -1004,7 +1019,7 @@ msgstr ""
 #: ../widgets/products-ticker/admin.php:119 ../widgets/profile/admin.php:143
 #: ../widgets/slider-image/admin.php:124
 #: ../widgets/slider-postimage/admin.php:147
-#: ../widgets/social-icons/admin.php:80 ../widgets/tabs/admin.php:58
+#: ../widgets/social-icons/admin.php:91 ../widgets/tabs/admin.php:58
 #: ../widgets/ticker-posts/admin.php:109 ../widgets/ticker/admin.php:95
 #: ../widgets/toggle/admin.php:66 ../widgets/vcards/admin.php:141
 msgid "Widget Options"
@@ -1030,7 +1045,7 @@ msgstr ""
 #: ../widgets/products-ticker/admin.php:123 ../widgets/profile/admin.php:147
 #: ../widgets/slider-image/admin.php:128
 #: ../widgets/slider-postimage/admin.php:151
-#: ../widgets/social-icons/admin.php:84 ../widgets/tabs/admin.php:62
+#: ../widgets/social-icons/admin.php:95 ../widgets/tabs/admin.php:62
 #: ../widgets/ticker-posts/admin.php:113 ../widgets/ticker/admin.php:99
 #: ../widgets/toggle/admin.php:70 ../widgets/vcards/admin.php:145
 msgid "Custom CSS Class"
@@ -1056,7 +1071,7 @@ msgstr ""
 #: ../widgets/products-ticker/admin.php:124 ../widgets/profile/admin.php:148
 #: ../widgets/slider-image/admin.php:129
 #: ../widgets/slider-postimage/admin.php:152
-#: ../widgets/social-icons/admin.php:85 ../widgets/tabs/admin.php:63
+#: ../widgets/social-icons/admin.php:96 ../widgets/tabs/admin.php:63
 #: ../widgets/ticker-posts/admin.php:114 ../widgets/ticker/admin.php:100
 #: ../widgets/toggle/admin.php:71 ../widgets/vcards/admin.php:146
 msgid "Give this widget a custom css classname"
@@ -1082,7 +1097,7 @@ msgstr ""
 #: ../widgets/products-ticker/admin.php:128 ../widgets/profile/admin.php:152
 #: ../widgets/slider-image/admin.php:133
 #: ../widgets/slider-postimage/admin.php:156
-#: ../widgets/social-icons/admin.php:89 ../widgets/tabs/admin.php:67
+#: ../widgets/social-icons/admin.php:100 ../widgets/tabs/admin.php:67
 #: ../widgets/ticker-posts/admin.php:118 ../widgets/ticker/admin.php:104
 #: ../widgets/toggle/admin.php:75 ../widgets/vcards/admin.php:150
 msgid "Margin Top"
@@ -1126,7 +1141,7 @@ msgstr ""
 #: ../widgets/slider-image/admin.php:141
 #: ../widgets/slider-postimage/admin.php:157
 #: ../widgets/slider-postimage/admin.php:164
-#: ../widgets/social-icons/admin.php:90 ../widgets/social-icons/admin.php:97
+#: ../widgets/social-icons/admin.php:101 ../widgets/social-icons/admin.php:108
 #: ../widgets/tabs/admin.php:68 ../widgets/tabs/admin.php:75
 #: ../widgets/ticker-posts/admin.php:119 ../widgets/ticker-posts/admin.php:126
 #: ../widgets/ticker/admin.php:105 ../widgets/ticker/admin.php:112
@@ -1155,7 +1170,7 @@ msgstr ""
 #: ../widgets/products-ticker/admin.php:135 ../widgets/profile/admin.php:159
 #: ../widgets/slider-image/admin.php:140
 #: ../widgets/slider-postimage/admin.php:163
-#: ../widgets/social-icons/admin.php:96 ../widgets/tabs/admin.php:74
+#: ../widgets/social-icons/admin.php:107 ../widgets/tabs/admin.php:74
 #: ../widgets/ticker-posts/admin.php:125 ../widgets/ticker/admin.php:111
 #: ../widgets/toggle/admin.php:82 ../widgets/vcards/admin.php:157
 msgid "Margin Bottom"
@@ -1170,14 +1185,17 @@ msgid "Alignment"
 msgstr ""
 
 #: ../widgets/buttons/admin.php:34 ../widgets/cta/admin.php:77
+#: ../widgets/social-icons/admin.php:63
 msgid "Left"
 msgstr ""
 
 #: ../widgets/buttons/admin.php:35 ../widgets/cta/admin.php:78
+#: ../widgets/social-icons/admin.php:62
 msgid "Center"
 msgstr ""
 
 #: ../widgets/buttons/admin.php:36 ../widgets/cta/admin.php:79
+#: ../widgets/social-icons/admin.php:64
 msgid "Right"
 msgstr ""
 
@@ -1230,10 +1248,6 @@ msgstr ""
 
 #: ../widgets/buttons/admin.php:74 ../widgets/notice/admin.php:42
 msgid "Preset"
-msgstr ""
-
-#: ../widgets/buttons/admin.php:80 ../widgets/notice/admin.php:79
-msgid "Text Color (optional)"
 msgstr ""
 
 #: ../widgets/buttons/admin.php:81 ../widgets/buttons/admin.php:87
@@ -1608,11 +1622,11 @@ msgstr ""
 msgid "Contact Link"
 msgstr ""
 
-#: ../widgets/contact-info/admin.php:57 ../widgets/social-icons/admin.php:63
+#: ../widgets/contact-info/admin.php:57 ../widgets/social-icons/admin.php:74
 msgid "Only 4 profiles allowed. Please use a wpHoot theme to add more profiles."
 msgstr ""
 
-#: ../widgets/contact-info/admin.php:57 ../widgets/social-icons/admin.php:63
+#: ../widgets/contact-info/admin.php:57 ../widgets/social-icons/admin.php:74
 msgid "Only 4 profiles available in the Free version of the theme."
 msgstr ""
 
@@ -2359,11 +2373,6 @@ msgstr ""
 msgid "Display Icon List"
 msgstr ""
 
-#: ../widgets/icon-list/admin.php:53 ../widgets/icon/admin.php:41
-#: ../widgets/notice/admin.php:73 ../widgets/ticker/admin.php:38
-msgid "Icon Color (optional)"
-msgstr ""
-
 #: ../widgets/icon-list/admin.php:54
 msgid "Leave empty to use default text color."
 msgstr ""
@@ -3001,11 +3010,19 @@ msgstr ""
 msgid "Colored"
 msgstr ""
 
-#: ../widgets/social-icons/admin.php:68
+#: ../widgets/social-icons/admin.php:58
+msgid "Icon Alignment"
+msgstr ""
+
+#: ../widgets/social-icons/admin.php:65
+msgid "Space Evenly"
+msgstr ""
+
+#: ../widgets/social-icons/admin.php:79
 msgid "Social Icon"
 msgstr ""
 
-#: ../widgets/social-icons/admin.php:73
+#: ../widgets/social-icons/admin.php:84
 msgid "URL (enter email address if you selected 'Email' icon above)"
 msgstr ""
 

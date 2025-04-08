@@ -55,7 +55,7 @@ function hootkit_content_grid_displayunit( $box, $gridcount, $factor, $columns, 
 			if ( empty( $height ) ) echo '<div class="coverimage-fullimg"><img src=" ' . esc_url( $img_src[0] ) . '"></div>';
 
 			/* Display Content */
-			if ( !empty( $content_title ) || !empty( $content_subtitle ) || !empty( $content ) ) {
+			if ( !empty( $content_title ) || !empty( $content_subtitle ) || !empty( $content ) || !empty( $buttonurl1 ) || !empty( $buttonurl2 ) ) {
 				$contentstyle = '';
 				if ( ( !empty( $caption_align_dist ) || $caption_align_dist === 0 ) && $caption_align_dist <= 100 ) {
 					$contentstyle .= 'style="';

@@ -110,4 +110,3 @@ function hootkit_reorder_custom_options_page() {
 
 }
 endif;
-add_action( 'admin_menu', 'hootkit_reorder_custom_options_page', 9990 );

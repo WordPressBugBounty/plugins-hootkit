@@ -54,6 +54,17 @@ class HootKit_Social_Icons_Widget extends HK_Widget {
 					'color'		=> __( 'Colored', 'hootkit' ),
 				),
 			),
+			'align' => array(
+				'name'		=> __( 'Icon Alignment', 'hootkit' ),
+				'type'		=> 'smallselect',
+				'std'		=> 'center',
+				'options'	=> array(
+					'center'	=> __( 'Center', 'hootkit' ),
+					'left'		=> __( 'Left', 'hootkit' ),
+					'right'		=> __( 'Right', 'hootkit' ),
+					'justify'	=> __( 'Space Evenly', 'hootkit' ),
+				),
+			),
 			'icons' => array(
 				'name'		=> __( 'Social Icons', 'hootkit' ),
 				'type'		=> 'group',
@@ -108,6 +119,9 @@ class HootKit_Social_Icons_Widget extends HK_Widget {
 		}
 		if ( !in_array( 'social-icons-altcolor', hootkit()->get_config( 'supports' ) ) ) {
 			unset( $settings['form_options']['altcolor'] );
+		}
+		if ( !in_array( 'social-icons-align', hootkit()->get_config( 'supports' ) ) ) {
+			unset( $settings['form_options']['align'] );
 		}
 
 		$settings = apply_filters( 'hootkit_social_icons_widget_settings', $settings );
