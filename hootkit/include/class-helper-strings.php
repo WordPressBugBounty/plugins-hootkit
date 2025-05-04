@@ -29,7 +29,12 @@ if ( ! class_exists( '\HootKit\Inc\Helper_Strings' ) ) :
 		/**
 		 * Constructor
 		 */
-		public function __construct() {
+		public function __construct() {}
+
+		/**
+		 * Set strings upon first call
+		 */
+		public static function set_strings() {
 			if ( null === self::$strings ) {
 				$strings = self::defaults();
 				self::$strings = wp_parse_args( apply_filters( 'hootkit_strings', array() ), $strings );

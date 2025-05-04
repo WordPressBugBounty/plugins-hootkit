@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       HootKit
  * Description:       HootKit is a great companion plugin for WordPress themes by wpHoot.
- * Version:           2.0.19
+ * Version:           2.0.20
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            wphoot
@@ -63,7 +63,7 @@ if ( ! class_exists( 'HootKit' ) ) :
 		public function __construct() {
 
 			// Plugin Info
-			$this->version         = '2.0.19';
+			$this->version         = '2.0.20';
 			$this->name            = 'HootKit';
 			$this->slug            = 'hootkit';
 			$this->file            = __FILE__;
@@ -154,6 +154,9 @@ if ( ! class_exists( 'HootKit' ) ) :
 		 */
 		public function get_string( $key, $default = '' ) {
 			$return = '';
+			if ( !is_array( Helper_Strings::$strings ) ) {
+				Helper_Strings::set_strings();
+			}
 			if ( !is_array( Helper_Strings::$strings ) ) {
 				$return = '';
 			} else {

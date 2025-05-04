@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HootKit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-08 19:35+0530\n"
+"POT-Creation-Date: 2025-05-04 23:40+0530\n"
 "PO-Revision-Date: 2021-12-04 00:48+0530\n"
 "Last-Translator: wpHoot <admin@wphoot.com>\n"
 "Language-Team: wpHoot <admin@wphoot.com>\n"
@@ -124,280 +124,280 @@ msgstr ""
 msgid "The premium version allows selecting layout for each individual page/post."
 msgstr ""
 
-#: ../include/class-helper-strings.php:44
+#: ../include/class-helper-strings.php:49
 msgid "Widgets"
 msgstr ""
 
-#: ../include/class-helper-strings.php:45
+#: ../include/class-helper-strings.php:50
 msgid "Gutenberg Blocks"
 msgstr ""
 
-#: ../include/class-helper-strings.php:46
+#: ../include/class-helper-strings.php:51
 msgid "Miscellaneous"
 msgstr ""
 
-#: ../include/class-helper-strings.php:47
+#: ../include/class-helper-strings.php:52
 msgid "Shortcode Generator"
 msgstr ""
 
-#: ../include/class-helper-strings.php:49
+#: ../include/class-helper-strings.php:54
 msgid "Slider Widgets"
 msgstr ""
 
-#: ../include/class-helper-strings.php:50
+#: ../include/class-helper-strings.php:55
 msgid "Content Widgets"
 msgstr ""
 
-#: ../include/class-helper-strings.php:51
+#: ../include/class-helper-strings.php:56
 msgid "Post Widgets"
 msgstr ""
 
-#: ../include/class-helper-strings.php:52
+#: ../include/class-helper-strings.php:57
 msgid "Display Widgets"
 msgstr ""
 
-#: ../include/class-helper-strings.php:53
+#: ../include/class-helper-strings.php:58
 msgid "WooCommerce"
 msgstr ""
 
-#: ../include/class-helper-strings.php:54
+#: ../include/class-helper-strings.php:59
 msgid "Misc. Features"
 msgstr ""
 
-#: ../include/class-helper-strings.php:57
+#: ../include/class-helper-strings.php:62
 msgid "HK > "
 msgstr ""
 
-#: ../include/class-helper-strings.php:59
-#: ../include/class-helper-strings.php:60
+#: ../include/class-helper-strings.php:64
+#: ../include/class-helper-strings.php:65
 msgid "Slider Images"
 msgstr ""
 
-#: ../include/class-helper-strings.php:61
-#: ../include/class-helper-strings.php:62
+#: ../include/class-helper-strings.php:66
+#: ../include/class-helper-strings.php:67
 msgid "Posts Slider"
 msgstr ""
 
-#: ../include/class-helper-strings.php:64
+#: ../include/class-helper-strings.php:69
 msgid "Carousel"
 msgstr ""
 
-#: ../include/class-helper-strings.php:65
+#: ../include/class-helper-strings.php:70
 msgid "Posts Carousel"
 msgstr ""
 
-#: ../include/class-helper-strings.php:66
+#: ../include/class-helper-strings.php:71
 msgid "Posts List Carousel"
 msgstr ""
 
-#: ../include/class-helper-strings.php:68
+#: ../include/class-helper-strings.php:73
 msgid "Products Carousel"
 msgstr ""
 
-#: ../include/class-helper-strings.php:69
+#: ../include/class-helper-strings.php:74
 msgid "Products List Carousel"
 msgstr ""
 
-#: ../include/class-helper-strings.php:71
+#: ../include/class-helper-strings.php:76
 msgid "Products Blocks"
 msgstr ""
 
-#: ../include/class-helper-strings.php:72
+#: ../include/class-helper-strings.php:77
 msgid "Products List"
 msgstr ""
 
-#: ../include/class-helper-strings.php:73
+#: ../include/class-helper-strings.php:78
 msgid "Products Ticker"
 msgstr ""
 
-#: ../include/class-helper-strings.php:74
+#: ../include/class-helper-strings.php:79
 msgid "Products Search"
 msgstr ""
 
-#: ../include/class-helper-strings.php:75
+#: ../include/class-helper-strings.php:80
 msgid "Products Cart Icon"
 msgstr ""
 
-#: ../include/class-helper-strings.php:76
+#: ../include/class-helper-strings.php:81
 msgid "Offscreen WooCommerce Cart"
 msgstr ""
 
-#: ../include/class-helper-strings.php:78
+#: ../include/class-helper-strings.php:83
 msgid "Announce"
 msgstr ""
 
-#: ../include/class-helper-strings.php:79
+#: ../include/class-helper-strings.php:84
 msgid "Content Blocks"
 msgstr ""
 
-#: ../include/class-helper-strings.php:80
+#: ../include/class-helper-strings.php:85
 msgid "Posts Blocks"
 msgstr ""
 
-#: ../include/class-helper-strings.php:81
+#: ../include/class-helper-strings.php:86
 msgid "Call To Action"
 msgstr ""
 
-#: ../include/class-helper-strings.php:82 ../widgets/announce/admin.php:30
+#: ../include/class-helper-strings.php:87 ../widgets/announce/admin.php:30
 #: ../widgets/content-blocks/admin.php:106 ../widgets/icon-list/admin.php:38
 #: ../widgets/icon/admin.php:30 ../widgets/notice/admin.php:57
 #: ../widgets/social-icons/admin.php:72 ../widgets/ticker/admin.php:34
 msgid "Icon"
 msgstr ""
 
-#: ../include/class-helper-strings.php:83
+#: ../include/class-helper-strings.php:88
 msgid "Posts Grid"
 msgstr ""
 
-#: ../include/class-helper-strings.php:84
+#: ../include/class-helper-strings.php:89
 msgid "Posts List"
 msgstr ""
 
-#: ../include/class-helper-strings.php:85 ../widgets/social-icons/admin.php:69
+#: ../include/class-helper-strings.php:90 ../widgets/social-icons/admin.php:69
 msgid "Social Icons"
 msgstr ""
 
-#: ../include/class-helper-strings.php:86 ../widgets/ticker-posts/admin.php:32
+#: ../include/class-helper-strings.php:91 ../widgets/ticker-posts/admin.php:32
 msgid "Ticker"
 msgstr ""
 
-#: ../include/class-helper-strings.php:87
+#: ../include/class-helper-strings.php:92
 msgid "Posts Ticker"
 msgstr ""
 
-#: ../include/class-helper-strings.php:88
+#: ../include/class-helper-strings.php:93
 msgid "About/Profile"
 msgstr ""
 
-#: ../include/class-helper-strings.php:89
+#: ../include/class-helper-strings.php:94
 msgid "Content Grid"
 msgstr ""
 
-#: ../include/class-helper-strings.php:90 ../widgets/cover-image/admin.php:168
+#: ../include/class-helper-strings.php:95 ../widgets/cover-image/admin.php:168
 msgid "Cover Image"
 msgstr ""
 
-#: ../include/class-helper-strings.php:92
+#: ../include/class-helper-strings.php:97
 msgid "Contact Info"
 msgstr ""
 
-#: ../include/class-helper-strings.php:93
+#: ../include/class-helper-strings.php:98
 msgid "Number Blocks"
 msgstr ""
 
-#: ../include/class-helper-strings.php:94 ../widgets/vcards/admin.php:67
+#: ../include/class-helper-strings.php:99 ../widgets/vcards/admin.php:67
 msgid "Vcards"
 msgstr ""
 
-#: ../include/class-helper-strings.php:95 ../widgets/buttons/admin.php:54
+#: ../include/class-helper-strings.php:100 ../widgets/buttons/admin.php:54
 msgid "Buttons"
 msgstr ""
 
-#: ../include/class-helper-strings.php:96
+#: ../include/class-helper-strings.php:101
 msgid "Icon List"
 msgstr ""
 
-#: ../include/class-helper-strings.php:97
+#: ../include/class-helper-strings.php:102
 msgid "Notice Box"
 msgstr ""
 
-#: ../include/class-helper-strings.php:98
+#: ../include/class-helper-strings.php:103
 msgid "Toggle"
 msgstr ""
 
-#: ../include/class-helper-strings.php:99
+#: ../include/class-helper-strings.php:104
 msgid "Tabs"
 msgstr ""
 
-#: ../include/class-helper-strings.php:102
+#: ../include/class-helper-strings.php:107
 msgid "Top Banner"
 msgstr ""
 
-#: ../include/class-helper-strings.php:103
+#: ../include/class-helper-strings.php:108
 msgid "Timer (shortcode)"
 msgstr ""
 
-#: ../include/class-helper-strings.php:104
+#: ../include/class-helper-strings.php:109
 msgid "Classic Widgets"
 msgstr ""
 
-#: ../include/class-helper-strings.php:107
+#: ../include/class-helper-strings.php:112
 msgid "White"
 msgstr ""
 
-#: ../include/class-helper-strings.php:108
+#: ../include/class-helper-strings.php:113
 msgid "Black"
 msgstr ""
 
-#: ../include/class-helper-strings.php:109
+#: ../include/class-helper-strings.php:114
 msgid "Brown"
 msgstr ""
 
-#: ../include/class-helper-strings.php:110
+#: ../include/class-helper-strings.php:115
 msgid "Brown (Bright)"
 msgstr ""
 
-#: ../include/class-helper-strings.php:111
+#: ../include/class-helper-strings.php:116
 msgid "Blue"
 msgstr ""
 
-#: ../include/class-helper-strings.php:112
+#: ../include/class-helper-strings.php:117
 msgid "Blue (Bright)"
 msgstr ""
 
-#: ../include/class-helper-strings.php:113
+#: ../include/class-helper-strings.php:118
 msgid "Cyan"
 msgstr ""
 
-#: ../include/class-helper-strings.php:114
+#: ../include/class-helper-strings.php:119
 msgid "Cyan (Bright)"
 msgstr ""
 
-#: ../include/class-helper-strings.php:115
+#: ../include/class-helper-strings.php:120
 msgid "Green"
 msgstr ""
 
-#: ../include/class-helper-strings.php:116
+#: ../include/class-helper-strings.php:121
 msgid "Green (Bright)"
 msgstr ""
 
-#: ../include/class-helper-strings.php:117
+#: ../include/class-helper-strings.php:122
 msgid "Yellow"
 msgstr ""
 
-#: ../include/class-helper-strings.php:118
+#: ../include/class-helper-strings.php:123
 msgid "Yellow (Bright)"
 msgstr ""
 
-#: ../include/class-helper-strings.php:119
+#: ../include/class-helper-strings.php:124
 msgid "Amber"
 msgstr ""
 
-#: ../include/class-helper-strings.php:120
+#: ../include/class-helper-strings.php:125
 msgid "Amber (Bright)"
 msgstr ""
 
-#: ../include/class-helper-strings.php:121
+#: ../include/class-helper-strings.php:126
 msgid "Orange"
 msgstr ""
 
-#: ../include/class-helper-strings.php:122
+#: ../include/class-helper-strings.php:127
 msgid "Orange (Bright)"
 msgstr ""
 
-#: ../include/class-helper-strings.php:123
+#: ../include/class-helper-strings.php:128
 msgid "Red"
 msgstr ""
 
-#: ../include/class-helper-strings.php:124
+#: ../include/class-helper-strings.php:129
 msgid "Red (Bright)"
 msgstr ""
 
-#: ../include/class-helper-strings.php:125
+#: ../include/class-helper-strings.php:130
 msgid "Pink"
 msgstr ""
 
-#: ../include/class-helper-strings.php:126
+#: ../include/class-helper-strings.php:131
 msgid "Pink (Bright)"
 msgstr ""
 

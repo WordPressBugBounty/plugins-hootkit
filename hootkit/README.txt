@@ -2,9 +2,9 @@
 Contributors: wphoot
 Tags: widgets, wphoot, demo content, slider
 Requires at least: 6.0
-Tested up to: 6.7
+Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 2.0.19
+Stable tag: 2.0.20
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -42,6 +42,9 @@ This plugin is released under a GPL license.
 The plugin supports all themes, but works best with wpHoot Themes. A few options are available only in compatible wpHoot Themes.
 
 == Changelog ==
+
+= 2.0.20 =
+* Fix "Function _load_textdomain_just_in_time was called incorrectly" warning
 
 = 2.0.19 =
 * Add align options for Social Widget
