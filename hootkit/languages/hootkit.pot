@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HootKit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-04 23:40+0530\n"
+"POT-Creation-Date: 2025-07-13 00:21+0530\n"
 "PO-Revision-Date: 2021-12-04 00:48+0530\n"
 "Last-Translator: wpHoot <admin@wphoot.com>\n"
 "Language-Team: wpHoot <admin@wphoot.com>\n"
@@ -922,22 +922,22 @@ msgid ""
 "\t\t\t"
 msgstr ""
 
-#: ../v2/widgets/announce/view.php:34
-#: ../v2/widgets/products-carticon/view.php:29 ../widgets/announce/view.php:36
+#: ../widgets-v2/announce/view.php:34
+#: ../widgets-v2/products-carticon/view.php:29 ../widgets/announce/view.php:36
 #: ../widgets/buttons/admin.php:66 ../widgets/products-carticon/view.php:29
 msgid "Click Here"
 msgstr ""
 
-#: ../v2/widgets/icon-list/admin.php:30
+#: ../widgets-v2/icon-list/admin.php:30
 msgid "Background Color (optional)"
 msgstr ""
 
-#: ../v2/widgets/icon-list/admin.php:36 ../widgets/buttons/admin.php:80
+#: ../widgets-v2/icon-list/admin.php:36 ../widgets/buttons/admin.php:80
 #: ../widgets/notice/admin.php:79
 msgid "Text Color (optional)"
 msgstr ""
 
-#: ../v2/widgets/icon-list/admin.php:40 ../widgets/icon-list/admin.php:53
+#: ../widgets-v2/icon-list/admin.php:40 ../widgets/icon-list/admin.php:53
 #: ../widgets/icon/admin.php:41 ../widgets/notice/admin.php:73
 #: ../widgets/ticker/admin.php:38
 msgid "Icon Color (optional)"

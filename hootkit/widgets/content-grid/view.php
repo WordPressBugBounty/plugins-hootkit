@@ -11,6 +11,9 @@ $firstgridcount = ( !empty( $firstgrid['count'] ) ) ? intval( $firstgrid['count'
 if ( $columns == 1 )
 	$firstgrid['standard'] = 1;
 
+// Non Standard first grid size
+$firstgridbig_1x2 = apply_filters( 'hootkit_gridwidget_firstgrid_big_1x2', false );
+
 // Create array for first grid unit
 $firstgrid_boxes = array();
 for ( $index = 0; $index < $firstgridcount;  $index++ ) { 
@@ -141,9 +144,10 @@ do_action( 'hootkit_gridwidget_wrap', 'content-grid', ( ( !isset( $instance ) ) 
 		$gridcount = 1;
 
 		/* First Grid Unit */
-		$factor = ( $columns == 1 || !empty( $firstgrid['standard'] ) ) ? '1' : '2';
+		$factor = ( $columns == 1 || !empty( $firstpost['standard'] ) ) ? '1' : '2';
+		$display_factor = $factor === '2' ? ( $firstgridbig_1x2 ? '1' : '2' ) : $factor;
 		$gridunit_attr = array();
-		$gridunit_attr['class'] = "hk-gridunit hcolumn-{$factor}-{$columns} hk-gridunit-size{$factor}";
+		$gridunit_attr['class'] = "hk-gridunit hcolumn-{$display_factor}-{$columns} hk-gridunit-size{$factor}";
 		$gridunit_attr['data-unitsize'] = $factor;
 		$gridunit_attr['data-columns'] = $columns;
 		$gridunit_height = ( empty( $unitheight ) ) ? 0 : ( intval( $unitheight ) );

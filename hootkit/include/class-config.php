@@ -285,7 +285,7 @@ if ( ! class_exists( '\HootKit\Inc\Helper_Config' ) ) :
 				// Misc theme specific settings
 				'supports' => array(),
 				// Version Support
-				'supports_version' => false, // Use 'v2' templates
+				'supports_version' => array(),
 				// wpHoot Themes
 				'themelist' => array(
 					'chromatic',		'dispatch',			'responsive-brix',
@@ -299,6 +299,7 @@ if ( ! class_exists( '\HootKit\Inc\Helper_Config' ) ) :
 					'nevark',			'neux',				'magazine-news-byte',
 					'hoot-porto',
 					'olius',			'strute',			'nirvata',
+					'magazine-lume',	'magazine-booster',
 				),
 				// Default Styles
 				'presets'   => array(),

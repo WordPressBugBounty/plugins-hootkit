@@ -10,6 +10,9 @@ $rows = ( empty( $rows ) ) ? 2 : $rows;
 if ( $rows == 1 || $columns == 1 )
 	$firstpost['standard'] = 1;
 
+// Non Standard first grid size
+$firstgridbig_1x2 = apply_filters( 'hootkit_gridwidget_firstgrid_big_1x2', false );
+
 // Create category array from main options 
 if ( isset( $category ) && is_string( $category ) ) $category = array( $category ); // Pre 1.0.10 compatibility with 'select' type
 $exccategory = ( !empty( $exccategory ) && is_array( $exccategory ) ) ? array_map( 'hootkit_append_negative', $exccategory ) : array(); // undefined if none selected in multiselect
@@ -54,7 +57,7 @@ $query_args = array();
 $count = $rows * $columns;
 $count--; // Remove count for first gridunit
 if ( empty( $firstpost['standard'] ) ) {
-	$count = $count - 3;
+	$count = $firstgridbig_1x2 ? $count - 1 : $count - 3;
 	if ( $count < 0 ) $count = 0; // redundant after introduction of edge case logic above
 }
 $query_args['posts_per_page'] = $count;
@@ -183,8 +186,9 @@ do_action( 'hootkit_gridwidget_wrap', 'post-grid', ( ( !isset( $instance ) ) ? a
 		/* First Grid Unit */
 
 		$factor = ( $columns == 1 || !empty( $firstpost['standard'] ) ) ? '1' : '2';
+		$display_factor = $factor === '2' ? ( $firstgridbig_1x2 ? '1' : '2' ) : $factor;
 		$gridunit_attr = array();
-		$gridunit_attr['class'] = "hk-gridunit hcolumn-{$factor}-{$columns} hk-gridunit-size{$factor}";
+		$gridunit_attr['class'] = "hk-gridunit hcolumn-{$display_factor}-{$columns} hk-gridunit-size{$factor}";
 		$gridunit_attr['data-unitsize'] = $factor;
 		$gridunit_attr['data-columns'] = $columns;
 		$gridunit_height = ( empty( $unitheight ) ) ? 0 : ( intval( $unitheight ) );

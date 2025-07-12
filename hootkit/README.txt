@@ -4,7 +4,7 @@ Tags: widgets, wphoot, demo content, slider
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 2.0.20
+Stable tag: 2.0.21
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -42,6 +42,11 @@ This plugin is released under a GPL license.
 The plugin supports all themes, but works best with wpHoot Themes. A few options are available only in compatible wpHoot Themes.
 
 == Changelog ==
+
+= 2.0.21 =
+* List widgets - Add class for style0
+* Grid widgets - Add display for 1x2 non standard unit
+* Update 'supports_version' to use array (refactor directory structure)
 
 = 2.0.20 =
 * Fix "Function _load_textdomain_just_in_time was called incorrectly" warning

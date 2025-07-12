@@ -42,7 +42,7 @@ $viewall = ( !empty( $viewall ) ) ? $viewall : '';
 do_action( 'hootkit_listwidget_wrap', 'posts-list', ( ( !isset( $instance ) ) ? array() : $instance ), $posts_list_query, $query_args );
 ?>
 
-<div class="hk-list-widget posts-list-widget hk-list-<?php echo $style; ?>">
+<div class="hk-list-widget posts-list-widget hk-list-<?php echo $style; ?> hk-list-u<?php echo $userstyle; ?>">
 
 	<?php
 	/* Display Title */

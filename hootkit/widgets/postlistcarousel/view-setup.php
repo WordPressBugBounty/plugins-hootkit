@@ -9,7 +9,7 @@ if ( !is_string( $slider_template ) || !file_exists( $slider_template ) )
 	return;
 
 /* Prevent errors : do not overwrite existing values */
-$defaults = array( 'category' => '', 'count' => '', 'offset' => '' );
+$defaults = array( 'category' => '', 'count' => '', 'offset' => '', 'style' => 'style1' );
 extract( $defaults, EXTR_SKIP );
 
 /* Reset any previous slider */
@@ -35,7 +35,7 @@ $slidersettings['item'] = ( empty( $items ) ) ? '3' : $items;
 // $slidersettings['widgetstyle'] = '';
 
 /* Vertical Carousel */
-$verticalunitdefaults = apply_filters( 'hootkit_listcarousel_unitdefaults', array(), 'post' );
+$verticalunitdefaults = apply_filters( 'hootkit_listcarousel_unitdefaults', array(), 'post', $style );
 $verticalunitdefaults = array_map( 'absint', $verticalunitdefaults );
 $verticalunits['heightstyle1'] = ( !empty( $verticalunitdefaults['heightstyle1'] ) ) ? $verticalunitdefaults['heightstyle1'] : 80;
 $verticalunits['heightstyle2'] = ( !empty( $verticalunitdefaults['heightstyle2'] ) ) ? $verticalunitdefaults['heightstyle2'] : 215;

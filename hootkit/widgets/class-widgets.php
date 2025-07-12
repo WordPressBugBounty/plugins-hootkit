@@ -95,12 +95,16 @@ if ( ! class_exists( '\HootKit\Mods\Widgets' ) ) :
 		 */
 		private function load_widgets() {
 			$tmplver = hootkit()->get_config( 'supports_version' );
+			$v2dir = (
+				$tmplver === 'v2' || // Backward compatibility: false|v2
+				( is_array( $tmplver ) && in_array( 'widgets-v2', $tmplver ) )
+			) ? 'widgets-v2/' : false;
 
 			foreach ( $this->activewidgets as $widget )
-				if ( $tmplver &&
-					file_exists(  hootkit()->dir . $tmplver . '/widgets/' . sanitize_file_name( $widget ) . '/admin.php' )
+				if ( $v2dir &&
+					file_exists(  hootkit()->dir . $v2dir . sanitize_file_name( $widget ) . '/admin.php' )
 				) {
-					require_once( hootkit()->dir . $tmplver . '/widgets/' . sanitize_file_name( $widget ) . '/admin.php' );
+					require_once( hootkit()->dir . $v2dir . sanitize_file_name( $widget ) . '/admin.php' );
 				} elseif (
 					file_exists(  hootkit()->dir . 'widgets/' . sanitize_file_name( $widget ) . '/admin.php' )
 				) {
