@@ -1,4 +1,7 @@
 <?php
+// Set vars
+$createvars = array( 'title','subtitle','before_title','after_title' );
+foreach ($createvars as $key) { $$key = !empty( $$key ) ? $$key : ''; }
 
 // Get border classes
 $top_class = hootkit_widget_borderclass( $border, 0, 'topborder-');
@@ -8,8 +11,6 @@ $bottom_class = hootkit_widget_borderclass( $border, 1, 'bottomborder-');
 $button_text = ( !empty( $button_text ) ) ? $button_text : ( ( function_exists( 'hoot_get_mod' ) ) ? hoot_get_mod('read_more') : __( 'Know More', 'hootkit' ) );
 $button_text = ( empty( $button_text ) ) ? sprintf( __( 'Read More %s', 'hootkit' ), '&rarr;' ) : $button_text;
 
-// Set vars
-$subtitle = ( !empty( $subtitle ) ) ? $subtitle : '';
 ?>
 
 <div class="profile-widget-wrap <?php echo hoot_sanitize_html_classes( "{$top_class} {$bottom_class}" ); ?>">

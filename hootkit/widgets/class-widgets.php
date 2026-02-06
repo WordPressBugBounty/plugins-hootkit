@@ -1,7 +1,7 @@
 <?php
 /**
  * HootKit Widgets Module
- * This file is loaded at 'after_setup_theme' hook @priority 96
+ * This file is loaded at after_setup_theme@96
  *
  * @since   2.0.0
  * @package Hootkit
@@ -53,38 +53,42 @@ if ( ! class_exists( '\HootKit\Mods\Widgets' ) ) :
 		 */
 		private function load_assets() {
 
-			$modules = hootkit()->get_mods( 'modules' );
 			$assets = array();
 			$adminassets = array();
+			$localize = array();
 
 			foreach ( $this->activewidgets as $widget ) {
-				if ( !empty( $modules[$widget]['assets'] ) )
-					$assets = array_merge( $assets, $modules[$widget]['assets'] );
-				if ( !empty( $modules[$widget]['adminassets'] ) )
-					$adminassets = array_merge( $adminassets, $modules[$widget]['adminassets'] );
+				$modassets = hootkit()->get_mfmodules( $widget, 'assets', false );
+				if ( \is_array( $modassets ) )
+					$assets = array_merge( $assets, $modassets );
+				$modassets = hootkit()->get_mfmodules( $widget, 'adminassets', false );
+				if ( \is_array( $modassets ) )
+					$adminassets = array_merge( $adminassets, $modassets );
+				$modassets = hootkit()->get_mfmodules( $widget, 'localize', false );
+				if ( \is_array( $modassets ) ) {
+					foreach ( $modassets as $modasset => $hook ) {
+						if ( !isset( $localize[ $hook ] ) || !is_array( $localize[ $hook ] ) )
+							$localize[ $hook ] = array();
+						if ( ! in_array( $modasset, $localize[ $hook ] ) )
+							$localize[ $hook ][] = $modasset;
+					}
+				}
 			}
 
 			/* Frontend */
 			foreach ( $assets as $asset )
 				Helper_Assets::add_asset( $asset );
-			if( ! hootkit()->get_config( 'theme_css' ) )
-				Helper_Assets::add_asset( hootkit()->slug );
 			Helper_Assets::add_asset( 'widgets' );
 
 			/* Admin */
 			$hooks = ( defined( 'SITEORIGIN_PANELS_VERSION' ) && version_compare( SITEORIGIN_PANELS_VERSION, '2.0' ) >= 0 ) ?
 						array( 'widgets.php', 'post.php', 'post-new.php' ):
 						array( 'widgets.php' );
-			// SiteOrigin Page Builder compatibility - Load css for Live Preview in backend
-			// > Limitation: dynamic css is not loaded // @todo test all widgets (inc sliders)
-			// if( $widgetload && hootkit()->get_config( 'theme_css' ) && function_exists( 'hoot_locate_style' ) ) {
-			// 	wp_enqueue_style( 'theme-hootkit', hoot_data()->template_uri . 'hootkit/hootkit.css' );
-			// 	// wp_enqueue_style( 'theme-style', hoot_data()->template_uri . 'style.css' ); // Loads all styles including headings, grid etc -> Not Needed // Loads grid etc for widget post grid etc -> Needed
-			// }
 			foreach ( $adminassets as $adminasset )
 				Helper_Assets::add_adminasset( $adminasset, $hooks );
-			Helper_Assets::add_adminasset( 'wp-color-picker' );
-			Helper_Assets::add_adminasset( 'adminwidgets' );
+			Helper_Assets::add_adminasset( 'wp-color-picker', $hooks );
+			$localizeadminwidgets = !empty( $localize['adminwidgets'] ) && is_array( $localize['adminwidgets'] ) ? $localize['adminwidgets'] : array();
+			Helper_Assets::add_adminasset( 'adminwidgets', $hooks, $localizeadminwidgets );
 
 		}
 
@@ -94,23 +98,22 @@ if ( ! class_exists( '\HootKit\Mods\Widgets' ) ) :
 		 * @since  2.0.0
 		 */
 		private function load_widgets() {
+			$locations = array( 'widgets' );
 			$tmplver = hootkit()->get_config( 'supports_version' );
-			$v2dir = (
-				$tmplver === 'v2' || // Backward compatibility: false|v2
-				( is_array( $tmplver ) && in_array( 'widgets-v2', $tmplver ) )
-			) ? 'widgets-v2/' : false;
-
-			foreach ( $this->activewidgets as $widget )
-				if ( $v2dir &&
-					file_exists(  hootkit()->dir . $v2dir . sanitize_file_name( $widget ) . '/admin.php' )
-				) {
-					require_once( hootkit()->dir . $v2dir . sanitize_file_name( $widget ) . '/admin.php' );
-				} elseif (
-					file_exists(  hootkit()->dir . 'widgets/' . sanitize_file_name( $widget ) . '/admin.php' )
-				) {
-					require_once( hootkit()->dir . 'widgets/' . sanitize_file_name( $widget ) . '/admin.php' );
+			if ( is_array( $tmplver ) ) {
+				if ( in_array( 'widgets-v2', $tmplver ) )
+					array_unshift( $locations, 'widgets-v2' );
+				if ( in_array( 'widgets-v3', $tmplver ) )
+					array_unshift( $locations, 'widgets-v3' );
+			}
+			foreach ( $this->activewidgets as $widget ) {
+				foreach ( $locations as $location ) {
+					if ( file_exists(  hootkit()->dir . $location . '/' . sanitize_file_name( $widget ) . '/admin.php' ) ) {
+						require_once( hootkit()->dir . $location . '/' . sanitize_file_name( $widget ) . '/admin.php' );
+						break;
+					}
 				}
-
+			}
 		}
 
 		/**

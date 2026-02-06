@@ -17,15 +17,14 @@ class HootKit_Slider_Productcarousel_Widget extends HK_Widget {
 
 	function __construct() {
 
-		$settings['id'] = 'hootkit-slider-productcarousel';
-		$settings['name'] = hootkit()->get_string('productcarousel');
+		$id = 'productcarousel';
+		$settings['id'] = "hootkit-slider-productcarousel";
+		$settings['name'] = hootkit()->get_string( $id );
 		$settings['widget_options'] = array(
 			'description'	=> __( 'Display Product in a Carousel', 'hootkit' ),
-			// 'classname'		=> 'hoot-slider-productscarousel-widget', // CSS class applied to frontend widget container via 'before_widget' arg
 		);
 		$settings['control_options'] = array();
 		$settings['form_options'] = array(
-			//'name' => can be empty or false to hide the name
 			'title' => array(
 				'name'		=> __( 'Title (optional)', 'hootkit' ),
 				'type'		=> 'text',
@@ -44,7 +43,7 @@ class HootKit_Slider_Productcarousel_Widget extends HK_Widget {
 			),
 			'count' => array(
 				'name'		=> __( 'Number of Products', 'hootkit' ),
-				'desc'		=> ( ( hootkit()->get_config( 'nohoot' ) ) ? __( '<strong>Only 4 Products allowed. Please use a wpHoot theme to add more Products.</strong>', 'hootkit' ) : __( '<strong>Only 4 Products available in the Free version of the theme.</strong>', 'hootkit' ) ),
+				'desc'		=> __( 'Only 4 Products available in the Free version of the theme.', 'hootkit' ),
 				'type'		=> 'smallselect',
 				'std'		=> '4',
 				'options'	=> array(
@@ -188,7 +187,7 @@ class HootKit_Slider_Productcarousel_Widget extends HK_Widget {
 			),
 		);
 
-		if ( !in_array( 'widget-subtitle', hootkit()->get_config( 'supports' ) ) ) {
+		if ( ! hootkit()->supports( 'widget-subtitle' ) ) {
 			unset( $settings['form_options']['subtitle'] );
 		}
 

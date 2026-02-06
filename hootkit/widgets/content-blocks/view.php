@@ -1,4 +1,9 @@
 <?php
+// Set vars
+$createvars = array( 'title','subtitle','before_title','after_title' );
+foreach ($createvars as $key) { $$key = !empty( $$key ) ? $$key : ''; }
+$columnsclass = !empty( $evenspacecol ) ? 'hk-cbox-evenspacecol' : '';
+
 // Return if no boxes to show
 if ( empty( $boxes ) || !is_array( $boxes ) )
 	return;
@@ -17,15 +22,12 @@ $clearfix = 1;
 // Set user defined style for content boxes
 $userstyle = $style;
 
-// Set vars
-$subtitle = ( !empty( $subtitle ) ) ? $subtitle : '';
-
 // Template modification Hook
 do_action( 'hootkit_content_blocks_wrap', 'custom', ( ( !isset( $instance ) ) ? array() : $instance ) );
 ?>
 
 <div class="content-blocks-widget-wrap content-blocks-custom <?php echo hoot_sanitize_html_classes( "{$top_class} {$bottom_class}" ); ?>">
-	<div class="content-blocks-widget">
+	<div class="content-blocks-widget <?php echo hoot_sanitize_html_classes( "content-blocks-widget-{$style}" ); ?>">
 
 		<?php
 		/* Display Title */
@@ -42,7 +44,7 @@ do_action( 'hootkit_content_blocks_wrap', 'custom', ( ( !isset( $instance ) ) ? 
 		do_action( 'hootkit_content_blocks_start', 'custom', ( ( !isset( $instance ) ) ? array() : $instance ) );
 		?>
 
-		<div class="flush-columns">
+		<div class="flush-columns <?php echo $columnsclass; ?>">
 			<?php
 			foreach ( $boxes as $key => $box ) :
 
@@ -61,7 +63,7 @@ do_action( 'hootkit_content_blocks_wrap', 'custom', ( ( !isset( $instance ) ) ? 
 
 				// Icon Style
 				$icon_color = $icon_size = $iconoptions_style = '';
-				if ( in_array( 'content-blocks-iconoptions', hootkit()->get_config( 'supports' ) ) ) {
+				if ( hootkit()->supports( 'content-blocks-iconoptions' ) ) {
 					$icon_color = ( !empty( $box['icon_color'] ) ) ? sanitize_hex_color( $box['icon_color'] ) : $icon_color;
 					$icon_size = ( !empty( $box['icon_size'] ) ) ? intval( $box['icon_size'] ) : $icon_size;
 				}
@@ -96,8 +98,7 @@ do_action( 'hootkit_content_blocks_wrap', 'custom', ( ( !isset( $instance ) ) ? 
 					} else {
 						$img_size = $columns;
 					}
-					$default_img_size = apply_filters( 'hootkit_nohoot_content_block_imgsize', ( ( $style != 'style4' ) ? 'full' : 'thumbnail' ), $columns, $style );
-					$img_size = hootkit_thumbnail_size( 'column-1-' . $img_size, NULL, $default_img_size );
+					$img_size = hoot_thumbnail_size( 'column-1-' . $img_size );
 					$img_size = apply_filters( 'hootkit_content_block_imgsize', $img_size, $columns, $style );
 					$visual = 1;
 				}
@@ -107,7 +108,7 @@ do_action( 'hootkit_content_blocks_wrap', 'custom', ( ( !isset( $instance ) ) ? 
 
 				// Set URL
 				if ( !empty( $box['url'] ) ) {
-					$linktag = '<a href="' . esc_url( $box['url'] ) . '" ' . hoot_get_attr( 'content-block-link', ( ( !isset( $instance ) ) ? array() : $instance ) ) . '>';
+					$linktag = '<a href="' . esc_url( $box['url'] ) . '" ' . hoot_get_attr( 'content-block-link', ( ( !isset( $instance ) ) ? array() : $instance ) ) . ( !empty( $box['target'] ) ? ' target="_blank"' : '' ) . '>';
 					$linktagend = '</a>';
 
 					if ( !empty( $box['link'] ) ) {
@@ -181,6 +182,9 @@ do_action( 'hootkit_content_blocks_wrap', 'custom', ( ( !isset( $instance ) ) ? 
 								echo $linktext;
 							?>
 						</div>
+						<?php if ( 'style5' == $style && !empty( $box['title'] ) && hootkit()->supports( 'content-blocks-style5-nojs' ) ) :
+							echo '<div class="content-block-content-clone">' . '<h4 class="content-block-title">' . $linktag . esc_html( $box['title'] ) . $linktagend . '</h4>' . '</div>';
+						endif; ?>
 						<?php endif; ?>
 
 					</div>
@@ -201,7 +205,16 @@ do_action( 'hootkit_content_blocks_wrap', 'custom', ( ( !isset( $instance ) ) ? 
 
 			endforeach;
 
-			if ( !$clearfix ) echo '</div>';
+			if ( !$clearfix ) {
+				if ( hootkit()->supports( 'content-blocks-emptyblocks' ) ) {
+					for ( $i=1; $i <= $columns; $i++ ) { 
+						if ( $column > $columns ) break;
+						?><div class="content-block-column content-block-column-empty <?php echo sanitize_html_class( "hcolumn-1-{$columns}" ); ?> <?php echo sanitize_html_class( "content-block-{$style}" ); ?> visual-none"></div><?php
+						$column++;
+					}
+				}
+				echo '</div>';
+			}
 			?>
 		</div>
 

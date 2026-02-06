@@ -13,9 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class HootKit_Products_Carticon_Widget
  */
-if (
-	file_exists(  hootkit()->dir . 'widgets/products-carticon/admin.php' )
-) {
+if ( file_exists(  hootkit()->dir . 'widgets/products-carticon/admin.php' ) ) {
 	require_once( hootkit()->dir . 'widgets/products-carticon/admin.php' );
 }
 

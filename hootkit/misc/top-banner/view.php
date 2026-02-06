@@ -1,4 +1,6 @@
 <?php
+
+
 // Get option values
 foreach ( array(
 		'background',

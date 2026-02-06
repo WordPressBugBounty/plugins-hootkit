@@ -39,11 +39,11 @@ $class .= ( !empty( $style ) ) ? ' cta-' . esc_attr( $style ) : ' cta-style1';
 		<?php if ( !empty( $url ) ) { ?>
 			<?php if ( !empty( $link_type ) && $link_type == 'text' ) { ?>
 				<div class="cta-link cta-textlink more-link">
-					<?php echo '<a href="' . esc_url( $url ) . '" ' . hoot_get_attr( 'cta-link', ( ( !isset( $instance ) ) ? array() : $instance ) ) . '>' . esc_html( $button_text ) . '</a>'; ?>
+					<?php echo '<a href="' . esc_url( $url ) . '" ' . hoot_get_attr( 'cta-link', ( ( !isset( $instance ) ) ? array() : $instance ) ) . ( !empty( $target ) ? ' target="_blank"' : '' ) . '>' . esc_html( $button_text ) . '</a>'; ?>
 				</div>
 			<?php } else { ?>
 				<div class="cta-link cta-buttonlink">
-					<?php echo '<a href="' . esc_url( $url ) . '" ' . hoot_get_attr( 'cta-button', ( ( !isset( $instance ) ) ? array() : $instance ), 'button button-medium border-box ' ) . '>' . esc_html( $button_text ) . '</a>'; ?>
+					<?php echo '<a href="' . esc_url( $url ) . '" ' . hoot_get_attr( 'cta-button', ( ( !isset( $instance ) ) ? array() : $instance ), 'button button-medium border-box ' ) . ( !empty( $target ) ? ' target="_blank"' : '' ) . '>' . esc_html( $button_text ) . '</a>'; ?>
 				</div>
 			<?php } ?>
 		<?php } ?>

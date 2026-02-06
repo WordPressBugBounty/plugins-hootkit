@@ -1,4 +1,8 @@
 <?php
+// Set vars
+$createvars = array( 'title','subtitle','before_title','after_title' );
+foreach ($createvars as $key) { $$key = !empty( $$key ) ? $$key : ''; }
+
 // Return if no boxes to show
 if ( empty( $boxes ) || !is_array( $boxes ) )
 	return;
@@ -20,9 +24,6 @@ for ( $index = 0; $index < $firstgridcount;  $index++ ) {
 	if ( !empty( $boxes ) ) $firstgrid_boxes[] = array_shift( $boxes );
 }
 
-// Set vars
-$subtitle = ( !empty( $subtitle ) ) ? $subtitle : '';
-
 // Display Grid Function
 if ( !function_exists( 'hootkit_content_grid_displayunit' ) ):
 function hootkit_content_grid_displayunit( $box, $gridcount, $factor, $columns, $gridunit_height = 200, $firstgrid = array() ){
@@ -40,21 +41,20 @@ function hootkit_content_grid_displayunit( $box, $gridcount, $factor, $columns, 
 
 	/* Image */
 	$image = intval( $image );
-	// $img_size = hootkit_thumbnail_size( "column-{$factor}-{$columns}" );
-	$img_size = 'hoot-large-thumb'; // hoot-preview-large -> blurry image when eg. 1035x425
+	// $img_size = hoot_thumbnail_size( "column-{$factor}-{$columns}" );
+	$img_size = 'hoot-large-thumb';
 	$img_size = apply_filters( 'hootkit_gridwidget_imgsize', $img_size, 'content-grid', $gridcount, $factor, $columns );
-	$default_img_size = apply_filters( 'hoot_notheme_gridwidget_imgsize', ( ( $factor == 2 ) ? 'full' : 'thumbnail' ), 'content-grid', $gridcount, $factor, $columns );
-	$thumbnail_size = hootkit_thumbnail_size( $img_size, NULL, $default_img_size );
+	$thumbnail_size = hoot_thumbnail_size( $img_size );
 	$img_src = ( $image ) ? wp_get_attachment_image_src( $image, $thumbnail_size ) : array();
 	$thumbnail_url = ( !empty( $img_src[0] ) ) ? $img_src[0] : '';
 
-		if ( $thumbnail_url ) $coverimg_attr['style'] .= "background-image:url(" . esc_url($thumbnail_url) . ");";
+		if ( $thumbnail_url ) $coverimg_attr['style'] .= ( hootkit()->supports( 'imgbg-cssvars' ) ? "--hkimgbg:" : "background-image:" ) . "url(" . esc_url($thumbnail_url) . ");";
 		if ( $gridunit_height ) $coverimg_attr['style'] .= 'height:' . esc_attr( $gridunit_height * $factor ) . 'px;';
 		$coverimg_attr['class'] = 'coverimage-wrap hk-gridunit-image';
 
 		?><div <?php echo hoot_get_attr( 'coverimage-wrap', 'content-grid', $coverimg_attr ) ?>><?php
 
-			if ( !empty( $url ) ) echo '<a href="' . esc_url( $url ) . '" ' . hoot_get_attr( 'content-grid-link', ( ( !isset( $instance ) ) ? array() : $instance ), 'hk-gridunit-imglink' ) . '></a>';
+			if ( !empty( $url ) ) echo '<a href="' . esc_url( $url ) . '" ' . hoot_get_attr( 'content-grid-link', ( ( !isset( $instance ) ) ? array() : $instance ), 'hk-gridunit-imglink' ) . ( !empty( $target ) ? ' target="_blank"' : '' ) . '></a>';
 			if ( empty( $height ) ) echo '<div class="coverimage-fullimg"><img src=" ' . esc_url( $img_src[0] ) . '"></div>';
 
 			/* Display Content */
@@ -100,7 +100,7 @@ function hootkit_content_grid_displayunit( $box, $gridcount, $factor, $columns, 
 								}
 								$buttonattr['class'] = 'coverimage-button button button-small';
 								$buttonattr['data-button'] = $b;
-								echo '<a href="' . esc_url( ${"buttonurl{$b}"} ) .'" ' . hoot_get_attr( 'content-grid-button', $box, $buttonattr ) . '>';
+								echo '<a href="' . esc_url( ${"buttonurl{$b}"} ) .'" ' . hoot_get_attr( 'content-grid-button', $box, $buttonattr ) . ( !empty( ${"target{$b}"} ) ? ' target="_blank"' : '' ) . '>';
 									echo esc_html( ${"button{$b}"} );
 								echo '</a>';
 							} }
@@ -144,7 +144,7 @@ do_action( 'hootkit_gridwidget_wrap', 'content-grid', ( ( !isset( $instance ) ) 
 		$gridcount = 1;
 
 		/* First Grid Unit */
-		$factor = ( $columns == 1 || !empty( $firstpost['standard'] ) ) ? '1' : '2';
+		$factor = ( $columns == 1 || !empty( $firstgrid['standard'] ) ) ? '1' : '2';
 		$display_factor = $factor === '2' ? ( $firstgridbig_1x2 ? '1' : '2' ) : $factor;
 		$gridunit_attr = array();
 		$gridunit_attr['class'] = "hk-gridunit hcolumn-{$display_factor}-{$columns} hk-gridunit-size{$factor}";
@@ -159,7 +159,7 @@ do_action( 'hootkit_gridwidget_wrap', 'content-grid', ( ( !isset( $instance ) ) 
 			<?php
 			if ( $gridslider ) echo '<div ' . hoot_get_attr( 'hk-gridslider', 'content-grid', 'lightSlider' ) . '>';
 			foreach ( $firstgrid_boxes as $box ) :
-				if ( $gridslider ) echo '<div class="hk-grid-slide">';;
+				if ( $gridslider ) echo '<div class="hk-grid-slide">';
 				hootkit_content_grid_displayunit( $box, $gridcount, $factor, $columns, $gridunit_height, $firstgrid );
 				if ( $gridslider ) echo '</div>';
 			endforeach;

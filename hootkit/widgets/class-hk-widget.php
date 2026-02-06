@@ -3,6 +3,7 @@
  * Functions for registering and setting widgets. This file loads an abstract class to help
  * build widgets, and loads individual widget classes for building widgets into the backend and
  * loading their template for displaying in frontend
+ * This file is loaded at after_setup_theme@96 via class-widgets
  *
  * @package Hootkit
  */
@@ -20,6 +21,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @credit  Inspired from Vantage theme code by Greg Priday http://SiteOrigin.com
  *          Licensed under GPL
  * 
+ * @property string $id_base
+ * @property string $widget_options
+ * @property string $number
+ * @method string get_field_name(string $field_name)
+ * @method string get_field_id(string $field_id)
  * @since 1.0.0
  * @access public
  */
@@ -40,7 +46,8 @@ abstract class HK_Widget extends WP_Widget {
 	function __construct( $id, $name, $widget_options = array(), $control_options = array(), $form_options = array() ) {
 		$this->form_options = $form_options;
 		$this->widgetid = $id;
-		$name = hootkit()->get_string('widget-prefix') . $name;
+		$prefix = hootkit()->get_string('widget-prefix');
+		$name = esc_html( $prefix . $name );
 		parent::__construct( $id, $name, $widget_options, $control_options );
 
 		$this->initialize();
@@ -80,7 +87,7 @@ abstract class HK_Widget extends WP_Widget {
 			} else {
 				// Legacy_Widget_Block_WP5.8
 				$widget_name = ( !empty( $args['before_widget'] ) ) ? str_replace( array( '<div class="widget widget_', '">' ), '', $args['before_widget'] ) : '';
-				$widget_name = ( strpos( $widget_name, 'hootkit-' ) === 0 ) ? ucwords( str_replace( '-', ' ', $widget_name ) ) : '';
+				$widget_name = ( strpos( $widget_name, 'hootkit-' ) === 0 ) ? hootkit_formatlabel( $widget_name ) : '';
 			}
 			$widget_name = ( !empty( $widget_name ) ) ? $widget_name : __( 'HootKit Widget', 'hootkit' );
 
@@ -160,7 +167,7 @@ abstract class HK_Widget extends WP_Widget {
 
 		// @redundant @6.21
 		// SiteOrigin Page Builder compatibility - Live Preview in backend
-		// > undefined functions like hootkit_thumbnail_size, hootkit_widget_borderclass etc.
+		// > undefined functions like hootkit_widget_borderclass etc.
 		// > These files are included only in !is_admin() by default, so add them now. // @todo test all widgets (inc sliders)
 		// require_once( hootkit()->dir . 'include/template.php' );
 		// if ( is_admin() ) { esc_html_e( $title ); printf( esc_html__( '%1$sThis widget preview is not available in the Edit screen.%2$s', 'hootkit' ), '<div style="background: #eee; border: inset 1px #ddd; padding: 3px 10px; border-radius: 3px; opacity: 0.8; font-style: italic; font-size: 0.95em;">', '</div>' ); return; }
@@ -281,7 +288,9 @@ abstract class HK_Widget extends WP_Widget {
 	function render_field( $id, $field, $value, $repeater = array() ){
 		extract( $field, EXTR_SKIP );
 
-		?><div class="hoot-widget-field hoot-widget-field-type-<?php echo ( strlen( $type ) < 15 ) ? sanitize_html_class( $type ) : 'custom' ?> hoot-widget-field-<?php echo sanitize_html_class( $id ) ?>"><?php
+		if ( empty( $mergefieldtop ) ) :
+		?><div class="hoot-widget-field hoot-widget-field-type-<?php echo ( strlen( $type ) < 15 ) ? sanitize_html_class( $type ) : 'custom' ?> hoot-widget-field-<?php echo sanitize_html_class( $id ) ?> <?php if ( !empty( $boxdivi ) ) echo 'hoot-' . sanitize_html_class( $boxdivi ); ?>"><?php
+		endif;
 
 			if ( !empty( $name ) && $type != 'checkbox' && $type != 'separator' && $type != 'group' && $type != 'collapse' ) { ?>
 				<label for="<?php echo $this->hoot_get_field_id( $id, $repeater ) ?>"><?php echo $name ?>:</label>
@@ -333,11 +342,17 @@ abstract class HK_Widget extends WP_Widget {
 					break;
 
 				case 'smallselect':
+					if ( !empty( $smallselectlabel ) ) {
+						echo '<div class="hootsmallselectlabel">';
+					}
 					?><select name="<?php echo $this->hoot_get_field_name( $id, $repeater ) ?>" id="<?php echo $this->hoot_get_field_id( $id, $repeater ) ?>" class="hoot-widget-input hootsmallselect">
 						<?php foreach( $options as $k => $v ) : ?>
 							<option value="<?php echo esc_attr($k) ?>" <?php selected($k, $value) ?>><?php echo esc_html($v) ?></option>
 						<?php endforeach; ?>
 					</select><?php
+					if ( !empty( $smallselectlabel ) ) {
+						echo '<small>' . esc_html( $smallselectlabel ) . '</small>' . '</div>';
+					}
 					break;
 
 				case 'radio': case 'images':
@@ -359,18 +374,21 @@ abstract class HK_Widget extends WP_Widget {
 					<div id="<?php echo $this->hoot_get_field_id( $id, $repeater ) . '-icon-picker-box' ?>" class="hoot-icon-picker-box">
 						<div class="hoot-icon-picker-list"><i class="fas fa-ban hoot-icon-none" data-value="0" data-category=""><span><?php _e( 'Remove Icon', 'hootkit' ) ?></span></i></div>
 						<?php
-						$section_icons = ( !empty( $options ) && is_array( $options ) )? $options : hoot_enum_icons('icons');
-						$sections = hoot_enum_icons('sections');
-						foreach ( $section_icons as $s_key => $s_array ) { ?>
-							<?php if ( !empty( $sections[ $s_key ] ) ) echo '<h4>'.$sections[ $s_key ].'</h4>'; elseif( is_string( $s_key ) ) echo '<h4>'.ucfirst( $s_key.'</h4>' ); else echo '<p></p>'; ?>
-							<div class="hoot-icon-picker-list"><?php
-							if ( is_array( $section_icons[$s_key] ) ) {
-								foreach ( $section_icons[$s_key] as $i_key => $i_class ) {
-									$selected = ( $iconvalue == $i_class ) ? ' selected' : '';
-									?><i class='<?php echo $i_class . $selected; ?>' data-value='<?php echo $i_class; ?>' data-category='<?php echo $s_key ?>'></i><?php
-								}
-							} ?>
-							</div><?php
+						if ( !empty( $options ) && is_array( $options ) ) {
+							$sections = hoot_enum_icons('sections');
+							foreach ( $options as $s_key => $s_array ) { ?>
+								<?php if ( !empty( $sections[ $s_key ] ) ) echo '<h4>'.$sections[ $s_key ].'</h4>'; elseif( is_string( $s_key ) ) echo '<h4>'.ucfirst( $s_key.'</h4>' ); else echo '<p></p>'; ?>
+								<div class="hoot-icon-picker-list"><?php
+								if ( is_array( $s_array ) ) {
+									foreach ( $s_array as $i_class ) {
+										$selected = ( $iconvalue == $i_class ) ? ' selected' : '';
+										?><i class='<?php echo $i_class . $selected; ?>' data-value='<?php echo $i_class; ?>' data-category='<?php echo $s_key ?>'></i><?php
+									}
+								} ?>
+								</div><?php
+							}
+						} else {
+							echo '<div class="hoot-icon-picker-hold"></div>';
 						}
 						?>
 					</div><?php
@@ -482,9 +500,11 @@ abstract class HK_Widget extends WP_Widget {
 
 			if ( ! empty( $desc ) )
 				echo '<div class="hoot-widget-field-description"><small>' . wp_kses_post( $desc ) . '</small></div>';
-			echo '<div class="clear"></div>';
 
-		?></div><?php
+		if ( empty( $mergefieldbelow ) ) : ?>
+		<div class="clear"></div>
+		</div><?php
+		endif;
 	}
 
 	/**

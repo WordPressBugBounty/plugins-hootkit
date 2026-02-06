@@ -17,15 +17,15 @@ class HootKit_Products_Search_Widget extends HK_Widget {
 
 	function __construct() {
 
-		$settings['id'] = 'hootkit-products-search';
-		$settings['name'] = hootkit()->get_string('products-search');
+		$id = 'products-search';
+
+		$settings['id'] = "hootkit-{$id}";
+		$settings['name'] = hootkit()->get_string( $id );
 		$settings['widget_options'] = array(
 			'description'	=> __( 'Woocommerce Products Search', 'hootkit' ),
-			// 'classname'		=> 'hoot-products-search-widget', // CSS class applied to frontend widget container via 'before_widget' arg
 		);
 		$settings['control_options'] = array();
 		$settings['form_options'] = array(
-			//'name' => can be empty or false to hide the name
 			'title' => array(
 				'name'		=> __( 'Title (optional)', 'hootkit' ),
 				'type'		=> 'text',

@@ -33,7 +33,7 @@ if ( $headlinesize ) {
 ?>
 
 <div class="announce-widget <?php echo $styleclass; ?>" <?php echo $inlinestyle;?>>
-	<?php if ( !empty( $url ) ) echo '<a href="' . esc_url( $url ) . '" ' . hoot_get_attr( 'announce-link', ( ( !isset( $instance ) ) ? array() : $instance ) ) . '><span>' . __( 'Click Here', 'hootkit' ) . '</span></a>'; ?>
+	<?php if ( !empty( $url ) ) echo '<a href="' . esc_url( $url ) . '" ' . hoot_get_attr( 'announce-link', ( ( !isset( $instance ) ) ? array() : $instance ) ) . ( !empty( $target ) ? ' target="_blank"' : '' ) . '><span>' . __( 'Click Here', 'hootkit' ) . '</span></a>'; ?>
 	<div class="announce-box table">
 		<?php if ( !empty( $icon ) ) : ?>
 			<div class="announce-box-icon table-cell-mid"><i class="<?php echo hoot_sanitize_fa( $icon ) . $iconclass; ?>"<?php echo $iconstyle ?>></i></div>

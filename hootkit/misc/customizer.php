@@ -1,7 +1,7 @@
 <?php
 /**
  * Customizer Modules
- * This file is loaded at 'after_setup_theme' hook with 95 priority in HootKit->loadplugin()->class_miscmods
+ * This file is loaded at after_setup_theme@96 via class-miscmods
  *
  * @package Hootkit
  */

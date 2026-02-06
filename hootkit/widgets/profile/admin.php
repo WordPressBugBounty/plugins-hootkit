@@ -17,15 +17,15 @@ class HootKit_Profile_Widget extends HK_Widget {
 
 	function __construct() {
 
-		$settings['id'] = 'hootkit-profile';
-		$settings['name'] = hootkit()->get_string('profile');
+		$id = 'profile';
+
+		$settings['id'] = "hootkit-{$id}";
+		$settings['name'] = hootkit()->get_string( $id );
 		$settings['widget_options'] = array(
 			'description'	=> __( 'Display Profile (about) block', 'hootkit' ),
-			// 'classname'		=> 'hoot-profile-widget', // CSS class applied to frontend widget container via 'before_widget' arg
 		);
 		$settings['control_options'] = array();
 		$settings['form_options'] = array(
-			//'name' => can be empty or false to hide the name
 			'title' => array(
 				'name'		=> __( 'Title (optional)', 'hootkit' ),
 				'type'		=> 'text',
@@ -166,7 +166,7 @@ class HootKit_Profile_Widget extends HK_Widget {
 			),
 		);
 
-		if ( !in_array( 'widget-subtitle', hootkit()->get_config( 'supports' ) ) ) {
+		if ( ! hootkit()->supports( 'widget-subtitle' ) ) {
 			unset( $settings['form_options']['subtitle'] );
 		}
 

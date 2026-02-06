@@ -1,9 +1,11 @@
 <?php
 /**
  * Top Banner Modules
+ * This file is loaded at after_setup_theme@96 via class-miscmods
  *
  * @package Hootkit
  */
+
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -18,7 +20,7 @@ if ( !function_exists( 'hootkit_add_customizer_options' ) )
 add_filter( 'hootkit_customizer_options', 'hootkit_topbanner_customizer_options' );
 
 // Include display template
-// Alternate use: add_action( "{$themeslug}_before_topbar", 'hootkit_topbanner_display' ); where $themeslug = ( !empty( hoot_data()->basetemplate_slug ) ) ? hoot_data()->basetemplate_slug : strtolower( preg_replace( '/[^a-zA-Z0-9]+/', '_', trim( hoot_data()->template_name ) ) );
+// Alternate: add_action( "{$themeslug}_before_topbar", 'hootkit_topbanner_display' ); where $themeslug = ( !empty( hoot_data()->basetemplate_slug ) ) ? hoot_data()->basetemplate_slug : strtolower( preg_replace( '/[^a-zA-Z0-9]+/', '_', trim( hoot_data()->template_name ) ) );
 add_action( 'wp_body_open', 'hootkit_topbanner_display' );
 
 /**
@@ -98,7 +100,7 @@ function hootkit_topbanner_customizer_options( $options ) {
 
 	$settings['hktb_content_nopad'] = array(
 		// 'label'		=> esc_html__( 'Remove paddings / spaces at corners?', 'hootkit' ),
-		// 'sublabel'	=> esc_html__( 'Remove paddings / spaces at corners?', 'hootkit' ),
+		// 'description' => esc_html__( 'Remove paddings / spaces at corners?', 'hootkit' ),
 		'section'	=> $section,
 		'type'		=> 'checkbox',
 		// 'default'	=> 1,

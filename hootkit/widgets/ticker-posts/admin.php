@@ -17,15 +17,15 @@ class HootKit_Ticker_Posts_Widget extends HK_Widget {
 
 	function __construct() {
 
-		$settings['id'] = 'hootkit-ticker-posts';
-		$settings['name'] = hootkit()->get_string('ticker-posts');
+		$id = 'ticker-posts';
+
+		$settings['id'] = "hootkit-{$id}";
+		$settings['name'] = hootkit()->get_string( $id );
 		$settings['widget_options'] = array(
 			'description'	=> __( 'Animated horizontal scrolling posts', 'hootkit' ),
-			// 'classname'		=> 'hoot-ticker-posts-widget', // CSS class applied to frontend widget container via 'before_widget' arg
 		);
 		$settings['control_options'] = array();
 		$settings['form_options'] = array(
-			//'name' => can be empty or false to hide the name
 			'title' => array(
 				'name'		=> __( 'Title (optional)', 'hootkit' ),
 				'type'		=> 'text',

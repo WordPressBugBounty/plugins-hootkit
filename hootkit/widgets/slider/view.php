@@ -1,4 +1,9 @@
 <?php
+// Set vars
+$createvars = array( 'title','subtitle','before_title','after_title' );
+foreach ($createvars as $key) { $$key = !empty( $$key ) ? $$key : ''; }
+$viewall = ( !empty( $viewall ) ) ? $viewall : '';
+
 /* Let developers alter slider via global $hoot_data */
 do_action( 'hootkit_widgetslider_start', 'slider', ( ( !isset( $instance ) ) ? array() : $instance ) );
 
@@ -44,12 +49,8 @@ foreach ( $slidersettings as $setting => $value )
 /* Start Slider Template */
 $slide_count = 1;
 
-// Set vars
-$subtitle = ( !empty( $subtitle ) ) ? $subtitle : '';
-$viewall = ( !empty( $viewall ) ) ? $viewall : '';
-$slidesubtitles = ( in_array( 'slider-subtitles', hootkit()->get_config( 'supports' ) ) );
-
 // Slide Subtitles
+$slidesubtitles = ( hootkit()->supports( 'slider-subtitles' ) );
 if ( $slidesubtitles )
 	$class .= ' supportSlideSubtitle';
 
@@ -63,7 +64,6 @@ if ( $slidesubtitles )
 		$titlemarkup .= $before_title . $title . $after_title;
 		$titleclass .= ' hastitle';
 	}
-	if ( $slidersettings['type'] == 'postimage' )
 	if ( $viewall == 'top' ) {
 		$titlemarkup .= hootkit_get_viewall();
 		$titleclass .= ' hasviewall';
@@ -86,6 +86,7 @@ if ( $slidesubtitles )
 				'caption_bg' => 'dark-on-light',
 				'button'     => '',
 				'url'        => '',
+				'target'     => '',
 			) );
 			$slide['image'] = intval( $slide['image'] );
 
@@ -101,7 +102,7 @@ if ( $slidesubtitles )
 
 					<?php
 					if ( !empty( $slide['url'] ) && empty( $slide['button'] ) )
-						echo '<a href="' . esc_url( $slide['url'] ) . '" ' . hoot_get_attr( 'hootkitslide-link', ( ( !isset( $instance ) ) ? array() : $instance ) ) . '>';
+						echo '<a href="' . esc_url( $slide['url'] ) . '" ' . hoot_get_attr( 'hootkitslide-link', ( ( !isset( $instance ) ) ? array() : $instance ) ) . ( !empty( $slide['target'] ) ? ' target="_blank"' : '' ) . '>';
 
 					$img_size = apply_filters( 'hootkitslide_imgsize', 'full' );
 					echo wp_get_attachment_image( $slide['image'], $img_size, '', array( 'class' => "hootkitslide-img attachment-{$img_size} size-{$img_size} skip-lazy", 'itemprop' => 'image' ) );
@@ -115,7 +116,7 @@ if ( $slidesubtitles )
 							<?php
 							if ( $hastitle || $hassubtitle || $hascaption ) :
 								?>
-								<div <?php hoot_attr( 'hootkitslide-caption', '', 'style-' . $slide['caption_bg'] ) ?>>
+								<div <?php hoot_attr( 'hootkitslide-caption', '', 'style-' . $slide['caption_bg'] . ' textstyle-' . $slide['caption_bg'] ) ?>>
 									<?php
 									if ( $hastitle )
 										echo '<h3 class="hootkitslide-head">' . wp_kses_post( $slide['title'] ) . '</h3>';
@@ -134,7 +135,7 @@ if ( $slidesubtitles )
 
 							if ( $hasbutton ) :
 								?>
-								<a href="<?php echo esc_url( $slide['url'] ) ?>" <?php hoot_attr( 'hootkitslide-button', ( ( !isset( $instance ) ) ? array() : $instance ), 'button button-small' ); ?>>
+								<a href="<?php echo esc_url( $slide['url'] ) ?>" <?php hoot_attr( 'hootkitslide-button', ( ( !isset( $instance ) ) ? array() : $instance ), 'button button-small' ); echo ( !empty( $slide['target'] ) ? ' target="_blank"' : '' ); ?>>
 									<?php echo esc_html( $slide['button'] ) ?>
 								</a>
 								<?php

@@ -1,6 +1,7 @@
 <?php
 /**
  * Miscellaneous template and utility helper functions
+ * This file is loaded at after_setup_theme@96
  *
  * @package Hootkit
  */
@@ -142,80 +143,6 @@ function hootkit_get_skype_button( $username ) {
 endif;
 
 /**
- * Predict the optimum image size based on column span
- *
- * @since 1.0.0
- * @access public
- * @param string $size span or column size or actual image size name. Default is content width span.
- * @param bool $crop true|false|null Using null will return closest matched image irrespective of its crop setting
- * @param string $default Image size if hoot theme function does not exist
- * @return string
- */
-if ( !function_exists( 'hootkit_thumbnail_size' ) ):
-function hootkit_thumbnail_size( $size = '', $crop = NULL, $default = 'full' ) {
-
-	// Hoot Framework >=v3.0.1
-	if ( function_exists( 'hoot_thumbnail_size' ) )
-		return hoot_thumbnail_size( $size, $crop );
-
-	// Hoot Framework v3.0.0
-	// JNES@deprecated <= Unos v2.8.0 @8.19
-	if ( function_exists( 'hoot_theme_thumbnail_size' ) )
-		return hoot_theme_thumbnail_size( $size, $crop );
-
-	// Non Hoot Framework themes
-	$registered = get_intermediate_image_sizes();
-	if ( in_array( $size, $registered ) )
-		return $size;
-
-	// @todo `hoot_get_image_sizes` logic => use best guess in templates using `hootkit_thumbnail_size`
-	// if ( is_numeric( $default ) ) {
-	// 	$size = absint( $default );
-	// }
-
-	return esc_attr( apply_filters( 'hootkit_thumbnail_size', $default, $size, $crop ) );
-}
-endif;
-
-/**
- * Display the post thumbnail image
- *
- * @since 1.0.0
- * @access public
- * @param string $classes additional classes
- * @param string $size span or column size or actual image size name. Default is content width span.
- * @param bool $miscrodata true|false Add microdata or not
- * @param string $link image link url
- * @param bool $crop true|false|null Using null will return closest matched image irrespective of its crop setting
- * @param string $default Image size if hoot theme function does not exist
- * @return void
- */
-if ( !function_exists( 'hootkit_post_thumbnail' ) ):
-function hootkit_post_thumbnail( $classes = '', $size = '', $microdata = false, $link = '', $crop = NULL, $default = 'full' ) {
-
-	// Hoot Framework >=v3.0.1
-	if ( function_exists( 'hoot_post_thumbnail' ) ) {
-		hoot_post_thumbnail( $classes, $size, $microdata, $link, $crop );
-	}
-	// Hoot Framework v3.0.0
-	// JNES@deprecated <= Unos v2.8.0 @8.19
-	elseif ( function_exists( 'hoot_theme_post_thumbnail' ) ) {
-		hoot_theme_post_thumbnail( $classes, $size, $microdata, $link, $crop );
-	}
-	// Non Hoot Framework themes
-	elseif ( has_post_thumbnail() ) {
-		$thumbnail_size = hootkit_thumbnail_size( $size, NULL, $default );
-		$custom_class = ( !empty( $classes ) ) ? hoot_sanitize_html_classes( $classes ) : '';
-		echo '<div class="entry-featured-img-wrap">';
-			if ( !empty( $link ) ) echo '<a href="' . esc_url( $link ) . '" ' . hoot_get_attr( 'entry-featured-img-link' ) . '>';
-			the_post_thumbnail( $thumbnail_size, array( 'class' => "attachment-$thumbnail_size $custom_class", 'itemscope' => '' ) );
-			if ( !empty( $link ) ) echo '</a>';
-		echo '</div>';
-	}
-}
-endif;
-
-/**
  * Display the meta information HTML for single post/page
  *
  * @since 1.0.0
@@ -237,113 +164,19 @@ function hootkit_display_meta_info( $args = array() ) {
 	) );
 	extract( $args, EXTR_SKIP );
 
-	$wrapper = preg_replace( '/[^a-z]/i', '', $wrapper );
+	$wrapper = preg_replace( '/[^a-z]/i', '', $wrapper ); // keeps letters only - remove everything else
+	$wrapperend = "</{$wrapper}>";
 	if ( !empty( $wrapper ) ) {
-		$wrapperend = "</{$wrapper}>";
 		$wrapper_id = ( !empty( $wrapper_id ) ) ? ' id="' . hoot_sanitize_html_classes( $wrapper_id ) . '"' : '';
 		$wrapper_class = ( !empty( $wrapper_class ) ) ? ' class="' . hoot_sanitize_html_classes( $wrapper_class ) . '"' : '';
 		$wrapper = "<{$wrapper}{$wrapper_id}{$wrapper_class}>";
 	}
 
 	// Hoot Framework >=v3.0.1
-	if ( function_exists( 'hoot_display_meta_info' ) ) {
-		if ( hoot_meta_info( $display, $context, true ) ) {
-			echo $wrapper;
-			hoot_display_meta_info( $display, $context, $editlink );
-			echo $wrapperend;
-		}
-	}
-
-	// Hoot Framework v3.0.0
-	// JNES@deprecated <= Unos v2.8.0 @8.19
-	elseif ( function_exists( 'hoot_theme_display_meta_info' ) ) {
-		if ( hoot_theme_meta_info( $display, $context, true ) ) {
-			echo $wrapper;
-			hoot_theme_display_meta_info( $display, $context, $editlink );
-			echo $wrapperend;
-		}
-	}
-
-	// Non Hoot Framework themes
-	elseif ( empty( $display ) ) {
-		echo ( ( $empty ) ? $wrapper . wp_kses_post( $empty ) . $wrapperend : '' );
-	} else {
-
-		$display = array(
-			'author'   => in_array( 'author', $display ),
-			'date'     => in_array( 'date', $display ),
-			'cats'     => in_array( 'cats', $display ),
-			'tags'     => in_array( 'tags', $display ),
-			'comments' => in_array( 'comments', $display ),
-		);
-
+	if ( hoot_meta_info( $display, $context, true ) ) {
 		echo $wrapper;
-		/** Begin @HootKit **/
-
-	$blocks = array();
-
-	if ( !empty( $display['author'] ) ) :
-		$blocks['author']['label'] = __( 'By:', 'hootkit' );
-		ob_start();
-		the_author_posts_link();
-		$blocks['author']['content'] = '<span ' . hoot_get_attr( 'entry-author' ) . '>' . ob_get_clean() . '</span>';
-	endif;
-
-	if ( !empty( $display['date'] ) ) :
-		$blocks['date']['label'] = __( 'On:', 'hootkit' );
-		$blocks['date']['content'] = '<time ' . hoot_get_attr( 'entry-published' ) . '>' . get_the_date() . '</time>';
-	endif;
-
-	if ( !empty( $display['cats'] ) ) :
-		$category_list = get_the_category_list(', ');
-		if ( !empty( $category_list ) ) :
-			$blocks['cats']['label'] = __( 'In:', 'hootkit' );
-			$blocks['cats']['content'] = $category_list;
-		endif;
-	endif;
-
-	if ( !empty( $display['tags'] ) && get_the_tags() ) :
-		$blocks['tags']['label'] = __( 'Tagged:', 'hootkit' );
-		$blocks['tags']['content'] = ( ! get_the_tags() ) ? __( 'No Tags', 'hootkit' ) : get_the_tag_list( '', ', ', '' );
-	endif;
-
-	if ( !empty( $display['comments'] ) && comments_open() ) :
-		$blocks['comments']['label'] = __( 'With:', 'hootkit' );
-		ob_start();
-		comments_popup_link(__( '0 Comments', 'hootkit' ),
-							__( '1 Comment', 'hootkit' ),
-							__( '% Comments', 'hootkit' ), 'comments-link', '' );
-		$blocks['comments']['content'] = ob_get_clean();
-	endif;
-
-	if ( $editlink && $edit_link = get_edit_post_link() ) :
-		$blocks['editlink']['label'] = '';
-		$blocks['editlink']['content'] = '<a href="' . $edit_link . '">' . __( 'Edit This', 'hootkit' ) . '</a>';
-	endif;
-
-	$blocks = apply_filters( 'hootkit_display_meta_info', $blocks, $args ); // @HootKit
-
-	if ( !empty( $blocks ) )
-		echo '<div class="entry-byline">';
-
-	foreach ( $blocks as $key => $block ) {
-		if ( !empty( $block['content'] ) ) {
-			echo ' <div class="entry-byline-block entry-byline-' . sanitize_html_class( $key ) . '">';
-				if ( !empty( $block['label'] ) )
-					echo ' <span class="entry-byline-label">' . esc_html( $block['label'] ) . '</span> ';
-				echo wp_kses( $block['content'], hoot_data( 'hootallowedtags' ) );
-			echo ' </div>';
-		}
-	}
-
-	// if ( !empty( $display['publisher'] ) ) {} // @HootKit
-
-	if ( !empty( $blocks ) )
-		echo '</div><!-- .entry-byline -->';
-
-		/** End @HootKit **/
+		hoot_display_meta_info( $display, $context, $editlink );
 		echo $wrapperend;
-
 	}
 
 }

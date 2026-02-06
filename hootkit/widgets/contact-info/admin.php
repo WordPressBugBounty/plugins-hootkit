@@ -17,15 +17,15 @@ class HootKit_Contact_Info_Widget extends HK_Widget {
 
 	function __construct() {
 
-		$settings['id'] = 'hootkit-contact-info';
-		$settings['name'] = hootkit()->get_string('contact-info');
+		$id = 'contact-info';
+
+		$settings['id'] = "hootkit-{$id}";
+		$settings['name'] = hootkit()->get_string( $id );
 		$settings['widget_options'] = array(
 			'description'	=> __( 'Display Contact Information', 'hootkit' ),
-			// 'classname'		=> 'hoot-contact-info-widget', // CSS class applied to frontend widget container via 'before_widget' arg
 		);
 		$settings['control_options'] = array();
 		$settings['form_options'] = array(
-			//'name' => can be empty or false to hide the name
 			'title' => array(
 				'name'		=> __( 'Title', 'hootkit' ),
 				'type'		=> 'text',
@@ -54,7 +54,7 @@ class HootKit_Contact_Info_Widget extends HK_Widget {
 				'options'	=> array(
 					'item_name'	=> __( 'Contact Link', 'hootkit' ),
 					'maxlimit'	=> 4,
-					'limitmsg'	=> ( ( hootkit()->get_config( 'nohoot' ) ) ? __( 'Only 4 profiles allowed. Please use a wpHoot theme to add more profiles.', 'hootkit' ) : __( 'Only 4 profiles available in the Free version of the theme.', 'hootkit' ) ),
+					'limitmsg'	=> __( 'Only 4 profiles available in the Free version of the theme.', 'hootkit' ),
 					'sortable'	=> true,
 				),
 				'fields'	=> array(
@@ -102,7 +102,7 @@ class HootKit_Contact_Info_Widget extends HK_Widget {
 			),
 		);
 
-		if ( !in_array( 'widget-subtitle', hootkit()->get_config( 'supports' ) ) ) {
+		if ( ! hootkit()->supports( 'widget-subtitle' ) ) {
 			unset( $settings['form_options']['subtitle'] );
 		}
 

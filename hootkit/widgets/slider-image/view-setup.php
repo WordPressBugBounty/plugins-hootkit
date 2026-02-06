@@ -21,7 +21,7 @@ hoot_set_data( 'slidersettings', array(), true );
 $slidersettings = array();
 $slidersettings['type'] = 'image';
 $slidersettings['source'] = 'slider-image.php';
-if ( empty( $style ) || ( $style == 'style3' && !in_array( 'slider-style3', hootkit()->get_config( 'supports' ) ) ) ) {
+if ( empty( $style ) || ( $style == 'style3' && ! hootkit()->supports( 'slider-style3' ) ) ) {
 	$slidersettings['widgetclass'] = ' slider-style1';
 } else {
 	$slidersettings['widgetclass'] = ' slider-' . esc_attr( $style );

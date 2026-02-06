@@ -17,15 +17,15 @@ class HootKit_Icon_Widget extends HK_Widget {
 
 	function __construct() {
 
-		$settings['id'] = 'hootkit-icon';
-		$settings['name'] = hootkit()->get_string('icon');
+		$id = 'icon';
+
+		$settings['id'] = "hootkit-{$id}";
+		$settings['name'] = hootkit()->get_string( $id );
 		$settings['widget_options'] = array(
 			'description'	=> __( 'Display Icon', 'hootkit' ),
-			// 'classname'		=> 'hoot-icon-widget', // CSS class applied to frontend widget container via 'before_widget' arg
 		);
 		$settings['control_options'] = array();
 		$settings['form_options'] = array(
-			//'name' => can be empty or false to hide the name
 			'icon' => array(
 				'name'		=> __( 'Icon', 'hootkit' ),
 				'type'		=> 'icon',

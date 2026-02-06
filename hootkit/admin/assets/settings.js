@@ -54,8 +54,17 @@ jQuery(document).ready(function($) {
 
 	/*** Module Toggle ***/
 
+	var $widgetssc = $('.hk-mod-widgets-as-sc');
 	$('.hk-toggle').click( function(e){
-		$(this).siblings('input[type=checkbox]').click();
+		var $input = $(this).siblings('input[type=checkbox]');
+		$input.click();
+		if ( $input.val() === 'classic-widgets' ) {
+			if ( $input.is(':checked') ) {
+				$widgetssc.removeClass('hk-mod-inactive').find('input[type="checkbox"]').prop('checked', true);
+			} else {
+				$widgetssc.addClass('hk-mod-inactive').find('input[type="checkbox"]').prop('checked', false);
+			}
+		}
 		dirtyvalues = true;
 	});
 
@@ -68,7 +77,6 @@ jQuery(document).ready(function($) {
 			$form = $('#hootkit-settings'),
 			$feedback = $('#hkfeedback'),
 			formvalues = $form.serialize();
-		// console.log($form.serialize()); console.log($form.serializeArray()); return;
 
 		if ( $submit.is('.disabled') )
 			return;
@@ -105,5 +113,16 @@ jQuery(document).ready(function($) {
 	function feedback( $feedback, context, string ) {
 		$feedback.html( string ).removeClass('hkfberror hkfbsuccess').addClass('hkfb'+context).fadeIn().delay(1500).fadeOut();
 	}
+
+	/*** Admin Footer ***/
+
+	$('.hootkit-rateus').click( function(e){
+		e.preventDefault();
+		var url      = $(this).attr('href') ,
+			doneText = $(this).data('rated');
+		window.open( url, '_blank' );
+		$('#footer-left').text( doneText );
+		$.post( hootkitSettingsData.ajaxfooterurl );
+	});
 
 });

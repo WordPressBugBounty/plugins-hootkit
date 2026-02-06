@@ -17,15 +17,14 @@ class HootKit_Slider_Carousel_Widget extends HK_Widget {
 
 	function __construct() {
 
-		$settings['id'] = 'hootkit-slider-carousel';
-		$settings['name'] = hootkit()->get_string('carousel');
+		$id = 'carousel';
+		$settings['id'] = "hootkit-slider-carousel";
+		$settings['name'] = hootkit()->get_string( $id );
 		$settings['widget_options'] = array(
 			'description'	=> __( 'Display Images in a Carousel', 'hootkit' ),
-			// 'classname'		=> 'hoot-slider-carousel-widget', // CSS class applied to frontend widget container via 'before_widget' arg
 		);
 		$settings['control_options'] = array();
 		$settings['form_options'] = array(
-			//'name' => can be empty or false to hide the name
 			'title' => array(
 				'name'		=> __( 'Title (optional)', 'hootkit' ),
 				'type'		=> 'text',
@@ -84,7 +83,7 @@ class HootKit_Slider_Carousel_Widget extends HK_Widget {
 				'options'	=> array(
 					'item_name'	=> __( 'Item', 'hootkit' ),
 					'maxlimit'	=> 4,
-					'limitmsg'	=> ( ( hootkit()->get_config( 'nohoot' ) ) ? __( 'Only 4 carousel items allowed. Please use a wpHoot theme to add more carousel items.', 'hootkit' ) : __( 'Only 4 carousel items available in the Free version of the theme.', 'hootkit' ) ),
+					'limitmsg'	=> __( 'Only 4 carousel items available in the Free version of the theme.', 'hootkit' ),
 					'sortable'	=> true,
 				),
 				'fields'	=> array(
@@ -113,6 +112,11 @@ class HootKit_Slider_Carousel_Widget extends HK_Widget {
 						'name'		=> __( 'Link URL (optional)', 'hootkit' ),
 						'type'		=> 'text',
 						'sanitize'	=> 'url',
+					),
+					'target' => array(
+						'name'		=> __( 'Open Link In New Window', 'hootkit' ),
+						'type'		=> 'checkbox',
+						'boxdivi'	=> 'div-ve0',
 					),
 				),
 			),
@@ -143,12 +147,15 @@ class HootKit_Slider_Carousel_Widget extends HK_Widget {
 			),
 		);
 
-		if ( !in_array( 'widget-subtitle', hootkit()->get_config( 'supports' ) ) ) {
+		if ( ! hootkit()->supports( 'widget-subtitle' ) ) {
 			unset( $settings['form_options']['subtitle'] );
 		}
 
-		if ( !in_array( 'slider-subtitles', hootkit()->get_config( 'supports' ) ) ) {
+		if ( ! hootkit()->supports( 'slider-subtitles' ) ) {
 			unset( $settings['form_options']['slides']['fields']['subtitle'] );
+		}
+		if ( ! hootkit()->supports( 'linktarget' ) ) {
+			unset( $settings['form_options']['slides']['fields']['target'] );
 		}
 
 		$settings = apply_filters( 'hootkit_slider_carousel_widget_settings', $settings );

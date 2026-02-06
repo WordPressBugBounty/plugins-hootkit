@@ -10,33 +10,70 @@
 				$picker_box = $self.siblings('.hoot-icon-picker-box'),
 				$button     = $self.siblings('.hoot-icon-picked'),
 				$preview    = $button.children('i'),
+				$holder     = $picker_box.find('.hoot-icon-picker-hold'),
 				$icons      = $picker_box.find('i');
 
 			$button.on( "click", function() {
-				$picker_box.toggle();
+				$picker_box.trigger('hootclick');
 			});
 
-			$icons.on( "click", function() {
-				var iconvalue = $(this).data('value');
-				$icons.removeClass('selected');
-				var selected = ( ! $(this).hasClass('cmb-icon-none') ) ? 'selected' : '';
-				$(this).addClass(selected);
-				$preview.removeClass().addClass( selected + ' ' + iconvalue );
-				$self.val(iconvalue);
-				$self.trigger('change');
-				$picker_box.toggle();
+			$picker_box.on( "hootclick", function() {
+				var $box = $(this),
+					isOpen = $box.data('open');
+				if ( isOpen ) {
+					$box.data('open', false).hide();
+					if ( $holder.length ) {
+						$holder.html('');
+					}
+					$( 'body' ).off( 'mousedown', pboxautoclose );
+				} else {
+					$box.data('open', true).show();
+					if ( $holder.length ) {
+						var iconshtml = '',
+							iconvalue = $self.val();
+						if ( typeof hootkitDataFontawesome !== 'undefined' && typeof hootkitDataFontawesome.icons === 'object' ) {
+							var sections = typeof hootkitDataFontawesome.sections === 'object' ? hootkitDataFontawesome.sections : {};
+							$.each( hootkitDataFontawesome.icons, function( s_key, s_array ) {
+								iconshtml += ( typeof sections[ s_key ] !== 'undefined' ) ? '<h4>' + sections[ s_key ] + '</h4>' : ( ( typeof s_key === 'string' ) ? '<h4>' + s_key.charAt(0).toUpperCase() + s_key.slice(1) + '</h4>'	: '<p></p>' );
+								iconshtml += '<div class="hoot-icon-picker-list">';
+								if ( typeof s_array === 'object' && s_array.length ) {
+									$.each( s_array, function( iconkey, iconclass ) {
+										var selected = ( iconvalue == iconclass ) ? ' selected' : '';
+										iconshtml += '<i class="' + iconclass + selected + '" data-value="' + iconclass + '" data-category="' + s_key + '"></i>';
+									});
+								}
+								iconshtml += '</div>';
+							});
+						}
+						$holder.html( iconshtml );
+					}
+					$( 'body' ).on( 'mousedown', pboxautoclose );
+				}
+			});
+
+			$icons.on("click", function() {
+				handleIconClick($(this), $picker_box, $preview, $self);
+			});
+			$holder.on("click", "i", function() {
+				handleIconClick($(this), $picker_box, $preview, $self);
 			});
 
 		});
 	};
-	$(document).on('click', function(event) {
-		// If this is not inside .hoot-icon-picker-box or .hoot-icon-picked
-		if (!$(event.target).closest('.hoot-icon-picker-box').length
-			&&
-			!$(event.target).closest('.hoot-icon-picked').length ) {
-			$('.hoot-icon-picker-box').hide();
+	function pboxautoclose(e) {
+		if (!$(e.target).closest('.hoot-icon-picker-box, .hoot-icon-picked').length) {
+			$('.hoot-icon-picker-box').filter(function() { return $(this).data('open') === true; }).trigger('hootclick');
 		}
-	});
+	}
+	function handleIconClick($icon, $picker_box, $preview, $self) {
+		var iconvalue = $icon.data('value');
+		$picker_box.find('i').removeClass('selected');
+		var selected = (!$icon.hasClass('cmb-icon-none')) ? 'selected' : '';
+		if ( iconvalue !== 0 ) $icon.addClass(selected); // Dont add to 'Remove icon' button when it is the one being clicked
+		$preview.removeClass().addClass(iconvalue);
+		$self.val(iconvalue).trigger('change');
+		$picker_box.trigger('hootclick');
+	}
 
 	/*** Image Upload ***/
 
@@ -244,5 +281,64 @@
 	$(document).on( 'widget-added widget-updated', function ( event, $widget ) {
 		$widget.find('.hoot-widget-form').hootSetupWidget();
 	});
+
+
+	/*** Widgets as Shortcodes ***/
+
+	$.fn.hootkitSC = function() {
+		return this.each( function(i, el) {
+			var $self       = $(el),
+				sidebarID   = $self.closest('.widgets-holder-wrap').find('.sidebar-name').parent().attr('id'),
+				widgetID    = $self.find('input.widget-id').val(),
+				is_instance = widgetID.indexOf("__i__") > -1;
+
+			// Skip if not hootkit shortcode sidebar (also skips available-widgets and wp_inactive_widgets)
+			if ( sidebarID !== 'hootkit-widgets-sc' ) {
+				// dragged from HK-SC-sidebar to non HK-SC-sidebar
+				if ( $self.data('hootkit-sc') === true ) {
+					$self.data('hootkit-sc', false);
+					$self.find('.widget-inside .hootkit-widgetsc').remove();
+				}
+				return true;
+			}
+			// Skip if already set up
+			if ( $self.data('hootkit-sc') === true ) return true;
+			$self.find('.widget-inside .hootkit-widgetsc').remove();
+			var codeMsg = is_instance ? '<code>Save the widget to generate shortcode</code>' : '<code class="widgetsccode">[hootkitwidget id="'+widgetID+'"]</code>';
+			$self.find('.widget-inside').prepend('<div class="hootkit-widgetsc"><div class="widgetscnotice">Add this shortcode to display widget</div><div class="widgetsccopied">Copied to clipboard.</div>' + codeMsg + '</div>');
+
+			// All done - set data only once the widget is saved (not on instance creation)
+			if ( ! is_instance ) {
+				$self.trigger('hootkitsc').data('hootkit-sc', true);
+			}
+		});
+
+	};
+
+	if ( $('body').hasClass('widgets-php') && $('#hootkit-widgets-sc').length > 0 ) {
+		$('body.widgets-php:not(.block-editor-page) .widget').hootkitSC();
+		$(document).on( 'widget-added widget-updated', function ( event, $widget ) {
+			$widget.hootkitSC();
+		});
+		$('.widgets-sortables').on('sortstop', function (event, ui) {
+			var $widget = ui.item;
+			$widget.hootkitSC();
+		});
+		$(document).on('click', '.hootkit-widgetsc', function () {
+			var $container = $(this),
+				code = $container.find('code.widgetsccode')[0];
+			if (!code) return;
+			var range = document.createRange();
+			range.selectNodeContents(code);
+			var sel = window.getSelection();
+			sel.removeAllRanges();
+			sel.addRange(range);
+			var text = code.textContent;
+			navigator.clipboard.writeText(text).then(function () {
+				$container.addClass('hkcopied');
+				setTimeout(() => { $container.removeClass('hkcopied'); }, 3000);
+			});
+		});
+	}
 
 }(jQuery));

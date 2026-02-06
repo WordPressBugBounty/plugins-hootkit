@@ -1,7 +1,7 @@
 <?php
 /**
  * Classic Widgets
- * This file is loaded in HootKit->loadplugin() via 'after_setup_theme' action @priority 95
+ * This file is loaded at after_setup_theme@96 via class-miscmods
  *
  * @package Hootkit
  */

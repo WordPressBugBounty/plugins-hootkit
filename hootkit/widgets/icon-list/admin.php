@@ -17,15 +17,15 @@ class HootKit_Icon_List_Widget extends HK_Widget {
 
 	function __construct() {
 
-		$settings['id'] = 'hootkit-icon-list';
-		$settings['name'] = hootkit()->get_string('icon-list');
+		$id = 'icon-list';
+
+		$settings['id'] = "hootkit-{$id}";
+		$settings['name'] = hootkit()->get_string( $id );
 		$settings['widget_options'] = array(
 			'description'	=> __( 'Display Icon List', 'hootkit' ),
-			// 'classname'		=> 'hoot-icon-list-widget', // CSS class applied to frontend widget container via 'before_widget' arg
 		);
 		$settings['control_options'] = array();
 		$settings['form_options'] = array(
-			//'name' => can be empty or false to hide the name
 			'title' => array(
 				'name'		=> __( 'Title (optional)', 'hootkit' ),
 				'type'		=> 'text',
@@ -61,7 +61,7 @@ class HootKit_Icon_List_Widget extends HK_Widget {
 				'options'	=> array(
 					'item_name'	=> __( 'List Item', 'hootkit' ),
 					'maxlimit'	=> 4,
-					'limitmsg'	=> ( ( hootkit()->get_config( 'nohoot' ) ) ? __( 'Only 4 items allowed. Please use a wpHoot theme to add more items.', 'hootkit' ) : __( 'Only 4 items available in the Free version of the theme.', 'hootkit' ) ),
+					'limitmsg'	=> __( 'Only 4 items available in the Free version of the theme.', 'hootkit' ),
 					'sortable'	=> true,
 				),
 				'fields'	=> array(
@@ -98,7 +98,7 @@ class HootKit_Icon_List_Widget extends HK_Widget {
 			),
 		);
 
-		if ( !in_array( 'widget-subtitle', hootkit()->get_config( 'supports' ) ) ) {
+		if ( ! hootkit()->supports( 'widget-subtitle' ) ) {
 			unset( $settings['form_options']['subtitle'] );
 		}
 

@@ -87,7 +87,7 @@ do_action( 'hootkit_ticker_wrap', 'products', ( ( !isset( $instance ) ) ? array(
 						$imgstyle .= ( !empty( $thumbheight ) ) ? 'height:' . intval( $thumbheight ) . 'px;width:' . intval( $thumbheight ) * 1.5 . 'px;' : '';
 						?>
 						<div class="ticker-img" style="<?php echo esc_attr( $imgstyle ); ?>">
-							<?php hootkit_post_thumbnail( 'product-ticker-img', $img_size, false, esc_url( get_permalink( $post->ID ) ), NULL, 'thumbnail' ); ?>
+							<?php hoot_post_thumbnail( 'product-ticker-img', $img_size, false, esc_url( get_permalink( $post->ID ) ) ); ?>
 						</div>
 						<?php
 					else: // Since we are not using a flexbox on ticker-msgs anymore, add an empty image box of same height to maintain middle alignment of ticker-msg without $visual

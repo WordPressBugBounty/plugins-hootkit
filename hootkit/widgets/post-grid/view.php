@@ -1,4 +1,9 @@
 <?php
+// Set vars
+$createvars = array( 'title','subtitle','before_title','after_title' );
+foreach ($createvars as $key) { $$key = !empty( $$key ) ? $$key : ''; }
+$viewall = ( !empty( $viewall ) ) ? $viewall : '';
+
 // Get total columns and set column counter
 $columns = ( intval( $columns ) >= 1 && intval( $columns ) <= 5 ) ? intval( $columns ) : 4;
 
@@ -30,10 +35,8 @@ $fpquery_args['posts_per_page'] = ( !empty( $firstpost['count'] ) ) ? intval( $f
 if ( !empty( $offset ) )
 	$fpquery_args['offset'] = absint( $offset );
 
-// Categories : Follow widget cat option if first gridunit's categories is empty
-if ( !empty( $firstpost['category'] ) ) // undefined if none selected in multiselect
-	$fpquery_args['category'] = implode( ',', $firstpost['category'] );
-elseif ( !empty( $category ) )
+// Categories
+if ( !empty( $category ) )
 	$fpquery_args['category'] = implode( ',', $category );
 
 // Skip posts without image
@@ -62,17 +65,13 @@ if ( empty( $firstpost['standard'] ) ) {
 }
 $query_args['posts_per_page'] = $count;
 
-// Categories : Exclude first gridunit's categories if not empty ; else skip number of posts from first post gridunit
-if ( !empty( $firstpost['category'] ) ) // undefined if none selected in multiselect
-	$category = array_merge( $category, array_map( 'hootkit_append_negative', $firstpost['category'] ) );
-else
-	$query_args['offset'] = $fpquery_args['posts_per_page'];
+// Categories
 if ( !empty( $category ) )
 	$query_args['category'] = implode( ',', $category );
 
 // Offset
-if ( !empty( $offset ) )
-	$query_args['offset'] = ( empty( $query_args['offset'] ) ) ? absint( $offset ) : $query_args['offset'] + absint( $offset );
+$query_args['offset'] = !empty( $offset ) ? absint( $offset ) : 0;
+$query_args['offset'] += $fpquery_args['posts_per_page'];
 
 // Skip posts without image
 $query_args['meta_query'] = array(
@@ -86,30 +85,24 @@ $query_args['meta_query'] = array(
 $query_args = apply_filters( 'hootkit_post_grid_stdquery', $query_args, ( ( !isset( $instance ) ) ? array() : $instance ) );
 $post_grid_query = get_posts( $query_args );
 
-// Set vars
-$subtitle = ( !empty( $subtitle ) ) ? $subtitle : '';
-$viewall = ( !empty( $viewall ) ) ? $viewall : '';
-
 
 /*** Template Functions ***/
-// @todo : Improve template file with proper location for template functions within plugin in respect to theme template management
 
 // Display Grid Function
 if ( !function_exists( 'hootkit_post_grid_displayunit' ) ):
 function hootkit_post_grid_displayunit( $post, $postcount, $factor, $columns, $gridunit_height = 0, $show_title = true, $metadisplay = array() ){
-	// $img_size = hootkit_thumbnail_size( "column-{$factor}-{$columns}" );
-	$img_size = 'hoot-large-thumb'; // hoot-preview-large -> blurry image when eg. 1035x425
+	// $img_size = hoot_thumbnail_size( "column-{$factor}-{$columns}" );
+	$img_size = 'hoot-large-thumb';
 	$img_size = apply_filters( 'hootkit_gridwidget_imgsize', $img_size, 'post-grid', $postcount, $factor, $columns );
-	$default_img_size = apply_filters( 'hoot_notheme_gridwidget_imgsize', ( ( $factor == 2 ) ? 'full' : 'thumbnail' ), 'post-grid', $postcount, $factor, $columns );
-	$gridimg_attr = array( 'style' => '' );
-	$thumbnail_size = hootkit_thumbnail_size( $img_size, NULL, $default_img_size );
+	$thumbnail_size = hoot_thumbnail_size( $img_size );
 	$thumbnail_url = get_the_post_thumbnail_url( null, $thumbnail_size );
-	if ( $thumbnail_url ) $gridimg_attr['style'] .= "background-image:url(" . esc_url($thumbnail_url) . ");";
+	$gridimg_attr = array( 'style' => '' );
+	if ( $thumbnail_url ) $gridimg_attr['style'] .= ( hootkit()->supports( 'imgbg-cssvars' ) ? "--hkimgbg:" : "background-image:" ) . "url(" . esc_url($thumbnail_url) . ");";
 	if ( $gridunit_height ) $gridimg_attr['style'] .= 'height:' . esc_attr( $gridunit_height * $factor ) . 'px;';
 	?>
 
 	<div <?php echo hoot_get_attr( 'hk-gridunit-image', 'post-grid', $gridimg_attr ) ?>>
-		<?php hootkit_post_thumbnail( 'hk-gridunit-img', $img_size, false, '', NULL, $default_img_size ); // Redundant, but we use it for SEO (related images) ?>
+		<?php hoot_post_thumbnail( 'hk-gridunit-img', $img_size ); // Redundant, but we use it for SEO (related images) ?>
 	</div>
 
 	<div class="hk-gridunit-bg"><?php echo '<a href="' . esc_url( get_permalink() ) . '" ' . hoot_get_attr( 'hk-gridunit-imglink', ( ( !isset( $instance ) ) ? array() : $instance ) ) . '></a>'; ?></div>
@@ -208,7 +201,7 @@ do_action( 'hootkit_gridwidget_wrap', 'post-grid', ( ( !isset( $instance ) ) ? a
 				if ( !empty( $firstpost['cats'] ) ) $metadisplay[] = 'cats';
 				if ( !empty( $firstpost['tags'] ) ) $metadisplay[] = 'tags';
 
-				if ( $gridslider ) echo '<div class="hk-grid-slide">';;
+				if ( $gridslider ) echo '<div class="hk-grid-slide">';
 				hootkit_post_grid_displayunit( $post, $postcount, $factor, $columns, $gridunit_height, $show_title, $metadisplay );
 				if ( $gridslider ) echo '</div>';
 			endforeach;

@@ -17,15 +17,14 @@ class HootKit_Slider_Postcarousel_Widget extends HK_Widget {
 
 	function __construct() {
 
-		$settings['id'] = 'hootkit-slider-postcarousel';
-		$settings['name'] = hootkit()->get_string('postcarousel');
+		$id = 'postcarousel';
+		$settings['id'] = "hootkit-slider-postcarousel";
+		$settings['name'] = hootkit()->get_string( $id );
 		$settings['widget_options'] = array(
 			'description'	=> __( 'Display Posts in a Carousel', 'hootkit' ),
-			// 'classname'		=> 'hoot-slider-postscarousel-widget', // CSS class applied to frontend widget container via 'before_widget' arg
 		);
 		$settings['control_options'] = array();
 		$settings['form_options'] = array(
-			//'name' => can be empty or false to hide the name
 			'title' => array(
 				'name'		=> __( 'Title (optional)', 'hootkit' ),
 				'type'		=> 'text',
@@ -44,7 +43,7 @@ class HootKit_Slider_Postcarousel_Widget extends HK_Widget {
 			),
 			'count' => array(
 				'name'		=> __( 'Number of Posts', 'hootkit' ),
-				'desc'		=> ( ( hootkit()->get_config( 'nohoot' ) ) ? __( '<strong>Only 4 posts allowed. Please use a wpHoot theme to add more posts.</strong>', 'hootkit' ) : __( '<strong>Only 4 posts available in the Free version of the theme.</strong>', 'hootkit' ) ),
+				'desc'		=> __( 'Only 4 posts available in the Free version of the theme.', 'hootkit' ),
 				'type'		=> 'smallselect',
 				'std'		=> '4',
 				'options'	=> array(
@@ -164,7 +163,7 @@ class HootKit_Slider_Postcarousel_Widget extends HK_Widget {
 			),
 		);
 
-		if ( !in_array( 'widget-subtitle', hootkit()->get_config( 'supports' ) ) ) {
+		if ( ! hootkit()->supports( 'widget-subtitle' ) ) {
 			unset( $settings['form_options']['subtitle'] );
 		}
 

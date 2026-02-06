@@ -1,6 +1,7 @@
 <?php
 /**
  * HootKit Config
+ * This file is loaded during plugin load
  *
  * @package Hootkit
  */
@@ -12,9 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die;
 }
 
-if ( ! class_exists( '\HootKit\Inc\Helper_Config' ) ) :
+if ( ! class_exists( '\HootKit\Inc\HKConfig' ) ) :
 
-	class Helper_Config {
+	class HKConfig {
 
 		/**
 		 * Class Instance
@@ -24,32 +25,28 @@ if ( ! class_exists( '\HootKit\Inc\Helper_Config' ) ) :
 		/**
 		 * Config
 		 */
-		public static $config = null;
+		public static $config = array();
 
 		/**
 		 * Constructor
 		 */
 		public function __construct() {
-
-			if ( null === self::$config ) {
-				self::$config = self::defaults();
-				add_action( 'after_setup_theme', array( $this, 'default_presets' ), 5 ); // Uses hootkit()->get_string : If used directly in self::defaults(), it would have lead to looping (since this file is called during HootKit Constructor method) making the constructor run additional number of times => Hence add presets to self::config by hooking to 'after_setup_themes'
-			}
-
 			add_action( 'after_setup_theme', array( $this, 'themeregister' ), 90 );
-			add_action( 'after_setup_theme', array( $this, 'setactivemodules' ), 93 );
-
 		}
 
 		/**
 		 * Register theme config
 		 */
 		public function themeregister() {
-
 			$themeconfig = apply_filters( 'hootkit_register', array() );
-			$themeconfig = $this->maybe_restructure( $themeconfig );
-			self::$config = wp_parse_args( $themeconfig, self::$config );
-			$this->sanitizeconfig();
+
+			if ( !empty( $themeconfig ) && \is_array( $themeconfig ) ) {
+				$themeconfig = $this->maybe_restructure( $themeconfig );
+				self::$config = wp_parse_args( $themeconfig, self::defaults() );
+				$this->sanitizeconfig();
+				$this->setactivemodules();
+				do_action( 'hootkit_config_registered' );
+			}
 
 		}
 
@@ -62,31 +59,46 @@ if ( ! class_exists( '\HootKit\Inc\Helper_Config' ) ) :
 					unset( $themeconfig['modules'] );
 				} else {
 					// 1. Rename slider slugs
-					if ( !empty( $themeconfig['modules']['sliders'] ) ) {
+					if ( !empty( $themeconfig['modules']['sliders'] ) && is_array( $themeconfig['modules']['sliders'] ) ) {
 						foreach ( $themeconfig['modules']['sliders'] as $slkey => $name ) {
 							if ( \in_array( $name, array( 'image', 'postimage' ) ) )
 								$themeconfig['modules']['sliders'][$slkey] = 'slider-' . $name;
 						}
 					}
 					// 2. Restructure to new format
-					$modules = wp_parse_args( $themeconfig['modules'], array(
-						'widget' => array(),
-						'block'  => array(),
-						'misc'   => array(),
-						) );
-					if ( !empty( $themeconfig['modules']['widgets'] ) )
-						$modules['widget'] = array_merge( $modules['widget'], $themeconfig['modules']['widgets'] );
-					if ( !empty( $themeconfig['modules']['sliders'] ) )
-						$modules['widget'] = array_merge( $modules['widget'], $themeconfig['modules']['sliders'] );
-					if ( !empty( $themeconfig['modules']['woocommerce'] ) )
-						$modules['widget'] = array_merge( $modules['widget'], $themeconfig['modules']['woocommerce'] );
-					$themeconfig['modules'] = array(
-						'widget' => $modules['widget'],
-						'block'  => $modules['block'],
-						'misc'   => $modules['misc'],
-						);
+					$modules = array();
+					foreach ( Manifest::$modtypes as $type ) {
+						$modules[ $type ] = isset( $themeconfig['modules'][ $type ] ) && is_array( $themeconfig['modules'][ $type ] ) ? $themeconfig['modules'][ $type ] : array();
+					}
+					if ( isset( $modules['widget'] ) && is_array( $modules['widget'] ) ) {
+						foreach ( array( 'widgets', 'sliders', 'woocommerce' ) as $oldkeys ) {
+							if ( isset( $themeconfig['modules'][ $oldkeys ] ) && is_array( $themeconfig['modules'][ $oldkeys ] ) ) {
+								$modules['widget'] = array_merge( $modules['widget'], $themeconfig['modules'][ $oldkeys ] );
+							}
+						}
+					}
+					$themeconfig['modules'] = $modules;
 				}
 			}
+			$themeconfig['supports_version'] = isset( $themeconfig['supports_version'] ) ? (
+					$themeconfig['supports_version'] === 'v2' ? array( 'widgets-v2' ) : (
+						\is_array( $themeconfig['supports_version'] ) ? $themeconfig['supports_version'] : array()
+					)
+				) : array();
+			if ( !defined( 'HOOT_PREMIUM_VERSION' ) && empty( $themeconfig['theme-filters'] ) ) {
+				$slug = false;
+				if ( function_exists( 'olius_abouttag' ) ) $slug = 'olius';
+				elseif ( function_exists( 'strute_abouttag' ) ) $slug = 'strute';
+				elseif ( function_exists( 'nirvata_abouttag' ) ) $slug = 'nirvata';
+				if ( $slug ) {
+					$themeconfig['theme-filters'] = array(
+						'fnspace' => $slug,
+						'abouttags' => array( 'fullshot' ),
+						'customizer' => array( 'pattern_pnote', 'sblayoutpnote', 'colorspnote', 'typopnote', 'archivetypepnote', 'singlemetapnote', 'article_background_pnote', 'article_maxwidth_pnote', 'topann_content', 'header_image_title', 'header_image_subtitle', 'header_image_text' ),
+					);
+				}
+			}
+
 			return $themeconfig;
 		}
 
@@ -94,77 +106,75 @@ if ( ! class_exists( '\HootKit\Inc\Helper_Config' ) ) :
 		 * Sanitize config values from theme and/or the default config values
 		 */
 		public function sanitizeconfig() {
-
-			/* Sanitize Theme Supported Modules against HootKit modules and arrange in order of hootkitmods */
-			/* Dont add woocommerce modules if plugin is inactive */
+			/*
+			* Sanitize Theme Supported Modules against HootKit manifest modules
+			* Arrange in order of HK manifest modules
+			* Add woocommerce modules only if plugin is active - Else add to 'wc-inactive'
+			*/
+			self::$config['wc-inactive'] = Manifest::$modtypesarray;
 			$wc = class_exists( 'WooCommerce' );
-			self::$config['wc-inactive'] = array(
-				'widget' => array(),
-				'block' => array(),
-				'misc' => array(),
-			);
+			$store = Manifest::$modtypesarray;
 			if ( !empty( self::$config['modules'] ) && \is_array( self::$config['modules'] ) ) {
-				foreach ( self::$config['modules'] as $type => $modules ) {
-					if ( !empty( self::$config['modules'][ $type ] ) ) {
-						$store = array();
-						$hkmodules = hootkit()->get_modtype( $type );
-						foreach ( $hkmodules as $modname => $modatts ) {
-							if ( \in_array( $modname, self::$config['modules'][ $type ] ) ) {
+				foreach ( self::$config['modules'] as $type => $thememods ) {
+					if ( is_array( $thememods ) ) {
+						// Arrange in order of HK manifest modules
+						$hkmodules = hootkit()->get_mfmods_oftype( $type );
+						foreach ( $hkmodules as $modid => $modatts ) {
+							if ( \in_array( $modid, $thememods ) ) {
+								// If this is a WC module - add to 'modules' only if WC is available
+								// Else add to 'wc-inactive'
 								if ( isset( $modatts['requires'] ) && \in_array( 'woocommerce', $modatts['requires'] ) ) {
-									if ( $wc ) { $store[] = $modname; }
-									else { self::$config['wc-inactive'][ $type ][] = $modname; }
+									if ( $wc ) { $store[ $type ][] = $modid; }
+									else { self::$config['wc-inactive'][ $type ][] = $modid; }
 								} else {
-									$store[] = $modname;
+									$store[ $type ][] = $modid;
 								}
 							}
 						}
-						self::$config['modules'][ $type ] = $store;
 					}
 				}
-			} else {
-				self::$config['modules'] = array(
-					'widget' => array(),
-					'block' => array(),
-					'misc' => array(),
-				);
 			}
+			self::$config['modules'] = $store;
 
-			$oldhoot = ( class_exists( 'Hoot_Theme' ) || class_exists( 'Hootubix_Theme' ) || class_exists( 'Maghoot_Theme' ) || class_exists( 'Dollah_Theme' ) );
-			if (
-				/* Sanitize and remove modules for older hoot themes */
-				( $oldhoot && !apply_filters( 'hootkit_forceload_deprecated', false ) )
-				||
-				/* Sanitize and remove modules for non hoot themes */
-				( self::$config['nohoot'] && !apply_filters( 'hootkit_forceload_nohoot', true ) )
-			)
-				self::$config['modules'] = ( !empty( self::$config['modules']['block'] ) ) ? array(
-					'widget' => array(),
-					'block' => self::$config['modules']['block'],
-					'misc' => array(),
-					) : array();
-
-			/* Sanitize Theme Supported Premium Modules against HootKit modules */
-			$themeslug = ( function_exists( 'hoot_data' ) ) ? strtolower( preg_replace( '/[^a-zA-Z0-9]+/', '-', trim( hoot_data( 'template_name' ) ) ) ) : '';
-			if ( !empty( $themeslug ) && \in_array( $themeslug, self::$config['themelist'] ) ) {
-				if ( !empty( self::$config['premium'] ) && \is_array( self::$config['premium'] ) ) {
-					$hkmodules = hootkit()->get_mods( 'modules' );
-					foreach ( self::$config['premium'] as $modkey => $modname ) {
-						if ( !array_key_exists( $modname, $hkmodules ) )
-							unset( self::$config['premium'][$modkey] );
-					}
+			/* Sanitize Theme Supported Premium Modules against HootKit Manifest modules */
+			if ( !empty( self::$config['premium'] ) && \is_array( self::$config['premium'] ) ) {
+				$hkmodules = hootkit()->get_mfmods_oftype( 'all', true );
+				foreach ( self::$config['premium'] as $modkey => $modid ) {
+					if ( ! in_array( $modid, $hkmodules ) )
+						unset( self::$config['premium'][$modkey] );
 				}
-			} else {
-				self::$config['premium'] = array();
 			}
 
 			/* Sanitize Theme specific supported settings against HootKit supported settings */
 			if ( !empty( self::$config['supports'] ) && \is_array( self::$config['supports'] ) ) {
-				$hksupports = hootkit()->get_mods( 'supports' );
+				$hksupports = hootkit()->get_manifest( 'supports' );
 				foreach ( self::$config['supports'] as $skey => $support ) {
-					if ( !in_array( $support, $hksupports ) )
+					if ( !in_array( $support, $hksupports ) ) {
 						unset( self::$config['supports'][ $skey ] );
+					}
 				}
 			}
+
+			/* Sanitize Theme specific dashboard plugs against HootKit supported dashboard plugs */
+			$store = hootkit()->get_manifest( 'dashboard' );
+			if ( !empty( self::$config['dashboard'] ) && \is_array( self::$config['dashboard'] ) ) {
+				foreach ( $store as $key => $value ) {
+					if ( isset( self::$config['dashboard'][ $key ] ) && is_scalar( self::$config['dashboard'][ $key ] ) ) {
+						$store[ $key ] = self::$config['dashboard'][ $key ];
+					}
+				}
+				/* Basic dependency checks for dashboard */
+				$store['dashmenu'] = !empty( $store['dashmenu'] ) && is_string( $store['dashmenu'] ) && !empty( $store['aboutfilter'] ) && is_string( $store['aboutfilter'] ) ? $store['dashmenu'] : '';
+				$hasrequired = ( function_exists( 'hoot_dashboard' )
+								&& !empty( $store['tabfilter'] ) && is_string( $store['tabfilter'] )
+								&& !empty( $store['tabaction'] ) && is_string( $store['tabaction'] )
+							);
+				foreach ( array( 'settings', 'code', 'tools', 'import' ) as $checkid ) {
+					$store[ $checkid ] = $hasrequired && !empty( $store[ $checkid ] ) && is_string( $store[ $checkid ] ) ? $store[ $checkid ] : '';
+				}
+				$store['import'] = !empty( $store['import'] ) && is_string( $store['import'] ) && !empty( $store['import_id'] ) && is_string( $store['import_id'] ) ? $store['import'] : '';
+			}
+			self::$config['dashboard'] = $store;
 
 		}
 
@@ -176,73 +186,66 @@ if ( ! class_exists( '\HootKit\Inc\Helper_Config' ) ) :
 		public function setactivemodules() {
 
 			$dbvalue = get_option( 'hootkit-activemods', false );
-			$store = array(
-				'widget' => array(),
-				'block' => array(),
-				'misc' => array(),
-			);
-			$disabled = ( \is_array( $dbvalue ) && !empty( $dbvalue[ 'disabled' ] ) && \is_array( $dbvalue[ 'disabled' ] ) ) ? $dbvalue[ 'disabled' ] : array();
+			$dbvalue = \is_array( $dbvalue ) && !empty( $dbvalue ) ? $dbvalue : array();
+			$disabled = !empty( $dbvalue[ 'disabled' ] ) && \is_array( $dbvalue[ 'disabled' ] ) ? $dbvalue[ 'disabled' ] : array();
 
-			foreach ( array( 'widget', 'block', 'misc' ) as $type ) {
+			$store = Manifest::$modtypesarray;
+			foreach ( $store as $type => $arr ) {
 
-				// User has modified any default settings yet
-				if ( $dbvalue !== false ) {
+				// User has not modified any default settings yet
+				// Hence set default active modules => all deactive if (bool) false ; all active if empty
+				if ( empty( $dbvalue ) ) {
+					$store[ $type ] = hootkit()->get_config( 'modules', $type );
+					$themeactivemods = self::$config['activemods'];
+					if ( $themeactivemods === false ) {
+						$store[ $type ] = array();
+					} elseif ( is_array( $themeactivemods ) && isset( $themeactivemods[ $type ] ) ) {
+						if ( $themeactivemods[ $type ] === false ) {
+							$store[ $type ] = array();
+						} elseif ( !empty( $themeactivemods[ $type ] ) && \is_array( $themeactivemods[ $type ] ) ) {
+							$store[ $type ] = $themeactivemods[ $type ];
+						}
+					}
+				} else {
 					if ( \in_array( $type, $disabled ) ) {
 						$store[ $type ] = array();
 					} elseif ( !empty( $dbvalue[ $type ] ) && \is_array( $dbvalue[ $type ] ) ) {
-						// Default: $dbvalue stores only active mods as serialize() does with checkboxes
-						// Issue:   User saves settings => new mods available (new or premium) => new mods inactive
-						//          Hence, $dbvalue should store both 1 and 0 statuses.
-						//          New available mods will be !isset in $dbvalue[$type]
-						//          However user deactivated are isset in $dbvalue[$type], but they are empty i.e. 0
 						foreach ( hootkit()->get_config( 'modules', $type ) as $check ) {
 							if ( !isset( $dbvalue[ $type ][ $check ] ) || $dbvalue[ $type ][ $check ] == 'yes' )
 								$store[ $type ][] = $check;
 						}
 					} else {
-					// This condition should never occur! as long as 'hootkit-activemods' has been properly stored in db
-					// i.e. we always have $dbvalue[$type] with disabled mods set to 'no' (so $dbvalue[$type] is not empty even when all disabled)
 						$store[ $type ] = hootkit()->get_config( 'modules', $type );
 					}
 				}
-				
-				// User hasn't modified any default settings yet
-				// Hence set default active modules => all deactive if (bool) false ; all active if empty
-				else {
-					if ( self::$config['activemods'] === false ||
-						 ( isset( self::$config['activemods'][ $type ] ) && self::$config['activemods'][ $type ] === false )
-						)
-						$store[ $type ] = array();
-					elseif ( !empty( self::$config['activemods'][ $type ] ) && \is_array( self::$config['activemods'][ $type ] ) )
-						$store[ $type ] = self::$config['activemods'][$type];
-					else
-						$store[ $type ] = hootkit()->get_config( 'modules', $type );
-				}
 
 			}
-
 			self::$config['activemods'] = apply_filters( 'hootkit_active_modules', $store );
 
-			/* Sanitize Active Modules against HootKit modules and arrange in order of hootkitmods */
-			/* Dont add woocommerce modules if plugin is inactive (Case: User sets settings with WC active; later disabled WC) */
-			$store = array();
+			/*
+			* Sanitize Active Modules against HootKit manifest modules
+			* Arrange in order of HK manifest modules
+			* Add woocommerce modules only if plugin is active (Ex: User saves settings with WC active; later disabled WC)
+			*/
 			$wc = class_exists( 'WooCommerce' );
-			foreach ( array( 'widget', 'block', 'misc' ) as $type ) {
-				$store[ $type ] = array();
+			$store = Manifest::$modtypesarray;
+			foreach ( $store as $type => $arr ) {
 				if ( !empty( self::$config['activemods'][ $type ] ) ) {
-					$hkmodules = hootkit()->get_modtype( $type );
-					foreach ( $hkmodules as $modname => $modatts ) {
-						if ( \in_array( $modname, self::$config['activemods'][ $type ] ) ) {
-							if ( isset( $modatts['requires'] ) && \in_array( 'woocommerce', $modatts['requires'] ) ) {
-								if ( $wc ) { $store[ $type ][] = $modname; }
-							} else {
-								$store[ $type ][] = $modname;
+						// Arrange in order of HK manifest modules
+						$hkmodules = hootkit()->get_mfmods_oftype( $type );
+						foreach ( $hkmodules as $modid => $modatts ) {
+							if ( \in_array( $modid, self::$config['activemods'][ $type ] ) ) {
+								// If this is a WC module - add to 'activemods' only if WC is available
+								// Else skip it
+								if ( isset( $modatts['requires'] ) && \in_array( 'woocommerce', $modatts['requires'] ) ) {
+									if ( $wc ) { $store[ $type ][] = $modid; }
+								} else {
+									$store[ $type ][] = $modid;
+								}
 							}
 						}
-					}
 				}
 			}
-
 			self::$config['activemods'] = $store;
 			self::$config['disabledmodtypes'] = $disabled;
 
@@ -253,100 +256,79 @@ if ( ! class_exists( '\HootKit\Inc\Helper_Config' ) ) :
 		 */
 		public static function defaults() {
 			return array(
-				// Set true for all non wphoot themes
-				'nohoot'    => true,
-				// If theme is loading its own css, hootkit wont load its own default styles
-				'theme_css' => false,
-				// Theme Supported Modules
+
+				/** Required - Themes should register these for best performance **/
+
+				// Theme Supported Modules - @see 'mods' for available list
 				'modules'   => array(
-					'widget' => array( 'slider-image', 'slider-postimage', 'announce', 'content-blocks', 'content-posts-blocks', 'cta', 'icon', 'post-grid', 'post-list', 'social-icons', /*'ticker',*/ 'content-grid', 'cover-image' ),
+					'widget' => array(),
 					'block' => array(),
 					'misc' => array(),
 				),
-				// Extracted list from 'modules' if WC is inactive ; else NULL
+				// Theme supports - @see 'mods' for available list
+				'supports' => array(),
+				// Version Support
+				'supports_version' => array(),
+				// Premium modules list
+				'premium' => array(),
+				// Theme filters to be applied [fnspace,abouttags,customizer]
+				'theme-filters' => array(),
+
+				/** Optional / Plugin Generated */
+
+				// Extracted list from 'modules' if WC is inactive
 				'wc-inactive' => array(
 					'widget' => array(),
 					'block' => array(),
 					'misc' => array(),
 				),
-				// Premium modules list
-				'premium' => array(),
 				// Active Modules (user settings)
 				// Optional: Themes can pass an array here to set them as defaults (before user settings saved)
-				//           Set to empty or boolean true for all active by default, boolean false for all deactive by default
+				//           Set to false for all deactive by default. Anything else is all active by default.
 				'activemods' => array(
 					'widget' => array(),
 					'block' => array(),
 					'misc' => array(),
 				),
-				// Misc theme specific settings
-				// JNES@deprecated <= Unos v2.7.1 @12.18
-				'settings' => array(),
-				// Misc theme specific settings
-				'supports' => array(),
-				// Version Support
-				'supports_version' => array(),
-				// wpHoot Themes
-				'themelist' => array(
-					'chromatic',		'dispatch',			'responsive-brix',
-					'brigsby',			'creattica',
-					'metrolo',			'juxter',			'divogue',
-					'hoot-ubix',		'magazine-hoot',	'dollah',
-					'hoot-business',	'hoot-du',
-					'unos',				'unos-publisher',	'unos-magazine-vu',
-					'unos-business',	'unos-glow',		'unos-magazine-black',
-					'unos-store-bell',	'unos-minima-store','unos-news',	'unos-bizdeck',
-					'nevark',			'neux',				'magazine-news-byte',
-					'hoot-porto',
-					'olius',			'strute',			'nirvata',
-					'magazine-lume',	'magazine-booster',
+				// Disabled Mod Types (user settings).
+				'disabledmodtypes' => array(),
+				// Default Styles
+				'presets'   => array(
+					'white'        => __( 'White',           'hootkit' ),
+					'black'        => __( 'Black',           'hootkit' ),
+					'brown'        => __( 'Brown',           'hootkit' ),
+					'blue'         => __( 'Blue',            'hootkit' ),
+					'cyan'         => __( 'Cyan',            'hootkit' ),
+					'green'        => __( 'Green',           'hootkit' ),
+					'yellow'       => __( 'Yellow',          'hootkit' ),
+					'amber'        => __( 'Amber',           'hootkit' ),
+					'orange'       => __( 'Orange',          'hootkit' ),
+					'red'          => __( 'Red',             'hootkit' ),
+					'pink'         => __( 'Pink',            'hootkit' ),
 				),
 				// Default Styles
-				'presets'   => array(),
-				// Default Styles
-				'presetcombo'   => array(),
-			);
-		}
-
-		/**
-		 * Config Structure (Defaults)
-		 * >> after hootkit() is available (constructor executed)
-		 */
-		public static function default_presets() {
-			self::$config['presets'] = array(
-				'white'  => hootkit()->get_string('white'),
-				'black'  => hootkit()->get_string('black'),
-				'brown'  => hootkit()->get_string('brown'),
-				'blue'   => hootkit()->get_string('blue'),
-				'cyan'   => hootkit()->get_string('cyan'),
-				'green'  => hootkit()->get_string('green'),
-				'yellow' => hootkit()->get_string('yellow'),
-				'amber'  => hootkit()->get_string('amber'),
-				'orange' => hootkit()->get_string('orange'),
-				'red'    => hootkit()->get_string('red'),
-				'pink'   => hootkit()->get_string('pink'),
-			);
-			self::$config['presetcombo'] = array(
-				'white'        => hootkit()->get_string('white'),
-				'black'        => hootkit()->get_string('black'),
-				'brown'        => hootkit()->get_string('brown'),
-				'brownbright'  => hootkit()->get_string('brownbright'),
-				'blue'         => hootkit()->get_string('blue'),
-				'bluebright'   => hootkit()->get_string('bluebright'),
-				'cyan'         => hootkit()->get_string('cyan'),
-				'cyanbright'   => hootkit()->get_string('cyanbright'),
-				'green'        => hootkit()->get_string('green'),
-				'greenbright'  => hootkit()->get_string('greenbright'),
-				'yellow'       => hootkit()->get_string('yellow'),
-				'yellowbright' => hootkit()->get_string('yellowbright'),
-				'amber'        => hootkit()->get_string('amber'),
-				'amberbright'  => hootkit()->get_string('amberbright'),
-				'orange'       => hootkit()->get_string('orange'),
-				'orangebright' => hootkit()->get_string('orangebright'),
-				'red'          => hootkit()->get_string('red'),
-				'redbright'    => hootkit()->get_string('redbright'),
-				'pink'         => hootkit()->get_string('pink'),
-				'pinkbright'   => hootkit()->get_string('pinkbright'),
+				'presetcombo'   => array(
+					'white'        => __( 'White',           'hootkit' ),
+					'black'        => __( 'Black',           'hootkit' ),
+					'brown'        => __( 'Brown',           'hootkit' ),
+					'brownbright'  => __( 'Brown (Bright)',  'hootkit' ),
+					'blue'         => __( 'Blue',            'hootkit' ),
+					'bluebright'   => __( 'Blue (Bright)',   'hootkit' ),
+					'cyan'         => __( 'Cyan',            'hootkit' ),
+					'cyanbright'   => __( 'Cyan (Bright)',   'hootkit' ),
+					'green'        => __( 'Green',           'hootkit' ),
+					'greenbright'  => __( 'Green (Bright)',  'hootkit' ),
+					'yellow'       => __( 'Yellow',          'hootkit' ),
+					'yellowbright' => __( 'Yellow (Bright)', 'hootkit' ),
+					'amber'        => __( 'Amber',           'hootkit' ),
+					'amberbright'  => __( 'Amber (Bright)',  'hootkit' ),
+					'orange'       => __( 'Orange',          'hootkit' ),
+					'orangebright' => __( 'Orange (Bright)', 'hootkit' ),
+					'red'          => __( 'Red',             'hootkit' ),
+					'redbright'    => __( 'Red (Bright)',    'hootkit' ),
+					'pink'         => __( 'Pink',            'hootkit' ),
+					'pinkbright'   => __( 'Pink (Bright)',   'hootkit' ),
+				),
 			);
 		}
 
@@ -362,6 +344,6 @@ if ( ! class_exists( '\HootKit\Inc\Helper_Config' ) ) :
 
 	}
 
-	Helper_Config::get_instance();
+	HKConfig::get_instance();
 
 endif;

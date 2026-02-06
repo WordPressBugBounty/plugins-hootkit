@@ -17,15 +17,14 @@ class HootKit_Products_List_Widget extends HK_Widget {
 
 	function __construct() {
 
-		$settings['id'] = 'hootkit-products-list';
-		$settings['name'] = hootkit()->get_string('product-list');
+		$id = 'product-list';
+		$settings['id'] = "hootkit-products-list";
+		$settings['name'] = hootkit()->get_string( $id );
 		$settings['widget_options'] = array(
 			'description'	=> __( 'Display Products List (all or specific category)', 'hootkit' ),
-			// 'classname'		=> 'hoot-product-list-widget', // CSS class applied to frontend widget container via 'before_widget' arg
 		);
 		$settings['control_options'] = array();
 		$settings['form_options'] = array(
-			//'name' => can be empty or false to hide the name
 			'title' => array(
 				'name'		=> __( 'Title (optional)', 'hootkit' ),
 				'type'		=> 'text',
@@ -98,6 +97,11 @@ class HootKit_Products_List_Widget extends HK_Widget {
 				'type'		=> 'text',
 				'settings'	=> array( 'size' => 3, ),
 				'sanitize'	=> 'absint',
+			),
+			'evenspacecol' => array(
+				'name'		=> __( 'Evenly space posts vertically in 2/3 columns', 'hootkit' ),
+				'type'		=> 'checkbox',
+				'std'		=> 1,
 			),
 			'offset' => array(
 				'name'		=> __( 'Offset', 'hootkit' ),
@@ -237,8 +241,11 @@ class HootKit_Products_List_Widget extends HK_Widget {
 			),
 		);
 
-		if ( !in_array( 'widget-subtitle', hootkit()->get_config( 'supports' ) ) ) {
+		if ( ! hootkit()->supports( 'widget-subtitle' ) ) {
 			unset( $settings['form_options']['subtitle'] );
+		}
+		if ( ! hootkit()->supports( 'list-evenspacecol' ) ) {
+			unset( $settings['form_options']['evenspacecol'] );
 		}
 
 		$settings = apply_filters( 'hootkit_products_list_widget_settings', $settings );

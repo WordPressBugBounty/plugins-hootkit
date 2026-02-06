@@ -1,4 +1,9 @@
 <?php
+// Set vars
+$createvars = array( 'title','subtitle','before_title','after_title' );
+foreach ($createvars as $key) { $$key = !empty( $$key ) ? $$key : ''; }
+$columnsclass = !empty( $evenspacecol ) ? 'hk-cbox-evenspacecol' : '';
+
 // Get border classes
 $top_class = hootkit_widget_borderclass( $border, 0, 'topborder-');
 $bottom_class = hootkit_widget_borderclass( $border, 1, 'bottomborder-');
@@ -56,15 +61,12 @@ if ( function_exists( 'hoot_remove_readmore_link' ) )
 
 $excerptlength = ( empty( $excerptlength ) ) ? '' : intval( $excerptlength );
 
-// Set vars
-$subtitle = ( !empty( $subtitle ) ) ? $subtitle : '';
-
 // Template modification Hook
 do_action( 'hootkit_content_blocks_wrap', 'products', ( ( !isset( $instance ) ) ? array() : $instance ), $content_blocks_query, $query_args );
 ?>
 
 <div class="content-blocks-widget-wrap content-blocks-products hk-woo-products <?php echo hoot_sanitize_html_classes( "{$top_class} {$bottom_class}" ); ?>">
-	<div class="content-blocks-widget">
+	<div class="content-blocks-widget <?php echo hoot_sanitize_html_classes( "content-blocks-widget-{$style}" ); ?>">
 
 		<?php
 		/* Display Title */
@@ -85,7 +87,7 @@ do_action( 'hootkit_content_blocks_wrap', 'products', ( ( !isset( $instance ) ) 
 		do_action( 'hootkit_content_blocks_start', 'products', ( ( !isset( $instance ) ) ? array() : $instance ), $content_blocks_query, $query_args );
 		?>
 
-		<div class="flush-columns">
+		<div class="flush-columns <?php echo $columnsclass; ?>">
 			<?php
 					global $post;
 					if ( $content_blocks_query->have_posts() ) : while ( $content_blocks_query->have_posts() ) : $content_blocks_query->the_post();
@@ -115,8 +117,7 @@ do_action( 'hootkit_content_blocks_wrap', 'products', ( ( !isset( $instance ) ) 
 								} else {
 									$img_size = $columns;
 								}
-								$default_img_size = apply_filters( 'hootkit_nohoot_content_products_block_imgsize', ( ( $style != 'style4' ) ? 'full' : 'thumbnail' ), $columns, $style );
-								$img_size = hootkit_thumbnail_size( 'column-1-' . $img_size, NULL, $default_img_size );
+								$img_size = hoot_thumbnail_size( 'column-1-' . $img_size );
 								$img_size = apply_filters( 'hootkit_content_products_block_imgsize', $img_size, $columns, $style );
 								$visual = 1;
 							}
@@ -141,7 +142,7 @@ do_action( 'hootkit_content_blocks_wrap', 'products', ( ( !isset( $instance ) ) 
 										<div class="content-block-visual content-block-image">
 											<?php echo $linktag;
 											$jplazyclass = ( $style == 'style5' ) ? 'skip-lazy' : '';
-											hootkit_post_thumbnail( "content-block-img {$jplazyclass}", $img_size, false, '', NULL, $default_img_size );
+											hoot_post_thumbnail( "content-block-img {$jplazyclass}", $img_size );
 											echo $linktagend; ?>
 										</div>
 									<?php endif; ?>
@@ -204,6 +205,12 @@ do_action( 'hootkit_content_blocks_wrap', 'products', ( ( !isset( $instance ) ) 
 											echo '</div>';
 										} ?>
 									</div>
+
+									<?php if ( 'style5' == $style && hootkit()->supports( 'content-blocks-style5-nojs' ) ) :
+										echo '<div class="content-block-content-clone">' . '<h4 class="content-block-title">' . $linktag;
+										the_title();
+										echo $linktagend . '</h4>' . '</div>';
+									endif; ?>
 
 								</div>
 								<?php

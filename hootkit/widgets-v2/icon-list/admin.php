@@ -13,9 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class HootKit_Icon_List_Widget
  */
-if (
-	file_exists(  hootkit()->dir . 'widgets/icon-list/admin.php' )
-) {
+if ( file_exists(  hootkit()->dir . 'widgets/icon-list/admin.php' ) ) {
 	require_once( hootkit()->dir . 'widgets/icon-list/admin.php' );
 }
 

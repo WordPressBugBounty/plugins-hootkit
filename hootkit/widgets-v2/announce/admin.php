@@ -13,9 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class HootKit_Announce_Widget
  */
-if (
-	file_exists(  hootkit()->dir . 'widgets/announce/admin.php' )
-) {
+if ( file_exists(  hootkit()->dir . 'widgets/announce/admin.php' ) ) {
 	require_once( hootkit()->dir . 'widgets/announce/admin.php' );
 }
 

@@ -17,15 +17,15 @@ class HootKit_Social_Icons_Widget extends HK_Widget {
 
 	function __construct() {
 
-		$settings['id'] = 'hootkit-social-icons';
-		$settings['name'] = hootkit()->get_string('social-icons');
+		$id = 'social-icons';
+
+		$settings['id'] = "hootkit-{$id}";
+		$settings['name'] = hootkit()->get_string( $id );
 		$settings['widget_options'] = array(
 			'description'	=> __( 'Display Social Icons', 'hootkit' ),
-			// 'classname'		=> 'hoot-social-icons-widget', // CSS class applied to frontend widget container via 'before_widget' arg
 		);
 		$settings['control_options'] = array();
 		$settings['form_options'] = array(
-			//'name' => can be empty or false to hide the name
 			'title' => array(
 				'name'		=> __( 'Title (optional)', 'hootkit' ),
 				'type'		=> 'text',
@@ -50,8 +50,18 @@ class HootKit_Social_Icons_Widget extends HK_Widget {
 				'type'		=> 'smallselect',
 				'std'		=> 'color',
 				'options'	=> array(
-					'default'	=> __( 'Default', 'hootkit' ),
+					'default'	=> __( 'None', 'hootkit' ),
 					'color'		=> __( 'Colored', 'hootkit' ),
+					'accent'	=> __( 'Accent Color', 'hootkit' ),
+				),
+			),
+			'altshape' => array(
+				'name'		=> __( 'Icon Background Shape', 'hootkit' ),
+				'type'		=> 'smallselect',
+				'std'		=> 'circle',
+				'options'	=> array(
+					'circle'	=> __( 'Circle', 'hootkit' ),
+					'square'	=> __( 'Square', 'hootkit' ),
 				),
 			),
 			'align' => array(
@@ -71,7 +81,7 @@ class HootKit_Social_Icons_Widget extends HK_Widget {
 				'options'	=> array(
 					'item_name'	=> __( 'Icon', 'hootkit' ),
 					'maxlimit'	=> 4,
-					'limitmsg'	=> ( ( hootkit()->get_config( 'nohoot' ) ) ? __( 'Only 4 profiles allowed. Please use a wpHoot theme to add more profiles.', 'hootkit' ) : __( 'Only 4 profiles available in the Free version of the theme.', 'hootkit' ) ),
+					'limitmsg'	=> __( 'Only 4 profiles available in the Free version of the theme.', 'hootkit' ),
 					'sortable'	=> true,
 				),
 				'fields'	=> array(
@@ -114,13 +124,19 @@ class HootKit_Social_Icons_Widget extends HK_Widget {
 			),
 		);
 
-		if ( !in_array( 'widget-subtitle', hootkit()->get_config( 'supports' ) ) ) {
+		if ( ! hootkit()->supports( 'widget-subtitle' ) ) {
 			unset( $settings['form_options']['subtitle'] );
 		}
-		if ( !in_array( 'social-icons-altcolor', hootkit()->get_config( 'supports' ) ) ) {
+		if ( ! hootkit()->supports( 'social-icons-altcoloraccent' ) ) {
+			unset( $settings['form_options']['altcolor']['options']['accent'] );
+		}
+		if ( ! hootkit()->supports( 'social-icons-altcolor' ) ) {
 			unset( $settings['form_options']['altcolor'] );
 		}
-		if ( !in_array( 'social-icons-align', hootkit()->get_config( 'supports' ) ) ) {
+		if ( ! hootkit()->supports( 'social-icons-shape' ) ) {
+			unset( $settings['form_options']['altshape'] );
+		}
+		if ( ! hootkit()->supports( 'social-icons-align' ) ) {
 			unset( $settings['form_options']['align'] );
 		}
 

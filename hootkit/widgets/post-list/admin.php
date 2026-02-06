@@ -17,15 +17,14 @@ class HootKit_Posts_List_Widget extends HK_Widget {
 
 	function __construct() {
 
-		$settings['id'] = 'hootkit-posts-list';
-		$settings['name'] = hootkit()->get_string('post-list');
+		$id = 'post-list';
+		$settings['id'] = "hootkit-posts-list";
+		$settings['name'] = hootkit()->get_string( $id );
 		$settings['widget_options'] = array(
 			'description'	=> __( 'Display Posts List (all or specific category)', 'hootkit' ),
-			// 'classname'		=> 'hoot-post-list-widget', // CSS class applied to frontend widget container via 'before_widget' arg
 		);
 		$settings['control_options'] = array();
 		$settings['form_options'] = array(
-			//'name' => can be empty or false to hide the name
 			'title' => array(
 				'name'		=> __( 'Title (optional)', 'hootkit' ),
 				'type'		=> 'text',
@@ -98,6 +97,11 @@ class HootKit_Posts_List_Widget extends HK_Widget {
 				'type'		=> 'text',
 				'settings'	=> array( 'size' => 3, ),
 				'sanitize'	=> 'absint',
+			),
+			'evenspacecol' => array(
+				'name'		=> __( 'Evenly space posts vertically in 2/3 columns', 'hootkit' ),
+				'type'		=> 'checkbox',
+				'std'		=> 1,
 			),
 			'offset' => array(
 				'name'		=> __( 'Offset', 'hootkit' ),
@@ -235,8 +239,11 @@ class HootKit_Posts_List_Widget extends HK_Widget {
 			),
 		);
 
-		if ( !in_array( 'widget-subtitle', hootkit()->get_config( 'supports' ) ) ) {
+		if ( ! hootkit()->supports( 'widget-subtitle' ) ) {
 			unset( $settings['form_options']['subtitle'] );
+		}
+		if ( ! hootkit()->supports( 'list-evenspacecol' ) ) {
+			unset( $settings['form_options']['evenspacecol'] );
 		}
 
 		$settings = apply_filters( 'hootkit_posts_list_widget_settings', $settings );
@@ -253,7 +260,7 @@ class HootKit_Posts_List_Widget extends HK_Widget {
 		$widget_template = hoot_get_widget( 'post-list', false );
 		// Use Hootkit template if theme does not have one
 		$widget_template = apply_filters( 'hootkit_widget_template', $widget_template, 'post-list' );
-		$default = ( !in_array( 'list-widget', hootkit()->get_config( 'supports' ) ) ) ? hootkit()->dir . 'widgets/post-list/view-deprecated.php' : hootkit()->dir . 'widgets/post-list/view.php'; // JNES@deprecated <= HootKit v1.1.3 @9.20
+		$default = hootkit()->dir . 'widgets/post-list/view.php';
 		$widget_template = ( $widget_template ) ? $widget_template : $default;
 		// Option to overwrite variables to keep html tags in title later sanitized during display => skips 'widget_title' filter (esc_html hooked) action on title; (Possibly redundant as html is sanitized in title during save)
 		if ( apply_filters( 'hootkit_display_widget_extract_overwrite', false, 'post-list' ) ) extract( $instance, EXTR_OVERWRITE ); else extract( $instance, EXTR_SKIP );

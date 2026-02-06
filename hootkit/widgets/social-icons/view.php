@@ -1,16 +1,20 @@
 <?php
+// Set vars
+$createvars = array( 'title','subtitle','before_title','after_title' );
+foreach ($createvars as $key) { $$key = !empty( $$key ) ? $$key : ''; }
+
 // Return if no icons to show
 if ( empty( $icons ) || !is_array( $icons ) )
 	return;
 
-// Set vars
-$subtitle = ( !empty( $subtitle ) ) ? $subtitle : '';
 ?>
 
 <div class="social-icons-widget <?php
 	echo 'social-icons-' . esc_attr( $size );
-	if ( in_array( 'social-icons-altcolor', hootkit()->get_config( 'supports' ) ) && !empty( $altcolor ) )
+	if ( hootkit()->supports( 'social-icons-altcolor' ) && !empty( $altcolor ) )
 		echo ' social-icons-style' . esc_attr( $altcolor );
+	if ( hootkit()->supports( 'social-icons-shape' ) && !empty( $altshape ) )
+		echo ' social-icons-style' . esc_attr( $altshape );
 	?>"><?php
 
 	/* Display Title */
@@ -23,7 +27,7 @@ $subtitle = ( !empty( $subtitle ) ) ? $subtitle : '';
 	$titlemarkup .= ( !empty( $subtitle ) ) ? '<div class="widget-subtitle hoot-subtitle">' . $subtitle . '</div>' : '';
 	echo do_shortcode( wp_kses_post( apply_filters( 'hootkit_widget_title', $titlemarkup, 'social-icons', $title, $before_title, $after_title, $subtitle ) ) );
 
-	if ( in_array( 'social-icons-align', hootkit()->get_config( 'supports' ) ) && !empty( $align ) )
+	if ( hootkit()->supports( 'social-icons-align' ) && !empty( $align ) )
 		echo '<div class="social-icons-align social-icons-align' . esc_attr( $align ) . '">';
 
 	$counter = 1;
@@ -50,7 +54,7 @@ $subtitle = ( !empty( $subtitle ) ) ? $subtitle : '';
 		endif;
 	endforeach;
 
-	if ( in_array( 'social-icons-align', hootkit()->get_config( 'supports' ) ) && !empty( $align ) )
+	if ( hootkit()->supports( 'social-icons-align' ) && !empty( $align ) )
 		echo '</div>';
 	?>
 </div>

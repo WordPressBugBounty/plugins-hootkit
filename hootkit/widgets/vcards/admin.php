@@ -17,15 +17,15 @@ class HootKit_Vcards_Widget extends HK_Widget {
 
 	function __construct() {
 
-		$settings['id'] = 'hootkit-vcards';
-		$settings['name'] = hootkit()->get_string('vcards');
+		$id = 'vcards';
+
+		$settings['id'] = "hootkit-{$id}";
+		$settings['name'] = hootkit()->get_string( $id );
 		$settings['widget_options'] = array(
 			'description'	=> __( 'Display ID Cards for Testimonials, Teams etc.', 'hootkit' ),
-			// 'classname'		=> 'hoot-vcards-widget', // CSS class applied to frontend widget container via 'before_widget' arg
 		);
 		$settings['control_options'] = array();
 		$settings['form_options'] = array(
-			//'name' => can be empty or false to hide the name
 			'title' => array(
 				'name'		=> __( 'Title', 'hootkit' ),
 				'type'		=> 'text',
@@ -63,13 +63,23 @@ class HootKit_Vcards_Widget extends HK_Widget {
 					'none none'		=> __( 'Top - None || Bottom - None', 'hootkit' ),
 				),
 			),
+			'img_style' => array(
+				'name'		=> __( 'Image Style', 'hootkit' ),
+				'type'		=> 'select',
+				'std'		=> 'square',
+				'options'	=> array(
+					'circle'	=> __( 'Thumbnail (circle)', 'hootkit' ),
+					'square'	=> __( 'Thumbnail (square)', 'hootkit' ),
+					'full'		=> __( 'Full Size', 'hootkit' ),
+				),
+			),
 			'vcards' => array(
 				'name'		=> __( 'Vcards', 'hootkit' ),
 				'type'		=> 'group',
 				'options'	=> array(
 					'item_name'	=> __( 'Vcard', 'hootkit' ),
 					'maxlimit'	=> 4,
-					'limitmsg'	=> ( ( hootkit()->get_config( 'nohoot' ) ) ? __( 'Only 4 vcards allowed. Please use a wpHoot theme to add more vcards.', 'hootkit' ) : __( 'Only 4 vcards available in the Free version of the theme.', 'hootkit' ) ),
+					'limitmsg'	=> __( 'Only 4 vcards available in the Free version of the theme.', 'hootkit' ),
 					'sortable'	=> true,
 				),
 				'fields'	=> array(
@@ -95,6 +105,11 @@ class HootKit_Vcards_Widget extends HK_Widget {
 						'type'		=> 'text',
 						'sanitize'	=> 'vcard_link_sanitize_url',
 					),
+					'target1' => array(
+						'name'		=> __( 'Open Link 1 In New Window', 'hootkit' ),
+						'type'		=> 'checkbox',
+						'boxdivi'	=> 'div-ve0',
+					),
 					'icon2' => array(
 						'name'		=> __( 'Social Icon 2', 'hootkit' ),
 						'type'		=> 'select',
@@ -104,6 +119,11 @@ class HootKit_Vcards_Widget extends HK_Widget {
 						'name'		=> __( 'URL 2', 'hootkit' ),
 						'type'		=> 'text',
 						'sanitize'	=> 'vcard_link_sanitize_url',
+					),
+					'target2' => array(
+						'name'		=> __( 'Open Link 2 In New Window', 'hootkit' ),
+						'type'		=> 'checkbox',
+						'boxdivi'	=> 'div-ve0',
 					),
 					'icon3' => array(
 						'name'		=> __( 'Social Icon 3', 'hootkit' ),
@@ -115,6 +135,11 @@ class HootKit_Vcards_Widget extends HK_Widget {
 						'type'		=> 'text',
 						'sanitize'	=> 'vcard_link_sanitize_url',
 					),
+					'target3' => array(
+						'name'		=> __( 'Open Link 3 In New Window', 'hootkit' ),
+						'type'		=> 'checkbox',
+						'boxdivi'	=> 'div-ve0',
+					),
 					'icon4' => array(
 						'name'		=> __( 'Social Icon 4', 'hootkit' ),
 						'type'		=> 'select',
@@ -125,6 +150,11 @@ class HootKit_Vcards_Widget extends HK_Widget {
 						'type'		=> 'text',
 						'sanitize'	=> 'vcard_link_sanitize_url',
 					),
+					'target4' => array(
+						'name'		=> __( 'Open Link 4 In New Window', 'hootkit' ),
+						'type'		=> 'checkbox',
+						'boxdivi'	=> 'div-ve0',
+					),
 					'icon5' => array(
 						'name'		=> __( 'Social Icon 5', 'hootkit' ),
 						'type'		=> 'select',
@@ -134,6 +164,11 @@ class HootKit_Vcards_Widget extends HK_Widget {
 						'name'		=> __( 'URL 5', 'hootkit' ),
 						'type'		=> 'text',
 						'sanitize'	=> 'vcard_link_sanitize_url',
+					),
+					'target5' => array(
+						'name'		=> __( 'Open Link 5 In New Window', 'hootkit' ),
+						'type'		=> 'checkbox',
+						'boxdivi'	=> 'div-ve0',
 					),
 				),
 			),
@@ -164,8 +199,19 @@ class HootKit_Vcards_Widget extends HK_Widget {
 			),
 		);
 
-		if ( !in_array( 'widget-subtitle', hootkit()->get_config( 'supports' ) ) ) {
+		if ( ! hootkit()->supports( 'widget-subtitle' ) ) {
 			unset( $settings['form_options']['subtitle'] );
+		}
+
+		if ( ! hootkit()->supports( 'vcard-imgstyles' ) ) {
+			unset( $settings['form_options']['img_style'] );
+		}
+		if ( ! hootkit()->supports( 'linktarget' ) ) {
+			unset( $settings['form_options']['vcards']['fields']['target1'] );
+			unset( $settings['form_options']['vcards']['fields']['target2'] );
+			unset( $settings['form_options']['vcards']['fields']['target3'] );
+			unset( $settings['form_options']['vcards']['fields']['target4'] );
+			unset( $settings['form_options']['vcards']['fields']['target5'] );
 		}
 
 		$settings = apply_filters( 'hootkit_vcards_widget_settings', $settings );

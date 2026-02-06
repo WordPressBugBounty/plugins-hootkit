@@ -1,9 +1,10 @@
 <?php
 // Set vars
+$createvars = array( 'title','subtitle','before_title','after_title' );
+foreach ($createvars as $key) { $$key = !empty( $$key ) ? $$key : ''; }
 $height = intval( $height );
 $boxes = ( isset( $boxes ) ) ? $boxes : array();
 $is_slider = ( !empty( $boxes ) && is_array( $boxes ) );
-$subtitle = ( !empty( $subtitle ) ) ? $subtitle : '';
 
 // Set cover images
 $firstimage = array(
@@ -12,15 +13,18 @@ $firstimage = array(
 	'content_subtitle'   => !empty( $content_subtitle )   ? $content_subtitle : '',
 	'content'            => !empty( $content )            ? $content : '',
 	'url'                => !empty( $url )                ? $url : '',
+	'target'             => !empty( $target )             ? $target : '',
 	'caption_bg'         => !empty( $caption_bg )         ? $caption_bg : '',
 	'caption_align'      => !empty( $caption_align )      ? $caption_align : '',
 	'caption_align_dist' => !empty( $caption_align_dist ) ? $caption_align_dist : '',
 	'button1'            => !empty( $button1 )            ? $button1 : '',
 	'buttonurl1'         => !empty( $buttonurl1 )         ? $buttonurl1 : '',
+	'target1'            => !empty( $target1 )            ? $target1 : '',
 	'buttoncolor1'       => !empty( $buttoncolor1 )       ? $buttoncolor1 : '',
 	'buttonfont1'        => !empty( $buttonfont1 )        ? $buttonfont1 : '',
 	'button2'            => !empty( $button2 )            ? $button2 : '',
 	'buttonurl2'         => !empty( $buttonurl2 )         ? $buttonurl2 : '',
+	'target2'            => !empty( $target2 )            ? $target2 : '',
 	'buttoncolor2'       => !empty( $buttoncolor2 )       ? $buttoncolor2 : '',
 	'buttonfont2'        => !empty( $buttonfont2 )        ? $buttonfont2 : '',
 );
@@ -45,12 +49,12 @@ function hootkit_coverimage_displayunit( $box, $height ){
 
 	if ( !empty( $img_src[0] ) ) :
 
-		if ( !empty( $height ) ) $coverimg_attr['style'] .= "background-image:url(" . esc_url( $img_src[0] ) . ");";
+		if ( !empty( $height ) ) $coverimg_attr['style'] .= ( hootkit()->supports( 'imgbg-cssvars' ) ? "--hkimgbg:" : "background-image:" ) . "url(" . esc_url($img_src[0]) . ");";
 		if ( !empty( $height ) ) $coverimg_attr['style'] .= "height:{$height}px;";
 
 		?><div <?php echo hoot_get_attr( 'coverimage-wrap', 'coverimage', $coverimg_attr ) ?>><?php
 
-			if ( !empty( $url ) ) echo '<a href="' . esc_url( $url ) . '" ' . hoot_get_attr( 'coverimage-link', ( ( !isset( $instance ) ) ? array() : $instance ) ) . '></a>';
+			if ( !empty( $url ) ) echo '<a href="' . esc_url( $url ) . '" ' . hoot_get_attr( 'coverimage-link', ( ( !isset( $instance ) ) ? array() : $instance ) ) . ( !empty( $target ) ? ' target="_blank"' : '' ) . '></a>';
 			if ( empty( $height ) ) echo '<div class="coverimage-fullimg"><img src=" ' . esc_url( $img_src[0] ) . '"></div>';
 
 			/* Display Content */
@@ -66,7 +70,7 @@ function hootkit_coverimage_displayunit( $box, $height ){
 					if ( strpos( $caption_align, 'middle' ) !== false ) $contentstyle .= "top:{$caption_align_dist}%;bottom:{$caption_align_dist}%;";
 					$contentstyle .= '"';
 				}
-				echo "<div class='coverimage-content align-{$caption_align}' {$contentstyle}><div class='coverimage-content-block style-{$caption_bg}'>";
+				echo "<div class='coverimage-content align-{$caption_align}' {$contentstyle}><div class='coverimage-content-block style-{$caption_bg} textstyle-{$caption_bg}'>";
 					if ( !empty( $content_title ) )
 						echo '<h4 class="coverimage-title">' . esc_html( $content_title ) . '</h4>';
 					if ( !empty( $content_subtitle ) )
@@ -96,7 +100,7 @@ function hootkit_coverimage_displayunit( $box, $height ){
 								}
 								$buttonattr['class'] = 'coverimage-button button button-small';
 								$buttonattr['data-button'] = $b;
-								echo '<a href="' . esc_url( ${"buttonurl{$b}"} ) .'" ' . hoot_get_attr( 'coverimage-button', $box, $buttonattr ) . '>';
+								echo '<a href="' . esc_url( ${"buttonurl{$b}"} ) .'" ' . hoot_get_attr( 'coverimage-button', $box, $buttonattr ) . ( !empty( ${"target{$b}"} ) ? ' target="_blank"' : '' ) . '>';
 									echo esc_html( ${"button{$b}"} );
 								echo '</a>';
 							} }

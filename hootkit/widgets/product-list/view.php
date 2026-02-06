@@ -1,4 +1,8 @@
 <?php
+// Set vars
+$createvars = array( 'title','subtitle','before_title','after_title' );
+foreach ($createvars as $key) { $$key = !empty( $$key ) ? $$key : ''; }
+
 // Get total columns and set column counter
 $columns = ( intval( $columns ) >= 1 && intval( $columns ) <= 3 ) ? intval( $columns ) : 1;
 
@@ -56,9 +60,6 @@ if ( function_exists( 'hoot_remove_readmore_link' ) && apply_filters( 'hootkit_l
 $userstyle = $style;
 $style = ( $style == 'style0' ) ? 'style1' : $style;
 
-// Set vars
-$subtitle = ( !empty( $subtitle ) ) ? $subtitle : '';
-
 // Template modification Hook
 do_action( 'hootkit_listwidget_wrap', 'products-list', ( ( !isset( $instance ) ) ? array() : $instance ), $products_list_query, $query_args );
 ?>
@@ -88,9 +89,10 @@ do_action( 'hootkit_listwidget_wrap', 'products-list', ( ( !isset( $instance ) )
 	$postcount = $colcount = 1;
 	$count = $count1;
 	$lastclass = ( $colcount == $columns ) ? 'hcol-last' : '';
+	$columnsclass = !empty( $evenspacecol ) ? 'hk-list-evenspacecol' : '';
 	?>
 
-	<div class="hk-list-columns">
+	<div class="hk-list-columns <?php echo $columnsclass; ?>">
 		<div class="<?php echo "hcolumn-1-{$columns} hk-list-column-1 hcol-first {$lastclass}"; ?>">
 			<?php
 			if ( $products_list_query->have_posts() ) : while ( $products_list_query->have_posts() ) : $products_list_query->the_post();
@@ -125,10 +127,9 @@ do_action( 'hootkit_listwidget_wrap', 'products-list', ( ( !isset( $instance ) )
 				if ( $postcount == 1 ) {
 					if ( $firstpost['size'] == 'thumb' ) $img_size = 'thumbnail';
 					elseif( $firstpost['size'] == 'full' ) $img_size = 'full';
-					else $img_size = 'hoot-large-thumb'; // hoot-preview-large -> blurry image when eg. 1035x425
+					else $img_size = 'hoot-large-thumb';
 				} else $img_size = 'thumbnail';
 				$img_size = apply_filters( 'hootkit_listwidget_imgsize', $img_size, 'products-list', $postcount, $factor, $columns );
-				$default_img_size = apply_filters( 'hoot_notheme_listwidget_imgsize', ( ( $factor == 'large' ) ? 'full' : 'thumbnail' ), 'products-list', $postcount, $factor, $columns );
 
 				// Start Block Display
 				$gridunit_attr = array();
@@ -150,13 +151,13 @@ do_action( 'hootkit_listwidget_wrap', 'products-list', ( ( !isset( $instance ) )
 							$gridimg_attr['class'] .= ' hk-listunit-nobg';
 						} else {
 							$gridimg_attr['class'] .= ' hk-listunit-bg';
-							$thumbnail_size = hootkit_thumbnail_size( $img_size, NULL, $default_img_size );
+							$thumbnail_size = hoot_thumbnail_size( $img_size );
 							$thumbnail_url = get_the_post_thumbnail_url( null, $thumbnail_size );
-							$gridimg_attr['style'] = "background-image:url(" . esc_url($thumbnail_url) . ");";
+							$gridimg_attr['style'] = ( hootkit()->supports( 'imgbg-cssvars' ) ? "--hkimgbg:" : "background-image:" ) . "url(" . esc_url($thumbnail_url) . ");";
 						}
 						?>
 						<div <?php echo hoot_get_attr( 'hk-listunit-image', 'product', $gridimg_attr ) ?>>
-							<?php hootkit_post_thumbnail( 'hk-listunit-img', $img_size, false, esc_url( get_permalink( $post->ID ) ), NULL, $default_img_size ); ?>
+							<?php hoot_post_thumbnail( 'hk-listunit-img', $img_size, false, esc_url( get_permalink( $post->ID ) ) ); // we use it for the link and for SEO (related images) ?>
 						</div>
 					<?php endif; ?>
 

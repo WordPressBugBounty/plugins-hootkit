@@ -17,15 +17,15 @@ class HootKit_Slider_Postimage_Widget extends HK_Widget {
 
 	function __construct() {
 
-		$settings['id'] = 'hootkit-slider-postimage';
-		$settings['name'] = hootkit()->get_string('slider-postimage');
+		$id = 'slider-postimage';
+
+		$settings['id'] = "hootkit-{$id}";
+		$settings['name'] = hootkit()->get_string( $id );
 		$settings['widget_options'] = array(
 			'description'	=> __( 'Display Posts Slider', 'hootkit' ),
-			// 'classname'		=> 'hoot-slider-posts-widget', // CSS class applied to frontend widget container via 'before_widget' arg
 		);
 		$settings['control_options'] = array();
 		$settings['form_options'] = array(
-			//'name' => can be empty or false to hide the name
 			'description' => array(
 				// 'name'		=> __( '', 'hootkit' ),
 				'type'		=> __( "<strong>Only posts which have a 'Featured Image' will be displayed</strong>", 'hootkit' ),
@@ -49,7 +49,7 @@ class HootKit_Slider_Postimage_Widget extends HK_Widget {
 			),
 			'count' => array(
 				'name'		=> __( 'Number of Posts to show', 'hootkit' ),
-				'desc'		=> ( ( hootkit()->get_config( 'nohoot' ) ) ? __( '<strong>Only 4 posts allowed. Please use a wpHoot theme to add more posts.</strong>', 'hootkit' ) : __( '<strong>Only 4 posts available in the Free version of the theme.</strong>', 'hootkit' ) ),
+				'desc'		=> __( 'Only 4 posts available in the Free version of the theme.', 'hootkit' ),
 				'type'		=> 'smallselect',
 				'std'		=> '4',
 				'options'	=> array(
@@ -170,11 +170,11 @@ class HootKit_Slider_Postimage_Widget extends HK_Widget {
 			),
 		);
 
-		if ( !in_array( 'slider-styles', hootkit()->get_config( 'supports' ) ) ) {
+		if ( ! hootkit()->supports( 'slider-styles' ) ) {
 			unset( $settings['form_options']['style'] );
 		}
 
-		if ( !in_array( 'widget-subtitle', hootkit()->get_config( 'supports' ) ) ) {
+		if ( ! hootkit()->supports( 'widget-subtitle' ) ) {
 			unset( $settings['form_options']['subtitle'] );
 		}
 

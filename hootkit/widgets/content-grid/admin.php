@@ -17,15 +17,15 @@ class HootKit_Content_Grid_Widget extends HK_Widget {
 
 	function __construct() {
 
-		$settings['id'] = 'hootkit-content-grid';
-		$settings['name'] = hootkit()->get_string('content-grid');
+		$id = 'content-grid';
+
+		$settings['id'] = "hootkit-{$id}";
+		$settings['name'] = hootkit()->get_string( $id );
 		$settings['widget_options'] = array(
 			'description'	=> __( 'Display Content in a Grid', 'hootkit' ),
-			// 'classname'		=> 'hoot-content-grid-widget', // CSS class applied to frontend widget container via 'before_widget' arg
 		);
 		$settings['control_options'] = array();
 		$settings['form_options'] = array(
-			//'name' => can be empty or false to hide the name
 			'title' => array(
 				'name'		=> __( 'Title (Optional)', 'hootkit' ),
 				'type'		=> 'text',
@@ -85,6 +85,11 @@ class HootKit_Content_Grid_Widget extends HK_Widget {
 						'name'		=> __( 'Link URL (optional)', 'hootkit' ),
 						'type'		=> 'text',
 						'sanitize'	=> 'url',
+					),
+					'target' => array(
+						'name'		=> __( 'Open Link In New Window', 'hootkit' ),
+						'type'		=> 'checkbox',
+						'boxdivi'	=> 'div-ve0',
 					),
 					'caption_bg' => array(
 						'name'		=> __( 'Text Styling', 'hootkit' ),
@@ -149,6 +154,11 @@ class HootKit_Content_Grid_Widget extends HK_Widget {
 						'sanitize'	=> 'url',
 						'settings'	=> array( 'size' => 16 ),
 					),
+					'target1' => array(
+						'name'		=> __( 'Open Link 1 In New Window', 'hootkit' ),
+						'type'		=> 'checkbox',
+						'boxdivi'	=> 'div-ve0',
+					),
 					'buttoncolor1' => array(
 						'name'		=> sprintf( __( 'Button %1$s Color', 'hootkit' ), '1' ),
 						'type'		=> 'color',
@@ -167,6 +177,11 @@ class HootKit_Content_Grid_Widget extends HK_Widget {
 						'type'		=> 'text',
 						'sanitize'	=> 'url',
 						'settings'	=> array( 'size' => 16 ),
+					),
+					'target2' => array(
+						'name'		=> __( 'Open Link 2 In New Window', 'hootkit' ),
+						'type'		=> 'checkbox',
+						'boxdivi'	=> 'div-ve0',
 					),
 					'buttoncolor2' => array(
 						'name'		=> sprintf( __( 'Button %1$s Color', 'hootkit' ), '2' ),
@@ -242,7 +257,7 @@ class HootKit_Content_Grid_Widget extends HK_Widget {
 			),
 		);
 
-		if ( !in_array( 'widget-subtitle', hootkit()->get_config( 'supports' ) ) ) {
+		if ( ! hootkit()->supports( 'widget-subtitle' ) ) {
 			unset( $settings['form_options']['subtitle'] );
 		}
 

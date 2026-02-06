@@ -95,34 +95,38 @@ jQuery(document).ready(function($) {
 	function contentblockhover(reset){
 		// if ( reset ) console.log('called when reset true'); else console.log('called when reset false');
 		$('.content-block-style5 .content-block').each(function(){
-			var $self = $(this),
-				$content = $self.children('.content-block-content'),
-				$title = $content.children('.content-block-title'),
-				$text = $content.children('.content-block-subtitle, .content-block-text, .more-link'),
-				titlemarginadjust = parseInt( $title.css('margin-bottom') ),
-				topadjust = parseInt( $content.css('bottom') );
+			var $self = $(this);
+			if ( ! $self.children('.content-block-content-clone').length ) {
 
-			if ( !titlemarginadjust || isNaN( titlemarginadjust ) ) titlemarginadjust = 0;
-			if ( !topadjust || isNaN( topadjust ) ) topadjust = 0;
+				var $content = $self.children('.content-block-content'),
+					$title = $content.children('.content-block-title'),
+					$text = $content.children('.content-block-subtitle, .content-block-text, .more-link'),
+					titlemarginadjust = parseInt( $title.css('margin-bottom') ),
+					topadjust = parseInt( $content.css('bottom') );
 
-			// Reset before calculating top
-			if ( reset ) {
-				$content.css('top', 'auto');
-				// Hide Text // Redundant for latest => can be deleted later
+				if ( !titlemarginadjust || isNaN( titlemarginadjust ) ) titlemarginadjust = 0;
+				if ( !topadjust || isNaN( topadjust ) ) topadjust = 0;
+
+				// Reset before calculating top
+				if ( reset ) {
+					$content.css('top', 'auto');
+					// Hide Text // Redundant for latest => can be deleted later
+					if( 'undefined' == typeof hootData.contentblockhovertext || 'disable' != hootData.contentblockhovertext )
+						$text.hide();
+				}
+
+				// Set Top
+				var top = $self.height() - $content.outerHeight();
+				// Adjust top // Redundant for latest => can be deleted later
 				if( 'undefined' == typeof hootData.contentblockhovertext || 'disable' != hootData.contentblockhovertext )
-					$text.hide();
+					top = top + titlemarginadjust - topadjust;
+				if ( top && !isNaN(top) ) $content.css('top', top+'px'); // @todo: Fix for edge case scenario (if user loads/refreshes page whilst hovering mouse on a cb5 box) in themes like Nevark where top!=0 => top will not be 0 as $self.height() > $content.outerHeight() by 10px, hence top will be 10 instead of 0 (top 5px and bottom 5px distances)
+
+				// Show Text // Redundant for latest => can be deleted later
+				if( 'undefined' == typeof hootData.contentblockhovertext || 'disable' != hootData.contentblockhovertext )
+					$text.show();
+
 			}
-
-			// Set Top
-			var top = $self.height() - $content.outerHeight();
-			// Adjust top // Redundant for latest => can be deleted later
-			if( 'undefined' == typeof hootData.contentblockhovertext || 'disable' != hootData.contentblockhovertext )
-				top = top + titlemarginadjust - topadjust;
-			if ( top && !isNaN(top) ) $content.css('top', top+'px'); // @todo: Fix for edge case scenario (if user loads/refreshes page whilst hovering mouse on a cb5 box) in themes like Nevark where top!=0 => top will not be 0 as $self.height() > $content.outerHeight() by 10px, hence top will be 10 instead of 0 (top 5px and bottom 5px distances)
-
-			// Show Text // Redundant for latest => can be deleted later
-			if( 'undefined' == typeof hootData.contentblockhovertext || 'disable' != hootData.contentblockhovertext )
-				$text.show();
 		});
 	}
 

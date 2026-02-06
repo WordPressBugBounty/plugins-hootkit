@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       HootKit
  * Description:       HootKit is a great companion plugin for WordPress themes by wpHoot.
- * Version:           2.0.21
+ * Version:           3.0.4
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            wphoot
@@ -14,9 +14,9 @@
  * @package           Hootkit
  */
 
-use \HootKit\Inc\Helper_Config;
-use \HootKit\Inc\Helper_Strings;
-use \HootKit\Inc\Helper_Mods;
+use \HootKit\Inc\HKConfig;
+use \HootKit\Inc\Strings;
+use \HootKit\Inc\Manifest;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -63,7 +63,7 @@ if ( ! class_exists( 'HootKit' ) ) :
 		public function __construct() {
 
 			// Plugin Info
-			$this->version         = '2.0.21';
+			$this->version         = '3.0.4';
 			$this->name            = 'HootKit';
 			$this->slug            = 'hootkit';
 			$this->file            = __FILE__;
@@ -71,14 +71,60 @@ if ( ! class_exists( 'HootKit' ) ) :
 			$this->uri             = trailingslashit( plugin_dir_url( __FILE__ ) );
 			$this->plugin_basename = plugin_basename(__FILE__);
 
+			// Load Text Domain
+			add_action( 'plugins_loaded', array( $this, 'load_plugin_textdomain' ) );
+
+			// (De)Activation Hook
+			register_activation_hook( $this->file, array( $this, 'activate' ) );
+			register_deactivation_hook( $this->file, array( $this, 'deactivate' ) );
+
 			// Load Plugin Files and Helpers
 			$this->loader();
+			add_action( 'plugins_loaded', array( $this, 'dashboardplugs' ), 5 );
 
-			// Plugin Loader - Load config, and modules based on config
-			// -> Register HootKit configuration after theme has loaded (so that theme can hook in to alter Hootkit config)
-			// -> init hook may be a bit late for us to load since 'widgets_init' is used to intialize widgets (unless we hook into init at 0, which is a bit messy)
+			// Initiate Plugin
+			add_action( 'after_setup_theme', array( $this, 'load_deprecated' ), 89 );
 			add_action( 'after_setup_theme', array( $this, 'loadhootkit' ), 96 );
 
+		}
+
+		/**
+		 * Load Plugin Text Domain
+		 * @since  1.0.0
+		 */
+		public function load_plugin_textdomain() {
+			$rootdir = dirname( $this->plugin_basename );
+			$lang_dir = apply_filters( 'hootkit_languages_directory',  $rootdir . '/languages/' );
+			load_plugin_textdomain(
+				$this->slug,
+				false,
+				$lang_dir
+			);
+		}
+
+		/**
+		 * Run when plugin is activated
+		 * @since  1.1.0
+		 */
+		public function activate() {
+			$activation = get_option( 'hootkit-activate' );
+			if ( !$activation ) {
+				$activation = array(
+					'time' => time(),
+					'version' => $this->version
+				);
+				add_option( 'hootkit-activate', $activation );
+			}
+			do_action( 'hootkit/activate', $activation );
+		}
+
+		/**
+		 * Run when plugin is deactivated
+		 * @since  2.0.0
+		 */
+		public function deactivate() {
+			$activation = get_option( 'hootkit-activate' );
+			do_action( 'hootkit/deactivate', $activation );
 		}
 
 		/**
@@ -89,13 +135,38 @@ if ( ! class_exists( 'HootKit' ) ) :
 		 * @return void
 		 */
 		public function loader() {
-
-			require_once( $this->dir . 'include/class-activation.php' );
+			require_once( $this->dir . 'include/class-strings.php' );
 			require_once( $this->dir . 'include/class-config.php' );
-			require_once( $this->dir . 'include/class-helper-strings.php' );
-			require_once( $this->dir . 'include/class-helper-mods.php' );
-			require_once( $this->dir . 'include/class-helper-assets.php' );
+			require_once( $this->dir . 'include/class-manifest.php' );
+			require_once( $this->dir . 'include/class-assets.php' );
+		}
 
+		/**
+		 * Load Dashboard Plug Files and Helpers
+		 *
+		 * @since  3.0.0
+		 * @access public
+		 * @return void
+		 */
+		public function dashboardplugs() {
+			require_once( $this->dir . 'misc/import/class-import.php' );
+			require_once( $this->dir . 'misc/code/class-customcode.php' );
+			require_once( $this->dir . 'misc/tools/class-tools.php' );
+			if ( is_admin() ) {
+				require_once( $this->dir . 'admin/class-settings.php' );
+				require_once( $this->dir . 'admin/class-dashmenu.php' );
+			}
+		}
+
+		/**
+		 * Load Deprecated functions
+		 *
+		 * @since  3.0.0
+		 * @access public
+		 * @return void
+		 */
+		public function load_deprecated() {
+			require_once( $this->dir . 'include/functions-deprecated.php' );
 		}
 
 		/**
@@ -107,40 +178,34 @@ if ( ! class_exists( 'HootKit' ) ) :
 		 * @return void
 		 */
 		public function loadhootkit() {
-
-			// Load plugin parts
-			$loadhootkit = array();
-			$thememods = hootkit()->get_config( 'modules' );
-			foreach ( array( 'widget', 'block', 'misc' ) as $check )
-				if ( !empty( $thememods[ $check ] ) )
-					$loadhootkit[ $check ] = true;
-
-			if ( !empty( $loadhootkit ) ) {
-
-				// Load Limited Core/Helper Functions
-				// Template Functions - may be required in admin for creating live preview eg. so page builder
-				require_once( $this->dir . 'include/template-functions.php' );
-
-				// Load Limited Library for Non Hoot themes :: some deprecated theme versions 'may' have nohoot set to true
-				if ( $this->get_config( 'nohoot' ) ) {
-					require_once( $this->dir . 'include/hoot-library.php' );
-					require_once( $this->dir . 'include/hoot-library-icons.php' );
-				}
-
-				// Admin Functions
-				if ( is_admin() ) {
-					require_once( $this->dir . 'admin/functions.php' );
-					require_once( $this->dir . 'admin/class-settings.php' );
-				}
-
-				// Modules
-				if ( !empty( $loadhootkit['widget'] ) )
-					require_once( $this->dir . 'widgets/class-widgets.php' );
-				if ( !empty( $loadhootkit['misc'] ) )
-					require_once( $this->dir . 'misc/class-miscmods.php' );
-
+			// Admin Functions and Settings
+			if ( is_admin() ) {
+				require_once( $this->dir . 'admin/functions.php' );
 			}
 
+			// Load general helper functions
+			require_once( $this->dir . 'include/functions.php' );
+
+			// Template Functions - may be required in admin for creating live preview eg. so page builder
+			require_once( $this->dir . 'include/template-functions.php' );
+
+			// Load Parts
+			$modtypes = Manifest::$modtypes;
+			$activemods = $this->get_config( 'activemods' );
+			foreach ( $modtypes as $modtype ) {
+				if ( !empty( $activemods[ $modtype ] ) ) {
+					if ( file_exists( $this->dir . "{$modtype}s/class-{$modtype}s.php" ) )
+						require_once( $this->dir . "{$modtype}s/class-{$modtype}s.php" );
+					elseif ( file_exists( $this->dir . "{$modtype}/class-{$modtype}.php" ) )
+						require_once( $this->dir . "{$modtype}/class-{$modtype}.php" );
+					elseif ( file_exists( $this->dir . "{$modtype}/init.php" ) )
+						require_once( $this->dir . "{$modtype}/init.php" );
+				}
+			}
+			$tfilters = $this->get_config( 'theme-filters' );
+			if ( !empty( $tfilters ) && is_array( $tfilters ) && !empty( $tfilters['fnspace'] ) ) {
+				require_once( $this->dir . 'include/class-themes.php' );
+			}
 		}
 
 		/**
@@ -153,20 +218,7 @@ if ( ! class_exists( 'HootKit' ) ) :
 		 * @return string
 		 */
 		public function get_string( $key, $default = '' ) {
-			$return = '';
-			if ( !is_array( Helper_Strings::$strings ) ) {
-				Helper_Strings::set_strings();
-			}
-			if ( !is_array( Helper_Strings::$strings ) ) {
-				$return = '';
-			} else {
-				$return = ( !empty( Helper_Strings::$strings[ $key ] ) ? Helper_Strings::$strings[ $key ] : '' );
-			}
-			if ( !empty( $return ) && is_string( $return ) )
-				return esc_html( $return );
-			elseif ( !empty( $default ) && is_string( $default ) )
-				return esc_html( $default );
-			else return esc_html( ucwords( str_replace( array( '-', '_' ), ' ' , $key ) ) );
+			return Strings::get_string( $key, $default );
 		}
 
 		/**
@@ -179,82 +231,133 @@ if ( ! class_exists( 'HootKit' ) ) :
 		 * @return mixed
 		 */
 		public function get_config( $key = '', $subkey = '', $default = array() ) {
-
-			// Early Check in case config has changed
-			// Now redundant since config is loaded within this->loader
-			if ( empty( Helper_Config::$config ) )
+			if ( empty( $key ) )
+				return HKConfig::$config;
+			if ( ! is_string( $key ) || ! isset( HKConfig::$config[ $key ] ) )
 				return $default;
-
-			// Return the value
-			if ( $key && is_string( $key ) ) {
-				if ( isset( Helper_Config::$config[ $key ] ) ) {
-					if ( $subkey && ( is_string( $subkey ) || is_integer( $subkey ) ) ) {
-						return ( isset( Helper_Config::$config[ $key ][ $subkey] ) ) ? Helper_Config::$config[ $key ][ $subkey ] : $default;
-					} else {
-						return Helper_Config::$config[ $key ];
-					}
-				} else {
-					return $default;
-				}
-			} else {
-				return Helper_Config::$config;
+			if ( empty( $subkey ) && $subkey !== 0 )
+				return HKConfig::$config[ $key ];
+			if ( is_string( $subkey ) || is_integer( $subkey ) ) {
+				return ( isset( HKConfig::$config[ $key ][ $subkey ] ) ? HKConfig::$config[ $key ][ $subkey ] : $default );
 			}
-
+			if ( is_array( $subkey ) ) {
+				$arr = HKConfig::$config[ $key ];
+				foreach ( $subkey as $sub )
+					if ( isset( $arr[ $sub ] ) )
+						$arr = $arr[ $sub ];
+					else
+						return $default;
+				return $arr;
+			}
+			return $default;
 		}
 
 		/**
 		 * Get Active Modules from config
+		 * Shortcut for hootkit()->get_config( 'activemods', $type )
 		 *
 		 * @since  2.0.0
 		 */
 		public function get_activemods( $type = '' ) {
 			if ( $type && is_string( $type ) )
-				retrun( ( isset( Helper_Config::$config['activemods'][ $type ] ) ) ? Helper_Config::$config['activemods'][ $type ] : array() );
+				return( ( isset( HKConfig::$config['activemods'][ $type ] ) ) ? HKConfig::$config['activemods'][ $type ] : array() );
 			else
-				return Helper_Config::$config['activemods'];
+				return HKConfig::$config['activemods'];
 		}
 
 		/**
-		 * Get HootKit modules
+		 * Get HootKit manifest
 		 *
 		 * @since  1.2.0
 		 * @access public
 		 * @param  string $key 'modules' 'supports'
-		 * @param  string $subkey Check for $subkey if $key value is an array
+		 * @param  string|array $subkey Check for $subkey if $key value is an array
 		 * @return mixed
 		 */
-		public function get_mods( $key = '', $subkey = '', $default = array() ) {
-			if ( $key && is_string( $key ) ) {
-				if ( isset( Helper_Mods::$mods[ $key ] ) ) {
-					if ( $subkey && ( is_string( $subkey ) || is_integer( $subkey ) ) ) {
-						return ( isset( Helper_Mods::$mods[ $key ][ $subkey] ) ) ? Helper_Mods::$mods[ $key ][ $subkey ] : $default;
-					} else {
-						return Helper_Mods::$mods[ $key ];
-					}
-				} else {
-					return array();
-				}
-			} else {
-				return Helper_Mods::$mods;
+		public function get_manifest( $key = '', $subkey = '', $default = array() ) {
+			if ( empty( $key ) )
+				return Manifest::$manifest;
+			if ( ! is_string( $key ) || ! isset( Manifest::$manifest[ $key ] ) )
+				return $default;
+			if ( empty( $subkey ) && $subkey !== 0 )
+				return Manifest::$manifest[ $key ];
+			if ( is_string( $subkey ) || is_integer( $subkey ) ) {
+				return ( is_array( Manifest::$manifest[ $key ] ) && isset( Manifest::$manifest[ $key ][ $subkey ] ) ? Manifest::$manifest[ $key ][ $subkey ] : $default );
 			}
+			if ( is_array( $subkey ) ) {
+				$arr = Manifest::$manifest[ $key ];
+				foreach ( $subkey as $sub )
+					if ( is_array( $arr ) && isset( $arr[ $sub ] ) )
+						$arr = $arr[ $sub ];
+					else
+						return $default;
+				return $arr;
+			}
+			return $default;
 		}
 
 		/**
-		 * Fitler and Get HootKit modules of specific type
+		 * Get Manifest modules info
+		 * Shortcut for hootkit()->get_manifest( 'modules', array( $key, $subkey ) )
+		 * 
+		 * @since  3.0.0
+		 * @param  string $key
+		 * @param  string $subkey
+		 * @return mixed
+		 */
+		public function get_mfmodules( $key = '', $subkey = '', $default = array() ) {
+			if ( ! isset( Manifest::$manifest['modules'] ) || ! is_array( Manifest::$manifest['modules'] ) )
+				return $default;
+			if ( empty( $key ) )
+				return Manifest::$manifest['modules'];
+			if ( ! is_string( $key ) || ! isset( Manifest::$manifest['modules'][ $key ] ) )
+				return $default;
+			if ( empty( $subkey ) && $subkey !== 0 )
+				return Manifest::$manifest['modules'][ $key ];
+			if ( is_string( $subkey ) || is_integer( $subkey ) ) {
+				return ( is_array( Manifest::$manifest['modules'][ $key ] ) && isset( Manifest::$manifest['modules'][ $key ][ $subkey ] ) ? Manifest::$manifest['modules'][ $key ][ $subkey ] : $default );
+			}
+			return $default;
+		}
+
+		/**
+		 * Get all HootKit modules from Manifest of a specific type
 		 *
 		 * @since  2.0.0
-		 * @param $type 'widget' 'block' 'misc'
-		 * @param $keys boolean
+		 * @param $type 'all' 'widget' 'block' 'misc'
+		 * @param $list boolean
 		 */
-		public function get_modtype( $type, $keys = false ) {
-			static $modtypes = array();
-			if ( !isset( $modtypes[ $type ] ) ) {
-				$modtypes[ $type ] = array();
-				foreach ( Helper_Mods::$mods['modules'] as $slug => $atts )
-					if ( isset( $atts['types'] ) && \in_array( $type, $atts['types'] ) )
-						$modtypes[ $type ][ $slug ] = $atts;
+		public function get_mfmods_oftype( $type, $list = false ) {
+			$modsoftype = array();
+			if ( is_string( $type ) && ! empty( $type ) ) {
+				foreach ( Manifest::$manifest['modules'] as $slug => $atts ) {
+					if ( $type === 'all' ||
+						( isset( $atts['types'] ) && \in_array( $type, $atts['types'] ) )
+					) {
+						if ( $list === false ) $modsoftype[ $slug ] = $atts;
+						else $modsoftype[] = $slug;
+					}
+				}
 			}
-			return ( ( $keys === false ) ? $modtypes[ $type ] : array_keys( $modtypes[ $type ] ) );
+			return $modsoftype;
+		}
+
+		/**
+		 * Check if theme supports a feature
+		 * 
+		 * @since  3.0.0
+		 * @param  string $id
+		 * @param  bool $iskey
+		 * @return bool|mixed
+		 */
+		public function supports( $id, $iskey = false ) {
+			if ( ! is_string( $id ) || empty( $id ) )
+				return false;
+			if ( $iskey ) {
+				$supports = $this->get_config( 'supports' );
+				return ( array_key_exists( $id, $supports ) ? $supports[ $id ] : false );
+			}
+			return ( in_array( $id, $this->get_config( 'supports' ) ) );
 		}
 
 		/**

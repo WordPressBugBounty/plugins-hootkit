@@ -17,15 +17,15 @@ class HootKit_Buttons_Widget extends HK_Widget {
 
 	function __construct() {
 
-		$settings['id'] = 'hootkit-buttons';
-		$settings['name'] = hootkit()->get_string('buttons');
+		$id = 'buttons';
+
+		$settings['id'] = "hootkit-{$id}";
+		$settings['name'] = hootkit()->get_string( $id );
 		$settings['widget_options'] = array(
 			'description'	=> __( 'Display Buttons', 'hootkit' ),
-			// 'classname'		=> 'hoot-buttons-widget', // CSS class applied to frontend widget container via 'before_widget' arg
 		);
 		$settings['control_options'] = array();
 		$settings['form_options'] = array(
-			//'name' => can be empty or false to hide the name
 			'align' => array(
 				'name'		=> __( 'Alignment', 'hootkit' ),
 				'type'		=> 'smallselect',
@@ -56,7 +56,7 @@ class HootKit_Buttons_Widget extends HK_Widget {
 				'options'	=> array(
 					'item_name'	=> __( 'Button', 'hootkit' ),
 					'maxlimit'	=> 4,
-					'limitmsg'	=> ( ( hootkit()->get_config( 'nohoot' ) ) ? __( 'Only 4 buttons allowed. Please use a wpHoot theme to add more buttons.', 'hootkit' ) : __( 'Only 4 buttons available in the Free version of the theme.', 'hootkit' ) ),
+					'limitmsg'	=> __( 'Only 4 buttons available in the Free version of the theme.', 'hootkit' ),
 					'sortable'	=> true,
 				),
 				'fields'	=> array(

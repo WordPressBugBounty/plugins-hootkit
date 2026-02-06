@@ -1,6 +1,7 @@
 <?php
 /**
  * Fly Cart Modules
+ * This file is loaded at after_setup_theme@96 via class-miscmods
  *
  * @package Hootkit
  */
@@ -18,7 +19,6 @@ if ( !function_exists( 'hootkit_add_customizer_options' ) )
 add_filter( 'hootkit_customizer_options', 'hootkit_flycart_customizer_options' );
 
 // Include display template
-// Alternate use: add_action( "{$themeslug}_main_wrapper_end", 'hootkit_flycart_display' ); where $themeslug = ( !empty( hoot_data()->basetemplate_slug ) ) ? hoot_data()->basetemplate_slug : strtolower( preg_replace( '/[^a-zA-Z0-9]+/', '_', trim( hoot_data()->template_name ) ) );
 add_action( 'wp_footer', 'hootkit_flycart_display' );
 
 /**

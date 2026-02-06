@@ -17,15 +17,15 @@ class HootKit_Announce_Widget extends HK_Widget {
 
 	function __construct() {
 
-		$settings['id'] = 'hootkit-announce';
-		$settings['name'] = hootkit()->get_string('announce');
+		$id = 'announce';
+
+		$settings['id'] = "hootkit-{$id}";
+		$settings['name'] = hootkit()->get_string( $id );
 		$settings['widget_options'] = array(
 			'description'	=> __( 'Display Announcement Message', 'hootkit' ),
-			// 'classname'		=> 'hoot-announce-widget', // CSS class applied to frontend widget container via 'before_widget' arg
 		);
 		$settings['control_options'] = array();
 		$settings['form_options'] = array(
-			//'name' => can be empty or false to hide the name
 			'icon' => array(
 				'name'		=> __( 'Icon', 'hootkit' ),
 				'type'		=> 'icon',
@@ -74,6 +74,11 @@ class HootKit_Announce_Widget extends HK_Widget {
 				'name'		=> __( 'Link URL (Optional)', 'hootkit' ),
 				'type'		=> 'text',
 				'sanitize'	=> 'url',
+			),
+			'target' => array(
+				'name'		=> __( 'Open Link In New Window', 'hootkit' ),
+				'type'		=> 'checkbox',
+				'boxdivi'	=> 'div-ve0',
 			),
 			'customcss' => array(
 				'name'		=> __( 'Widget Options', 'hootkit' ),

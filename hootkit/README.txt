@@ -2,9 +2,9 @@
 Contributors: wphoot
 Tags: widgets, wphoot, demo content, slider
 Requires at least: 6.0
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 2.0.21
+Stable tag: 3.0.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -12,10 +12,10 @@ HootKit is a great companion plugin for WordPress themes by wpHoot.
 
 == Description ==
 
-HootKit is a great companion plugin for WordPress themes by wpHoot.
-This plugin adds extra widgets and features to your theme. Though it will work with any theme, HootKit is primarily developed to work in sync with WordPress themes by wpHoot.
+HootKit is the ideal companion for <a href="https://wordpress.org/themes/author/wphoot/">wpHoot themes</a>.
+This plugin adds extra features and customization options to help you fine-tune your site's design. HootKit is primarily developed to work in sync with WordPress themes by wpHoot.
 
-Get free support at <a href="https://wphoot.com/support" target="_blank">wpHoot Support</a>
+Get free support at <a href="https://wphoot.com/support">wpHoot Support</a>
 
 == Installation ==
 
@@ -33,15 +33,59 @@ You can also install the plugin manually by following these steps:
 
 == Frequently Asked Questions ==
 
+= Which themes does HootKit work with? =
+
+HootKit is designed to work seamlessly with wpHoot themes. Some features are only available when used with compatible wpHoot themes.
+
+= Nothing happens when I activate the plugin =
+
+HootKit is a companion plugin for wpHoot themes. Please make sure your theme is compatible with HootKit by checking the <a href="https://wphoot.com/support">theme documentation</a>.
+
 = What is the plugin license? =
 
 This plugin is released under a GPL license.
 
-= Which themes does HootKit work with? =
-
-The plugin supports all themes, but works best with wpHoot Themes. A few options are available only in compatible wpHoot Themes.
-
 == Changelog ==
+
+= 3.0.4 =
+* Minor CSS and display fixes
+* Updated new demopacks manifest for theme importer
+
+= 3.0.3 =
+* Support 'widgets-v3' files
+* Move Post/Content Grid to v3 widgets - using css Grid
+* Updated new demopacks manifest for theme importer
+* Remove support for 'post-grid-firstpost-category'
+* Standardize "style-" classes to "textstyle-" for v3 widgets onwards
+
+= 3.0.2 =
+* Support import of '_menu-item-hootmenu' during menu import in XML (eg. contains menu item bg/font colors)
+* Page Content widget
+* Add options for Social Icons widget (accent bg and shape)
+* Postcarousel widget - remove 'hootkit_carousel_titleascaption' filter
+
+= 3.0.1 =
+* Widgets as Shortcode misc module
+* Fix bug in Content Grid widget - First post as standard size
+* 'Open in new tab' option for multiple widgets
+* Postcarousel widget - allow 'hootkit_carousel_titleascaption' filter
+
+= 3.0.0 =
+* Refactored code
+* Optimize performance for FA icons list in admin widgets
+* Add support for 'misc > Code' modules
+* Add support for 'misc > Tools' modules
+* Add support for 'misc > Import' modules
+* Load dashmenu if theme supports dashboard (settings as part of dashboard plug)
+* Add support for 'list-evenspacecol' in post-list widgets
+* Add support for 'cbox-evenspacecol' in content box widgets
+* Include default support for 'grid-widget' and 'list-widget'
+* Remove several deprecated code
+* Remove support for 'nohoot' tag. Hence removed duplicated Hoot Framework library code/css from themes.
+* Remove 'themelist' tag and cleanup various unused code
+* Minor CSS fixes for settings
+* Support for 'imgbg-cssvars' (set background image as inline css variable instead of inline style)
+* Support for 'content-blocks-style5-nojs'
 
 = 2.0.21 =
 * List widgets - Add class for style0

@@ -17,15 +17,14 @@ class HootKit_Content_Posts_Blocks_Widget extends HK_Widget {
 
 	function __construct() {
 
-		$settings['id'] = 'hootkit-posts-blocks';
-		$settings['name'] = hootkit()->get_string('content-posts-blocks');
+		$id = 'content-posts-blocks';
+		$settings['id'] = "hootkit-posts-blocks";
+		$settings['name'] = hootkit()->get_string( $id );
 		$settings['widget_options'] = array(
 			'description'	=> __( 'Display Styled Content Blocks (Posts)', 'hootkit' ),
-			// 'classname'		=> 'hoot-posts-blocks-widget', // CSS class applied to frontend widget container via 'before_widget' arg
 		);
 		$settings['control_options'] = array();
 		$settings['form_options'] = array(
-			//'name' => can be empty or false to hide the name
 			'title' => array(
 				'name'		=> __( 'Title (optional)', 'hootkit' ),
 				'type'		=> 'text',
@@ -81,6 +80,11 @@ class HootKit_Content_Posts_Blocks_Widget extends HK_Widget {
 					'4'	=> __( '4', 'hootkit' ),
 					'5'	=> __( '5', 'hootkit' ),
 				),
+			),
+			'evenspacecol' => array(
+				'name'		=> __( 'Evenly space posts vertically in multiple columns', 'hootkit' ),
+				'type'		=> 'checkbox',
+				'std'		=> 1,
 			),
 			'count' => array(
 				'name'		=> __( 'Number of Posts to show', 'hootkit' ),
@@ -177,14 +181,17 @@ class HootKit_Content_Posts_Blocks_Widget extends HK_Widget {
 			),
 		);
 
-		if ( !in_array( 'content-blocks-style5', hootkit()->get_config( 'supports' ) ) ) {
+		if ( ! hootkit()->supports( 'content-blocks-style5' ) ) {
 			unset( $settings['form_options']['style']['options']['style5'] );
 		}
-		if ( !in_array( 'content-blocks-style6', hootkit()->get_config( 'supports' ) ) ) {
+		if ( ! hootkit()->supports( 'content-blocks-style6' ) ) {
 			unset( $settings['form_options']['style']['options']['style6'] );
 		}
-		if ( !in_array( 'widget-subtitle', hootkit()->get_config( 'supports' ) ) ) {
+		if ( ! hootkit()->supports( 'widget-subtitle' ) ) {
 			unset( $settings['form_options']['subtitle'] );
+		}
+		if ( ! hootkit()->supports( 'cbox-evenspacecol' ) ) {
+			unset( $settings['form_options']['evenspacecol'] );
 		}
 
 		$settings = apply_filters( 'hootkit_content_posts_blocks_widget_settings', $settings );

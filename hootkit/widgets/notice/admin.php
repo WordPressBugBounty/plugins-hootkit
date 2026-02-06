@@ -17,15 +17,15 @@ class HootKit_Notice_Widget extends HK_Widget {
 
 	function __construct() {
 
-		$settings['id'] = 'hootkit-notice';
-		$settings['name'] = hootkit()->get_string('notice');
+		$id = 'notice';
+
+		$settings['id'] = "hootkit-{$id}";
+		$settings['name'] = hootkit()->get_string( $id );
 		$settings['widget_options'] = array(
 			'description'	=> __( 'Display Notice Box', 'hootkit' ),
-			// 'classname'		=> 'hoot-notice-widget', // CSS class applied to frontend widget container via 'before_widget' arg
 		);
 		$settings['control_options'] = array();
 		$settings['form_options'] = array(
-			//'name' => can be empty or false to hide the name
 			'title' => array(
 				'name'		=> __( 'Title', 'hootkit' ),
 				'type'		=> 'text',
@@ -114,7 +114,7 @@ class HootKit_Notice_Widget extends HK_Widget {
 			),
 		);
 
-		if ( !in_array( 'widget-subtitle', hootkit()->get_config( 'supports' ) ) ) {
+		if ( ! hootkit()->supports( 'widget-subtitle' ) ) {
 			unset( $settings['form_options']['subtitle'] );
 		}
 

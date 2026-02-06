@@ -1,5 +1,51 @@
 == Changelog ==
 
+= 2.0.21 =
+* List widgets - Add class for style0
+* Grid widgets - Add display for 1x2 non standard unit
+* Update 'supports_version' to use array (refactor directory structure)
+
+= 2.0.20 =
+* Fix "Function _load_textdomain_just_in_time was called incorrectly" warning
+
+= 2.0.19 =
+* Add align options for Social Widget
+* Content Grid - Display Content if only buttons available
+* Icons List - Icon Color Option
+* Support for new themes
+
+= 2.0.18 =
+* Fix customizer notices for latest themes
+
+= 2.0.17 =
+* Version Bump
+
+= 2.0.16 =
+* Provide option to hide WC Offscreen Cart
+* Add option to enable 'classic-widgets' for supporting themes
+* Add customizer options mods for supporting themes
+* Add AOS support for supporting themes
+
+= 2.0.15 =
+* Minor css changes for admin screens
+* Update WooCommerce label in Settings page
+* Read More link text compatibility with theme customizer live changes
+* Add v2 templates for supporting themes
+* Fix admin wp.media bug with WooPaymets plugin (Ticket#12065)
+
+= 2.0.14 =
+* Add X (twitter) to Social Profiles
+
+= 2.0.13 =
+* Fix lightSlider script for jquery >= 3.0 (Ticket#11596)
+
+= 2.0.12 =
+* Add discord and whatsapp options in social profile
+
+= 2.0.11 =
+* Fixed bug in content-block view when only image is present Ticket#10774
+* Fixed bug in slider (image) caption area view when no content to be displayed Ticket#11190
+
 = 2.0.10 =
 * Added icon options to Content Blocks widget for supporting themes
 * Added social icons alt color option for supporting themes

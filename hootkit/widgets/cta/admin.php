@@ -17,15 +17,15 @@ class HootKit_CTA_Widget extends HK_Widget {
 
 	function __construct() {
 
-		$settings['id'] = 'hootkit-cta';
-		$settings['name'] = hootkit()->get_string('cta');
+		$id = 'cta';
+
+		$settings['id'] = "hootkit-{$id}";
+		$settings['name'] = hootkit()->get_string( $id );
 		$settings['widget_options'] = array(
 			'description'	=> __( 'Display Call To Action block', 'hootkit' ),
-			// 'classname'		=> 'hoot-cta-widget', // CSS class applied to frontend widget container via 'before_widget' arg
 		);
 		$settings['control_options'] = array();
 		$settings['form_options'] = array(
-			//'name' => can be empty or false to hide the name
 			'headline' => array(
 				'name'		=> __( 'Headline', 'hootkit' ),
 				'type'		=> 'text',
@@ -68,6 +68,11 @@ class HootKit_CTA_Widget extends HK_Widget {
 				'desc'		=> __( 'Leave empty if you dont want to show link', 'hootkit' ),
 				'type'		=> 'text',
 				'sanitize'	=> 'url',
+			),
+			'target' => array(
+				'name'		=> __( 'Open Link In New Window', 'hootkit' ),
+				'type'		=> 'checkbox',
+				'boxdivi'	=> 'div-ve0',
 			),
 			'align' => array(
 				'name'		=> __( 'Alignment', 'hootkit' ),
@@ -141,10 +146,7 @@ class HootKit_CTA_Widget extends HK_Widget {
 				),
 			),
 		);
-
-		if ( !in_array( 'cta-styles', hootkit()->get_config( 'supports' ) )
-			 && !in_array( 'cta-styles', hootkit()->get_config( 'settings' ) ) // JNES@deprecated <= Unos v2.7.1 @12.18
-			)
+		if ( ! hootkit()->supports( 'cta-styles' ) )
 			unset( $settings['form_options']['style'] );
 
 		$settings = apply_filters( 'hootkit_cta_widget_settings', $settings );
